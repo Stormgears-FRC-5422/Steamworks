@@ -1,116 +1,80 @@
-
 package org.usfirst.frc.team5422.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.robot.commands.ExampleCommand;
 import org.usfirst.frc.team5422.robot.subsystems.ExampleSubsystem;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
- */
+//TODO: get max vel
+//TODO: PID tune with F val
+//TODO: figure out twist
+
 public class Robot extends IterativeRobot {
-
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static OI oi;
+	
+	Joystick joy = new Joystick(0);
+	CANTalon[] talons = new CANTalon[4];
 
-	Command autonomousCommand;
-	SendableChooser<Command> chooser = new SendableChooser<>();
-
-	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
-	 */
-	@Override
-	public void robotInit() {
-		oi = new OI();
-		chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
+	public Robot() {
+		
 	}
-
-	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
-	 */
-	@Override
-	public void disabledInit() {
-
-	}
-
-	@Override
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
-
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
-	 */
-	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
-
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
-		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		
 	}
-
-	/**
-	 * This function is called periodically during autonomous
-	 */
-	@Override
-	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
-	}
-
-	@Override
 	public void teleopInit() {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
-		if (autonomousCommand != null)
-			autonomousCommand.cancel();
+		while(isOperatorControl() && isEnabled()) {
+			double theta = joy.getDirectionRadians();
+			if(theta < 0) theta = 2 * Math.PI + theta;
+			if(Math.abs(joy.getX()) > 0.2 || Math.abs(joy.getY()) > 0.2 || Math.abs(joy.getZ()) > 0.2)
+				mecMove(0.5, theta, joy.getZ());
+			else mecMove(0, theta, 0);
+			SmartDashboard.putNumber("0: ", talons[0].getEncVelocity());
+			SmartDashboard.putNumber("1: ", talons[1].getEncVelocity());
+			SmartDashboard.putNumber("2: ", talons[2].getEncVelocity());
+			SmartDashboard.putNumber("3: ", talons[3].getEncVelocity());
+		}
 	}
-
-	/**
-	 * This function is called periodically during operator control
-	 */
-	@Override
-	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
+	public void robotInit() {
+		for(int i = 0; i < talons.length; i ++) {
+			talons[i] = new CANTalon(i);
+			if(i % 2 == 0) talons[i].setInverted(true);
+		}
 	}
+	public void autonomous() {
 
-	/**
-	 * This function is called periodically during test mode
-	 */
-	@Override
-	public void testPeriodic() {
-		LiveWindow.run();
+	}
+	public void teleop() {
+		
+	}
+	public void test() {
+		
+	}
+	
+	private void mecTwist() {
+		
+	}
+	
+	private void mecMove(double tgtVel, double theta, double changeVel) {
+		
+		double[] vels = new double[talons.length];
+		
+		vels[0] = tgtVel * Math.sin(theta + Math.PI / 4.0) + changeVel;
+		vels[1] = tgtVel * Math.cos(theta + Math.PI / 4.0) - changeVel;
+		vels[2] = tgtVel * Math.cos(theta + Math.PI / 4.0) + changeVel;
+		vels[3] = tgtVel * Math.sin(theta + Math.PI / 4.0) - changeVel;
+		
+		while(Math.abs(vels[0]) > 1.0 || Math.abs(vels[1]) > 1.0 || Math.abs(vels[2]) > 1.0 || Math.abs(vels[3]) > 1.0) {
+			double max = Math.max(Math.max(Math.max(Math.abs(vels[0]), Math.abs(vels[1])), Math.abs(vels[2])), Math.abs(vels[3]));
+			for(int i = 0; i < vels.length; i ++) {
+				vels[i] /= max;
+			}
+		}
+		
+		for(int i = 0; i < talons.length; i ++) {
+			talons[i].set(vels[i]);
+		}
 	}
 }
