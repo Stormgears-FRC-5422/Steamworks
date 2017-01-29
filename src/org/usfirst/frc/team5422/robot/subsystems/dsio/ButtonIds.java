@@ -7,5 +7,9 @@ package org.usfirst.frc.team5422.robot.subsystems.dsio;
  * Just add them if needed
  */
 public class ButtonIds {
-
+    // TODO: Change button IDs to real ones
+    public static final int BIG_BLUE = 0;
+    public static final int SMALL_BLUE = 1;
+    public static final int RED_SWITCH = 2;
+    public static final int GREEN_SWITCH = 3;
 }
