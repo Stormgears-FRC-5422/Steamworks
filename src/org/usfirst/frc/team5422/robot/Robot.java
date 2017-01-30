@@ -5,8 +5,9 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team5422.robot.commands.ExampleCommand;
-import org.usfirst.frc.team5422.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
+import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 //TODO: get max vel
 //TODO: PID tune with F val
@@ -14,7 +15,8 @@ import org.usfirst.frc.team5422.robot.subsystems.ExampleSubsystem;
 // Ferd was here.
 
 public class Robot extends IterativeRobot {
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+	public static final Shooter shooter = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
+	public static final DSIO dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 	
 	Joystick joy = new Joystick(0);
 	CANTalon[] talons = new CANTalon[4];
@@ -22,9 +24,11 @@ public class Robot extends IterativeRobot {
 	public Robot() {
 		
 	}
+
 	public void autonomousInit() {
 		
 	}
+
 	public void teleopInit() {
 		while(isOperatorControl() && isEnabled()) {
 			double theta = joy.getDirectionRadians();
@@ -38,24 +42,12 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("3: ", talons[3].getEncVelocity());
 		}
 	}
+
 	public void robotInit() {
 		for(int i = 0; i < talons.length; i ++) {
 			talons[i] = new CANTalon(i);
 			if(i % 2 == 0) talons[i].setInverted(true);
 		}
-	}
-	public void autonomous() {
-
-	}
-	public void teleop() {
-		
-	}
-	public void test() {
-		
-	}
-	
-	private void mecTwist() {
-		
 	}
 	
 	private void mecMove(double tgtVel, double theta, double changeVel) {
