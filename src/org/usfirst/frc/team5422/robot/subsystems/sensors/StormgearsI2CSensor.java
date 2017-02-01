@@ -389,9 +389,10 @@ public class StormgearsI2CSensor extends I2C {
 	}
 
 //Command implementation:
-    // Just echo PING - no other effect
+    // Just echo PING - should return the id of the sensor
     public boolean ping() {
-		return basicCommand("P".getBytes(), "Ping", "PING".getBytes());
+    	byte[] receiveBuffer = new byte[1];
+    	return fetchCommand("P".getBytes(), "Ping", receiveBuffer);
 	}
     // echo FAST - change the rate of the blinking LED
     public boolean fast() {
@@ -403,10 +404,22 @@ public class StormgearsI2CSensor extends I2C {
 		return basicCommand("S".getBytes(), "Slow", "SLOW".getBytes());
 	}
 
+    // Blink rate - set then fetch the current blink rate
+    public boolean blink(long rate) {
+		byte[] receiveBuffer = new byte[4];
+    	ByteBuffer buffer = ByteBuffer.allocate(5);
+		buffer.order(ByteOrder.LITTLE_ENDIAN);
+		
+		buffer.putChar('B');
+		buffer.putLong(rate);
+    	return fetchCommand(buffer.array(), "Blink", receiveBuffer);
+    }
+
     // Actually the default command - fetches a two bye value tied to a simple counter
     public boolean fetchCounter() {
     	byte[] receiveBuffer = new byte[2];
     	return fetchCommand("\0".getBytes(), "FetchCounter", receiveBuffer);
     }
 	
+
 }
