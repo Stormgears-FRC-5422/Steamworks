@@ -12,7 +12,7 @@ public class IRSensor extends StormgearsI2CSensor {
 	}
 
 	public void pollDistance() {
-		fetchFloats("U", "Ultrasonic", sensorValues);	
+		fetchFloats("I", "Infrared", sensorValues);	
 	}
 	
 	public float getDistance(int sensorNumber) {
