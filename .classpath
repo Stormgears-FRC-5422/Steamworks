@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="WPILIBS_DIR/WPILib.jar" sourcepath="wpilib.sources"/>
+	<classpathentry kind="var" path="WPILIBS_DIR/NetworkTables.jar" sourcepath="networktables.sources"/>
+	<classpathentry kind="var" path="WPILIBS_DIR/opencv.jar" sourcepath="opencv.sources"/>
+	<classpathentry kind="var" path="WPILIBS_DIR/cscore.jar" sourcepath="cscore.sources"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/CTRLib.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/navx_frc.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/webdashboard-all-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/webdashboard-diagnostics.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
