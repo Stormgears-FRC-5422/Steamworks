@@ -95,7 +95,7 @@ public class Robot extends IterativeRobot {
 			
 			if(Math.abs(changeVel) > 0.5) {
 				for(int i = 0; i < vels.length; i ++) {
-					vels[i] += changeVel;
+					vels[i] -= changeVel;
 				}
 			}
 			
@@ -108,7 +108,7 @@ public class Robot extends IterativeRobot {
 	
 			if(Math.abs(joy.getX()) < 0.2 && Math.abs(joy.getY()) < 0.2) {
 				for(int i = 0; i < vels.length; i ++) {
-					vels[i] = changeVel;
+					vels[i] = -changeVel;
 				}
 			}
 			
