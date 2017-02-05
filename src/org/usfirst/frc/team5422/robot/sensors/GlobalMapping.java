@@ -9,27 +9,27 @@ import edu.wpi.first.wpilibj.I2C.Port;
 
 public class GlobalMapping extends RunnableNotifier{
 	
-	final double SQRT_2 = Math.sqrt(2);
-	final double PI = Math.PI;
+	static final double SQRT_2 = Math.sqrt(2);
+	static final double PI = Math.PI;
 	
 	
 	//encodervalues are dummies
-	long enc_fl;
-	long enc_fr;
-	long enc_bl;
-	long enc_br;
+	static long enc_fl;
+	static long enc_fr;
+	static long enc_bl;
+	static long enc_br;
 	
-	long prev_enc_fl;
-	long prev_enc_fr;
-	long prev_enc_bl;
-	long prev_enc_br;
+	static long prev_enc_fl;
+	static long prev_enc_fr;
+	static long prev_enc_bl;
+	static long prev_enc_br;
 	
-	double x;
-	double y;
+	static double x;
+	static double y;
 	
-	AHRS ahrs = new AHRS(Port.kMXP);
+	static AHRS ahrs = new AHRS(Port.kMXP);
 	
-	GlobalMapping(){
+	public GlobalMapping(){
 		super("GlobalMapping", 0.01);
 		
 		enc_fl = 0;
@@ -54,13 +54,13 @@ public class GlobalMapping extends RunnableNotifier{
 		//TODO::
 	};
 	
-	void resetPose(double X, double Y, double theta){//meters, meters, radians
+	static void resetPose(double X, double Y, double theta){//meters, meters, radians
 		x = X;
 		y = Y;
 		ahrs.setAngleAdjustment(theta*180.0/PI-ahrs.getAngle());
 	}
 	
-	void updatePose(){
+	static void updatePose(){
 		
 		//TODO:: get encoder values
 		
@@ -93,15 +93,15 @@ public class GlobalMapping extends RunnableNotifier{
 		
 	}
 	
-	double getX(){
+	static double getX(){
 		return x;
 	}
 	
-	double getY(){
+	static double getY(){
 		return y;
 	}
 	
-	double getTheta(){//in radians
+	static double getTheta(){//in radians
 		return ahrs.getAngle()*PI/180.0;
 	}
 }

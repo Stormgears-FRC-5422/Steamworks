@@ -1,5 +1,7 @@
 package org.usfirst.frc.team5422.robot;
 
+import org.usfirst.frc.team5422.robot.sensors.GlobalMapping;
+
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
@@ -16,6 +18,7 @@ public class Robot extends IterativeRobot {
 	public Robot() {
 		NetworkTable.initialize();
 		//TODO:: initialize sensors here
+		new GlobalMapping();
 	}
 	
 	public void autonomousInit() {
