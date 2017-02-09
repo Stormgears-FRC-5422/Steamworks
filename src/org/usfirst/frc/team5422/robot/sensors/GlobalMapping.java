@@ -84,8 +84,8 @@ public class GlobalMapping extends RunnableNotifier{
 		prev_enc_br = enc_br;
 		
 		//robot's coordinate frame
-		double dRobotX = (d_enc_fr + d_enc_bl - (d_enc_fl + d_enc_br))*WHEEL_RADIUS/4;
-		double dRobotY = (d_enc_fl + d_enc_bl + (d_enc_fl + d_enc_br))*WHEEL_RADIUS/4;
+		double dRobotX = (d_enc_fr + d_enc_bl - (d_enc_fl + d_enc_br))*RADIANS_PER_TICK*WHEEL_RADIUS/4.f;
+		double dRobotY = (d_enc_fl + d_enc_bl + (d_enc_fl + d_enc_br))*RADIANS_PER_TICK*WHEEL_RADIUS/4.f;
 		
 		double angle = getTheta();
 		
