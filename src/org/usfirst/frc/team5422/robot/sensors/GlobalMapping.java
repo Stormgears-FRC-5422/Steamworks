@@ -10,7 +10,11 @@ import edu.wpi.first.wpilibj.I2C.Port;
 public class GlobalMapping extends RunnableNotifier{
 	
 	static final double SQRT_2 = Math.sqrt(2);
+	static final int ENCODER_RESOLUTION = 2048;//?????
 	static final double PI = Math.PI;
+	static final double RADIANS_PER_TICK = 2*PI/(float)ENCODER_RESOLUTION;
+	static final double WHEEL_RADIUS = 0.479;//meters
+	
 	
 	
 	//encodervalues are dummies
@@ -80,8 +84,8 @@ public class GlobalMapping extends RunnableNotifier{
 		prev_enc_br = enc_br;
 		
 		//robot's coordinate frame
-		double dRobotX = (d_enc_fr + d_enc_bl - (d_enc_fl + d_enc_br))/4/SQRT_2;
-		double dRobotY = (d_enc_fl + d_enc_bl - (d_enc_fl + d_enc_br))/4/SQRT_2;
+		double dRobotX = (d_enc_fr + d_enc_bl - (d_enc_fl + d_enc_br))*WHEEL_RADIUS/4;
+		double dRobotY = (d_enc_fl + d_enc_bl + (d_enc_fl + d_enc_br))*WHEEL_RADIUS/4;
 		
 		double angle = getTheta();
 		
