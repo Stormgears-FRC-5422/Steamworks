@@ -21,6 +21,10 @@ public class SteamworksConstants
 
     // TALON IDS GO HERE
     public static final int SHOOTER_TALON_ID = 0;   //TODO: Change this to the real talon ID
-
+    public static final int CLIMBER_INTAKE_TALON_ID = 2;
+    
+    //SWITCH IDS
+	public static final int INTAKE_CLIMBER_SWITCH_ID = 3;
+	
 
 }
