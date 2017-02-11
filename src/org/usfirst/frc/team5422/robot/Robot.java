@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5422.robot;
 
 import org.usfirst.frc.team5422.robot.subsystems.climber.Climber;
+import org.usfirst.frc.team5422.robot.subsystems.climber.Intake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
@@ -25,9 +26,11 @@ public class Robot extends IterativeRobot {
 	Joystick buttonBoard = new Joystick(SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 	CANTalon[] talons = new CANTalon[4];
 	Climber climberSubsystem;
+	Intake intakeSubsystem;
 	
 	public Robot() {
 	climberSubsystem = new Climber();
+	intakeSubsystem = new Intake();
 	}
 
 	public void autonomousInit() {
@@ -52,12 +55,13 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("2: ", talons[2].getEncVelocity());
 			SmartDashboard.putNumber("3: ", talons[3].getEncVelocity());
 
-			boolean climberButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_SWITCH_ID);
+			boolean climberButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
 			double climberVelocity = (joy.getThrottle()-1)/2;
 
 			climberSubsystem.climb(climberVelocity, climberButtonPressed );
 
-
+			boolean intakeButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
+			intakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
 		}
 	}
 

@@ -24,7 +24,7 @@ public class SteamworksConstants
     public static final int CLIMBER_INTAKE_TALON_ID = 2;
     
     //SWITCH IDS
-	public static final int INTAKE_CLIMBER_SWITCH_ID = 3;
-	
+	public static final int INTAKE_CLIMBER_RED_SWITCH_ID = 3;
+	public static final int INTAKE_ORANGE_SWITCH_ID = 15;
 
 }
