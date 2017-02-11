@@ -1,6 +1,6 @@
 package org.usfirst.frc.team5422.robot;
 
-import org.usfirst.frc.team5422.robot.sensors.GlobalMapping;
+import org.usfirst.frc.team5422.robot.sensors.SensorManager;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
@@ -13,17 +13,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 	
 	Joystick joy = new Joystick(0);
+	
 	CANTalon[] talons = new CANTalon[4];
 
 	public Robot() {
 		NetworkTable.initialize();
 		//TODO:: initialize sensors here
-		new GlobalMapping();
+		SensorManager.startPublishingToNetwork();
 	}
 	
 	public void autonomousInit() {
 		
 	}
+	
 	public void teleopInit() {
 		while(isOperatorControl() && isEnabled()) {
 			double theta = Math.atan2(joy.getX(), joy.getY());

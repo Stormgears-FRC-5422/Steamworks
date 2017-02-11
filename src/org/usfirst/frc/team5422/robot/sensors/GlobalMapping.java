@@ -2,12 +2,16 @@ package org.usfirst.frc.team5422.robot.sensors;
 
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.utils.NetworkConstants;
 
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.Timer;
 
 public class GlobalMapping extends RunnableNotifier{
+	
+	
 	
 	static final double SQRT_2 = Math.sqrt(2);
 	static final int ENCODER_RESOLUTION = 2048;//?????
@@ -23,18 +27,26 @@ public class GlobalMapping extends RunnableNotifier{
 	static long enc_bl;
 	static long enc_br;
 	
+	static double currTimeStamp;
+	
 	static long prev_enc_fl;
 	static long prev_enc_fr;
 	static long prev_enc_bl;
 	static long prev_enc_br;
 	
+	static double prevTimeStamp;
+	
 	static double x;
 	static double y;
+	static double vx;
+	static double vy;
+	
+	static double smoothingFactor = 0.9;
 	
 	static AHRS ahrs = new AHRS(Port.kMXP);
 	
 	public GlobalMapping(){
-		super("GlobalMapping", 0.01);
+		super("GlobalMapping", 0.001);
 		
 		enc_fl = 0;
 		enc_fr = 0;
@@ -46,21 +58,28 @@ public class GlobalMapping extends RunnableNotifier{
 		prev_enc_bl = 0;
 		prev_enc_br = 0;
 		
+		prevTimeStamp = Timer.getFPGATimestamp();
+		
 		resetPose(0, 0, 0);
+		
 		
 	}
 	
 	@Override
 	public void run(){
 		updatePose();
-		this.networkTable.putNumber("x-position", x);
-		this.networkTable.putNumber("y-position", y);
-		//TODO::
+		networkPublish(NetworkConstants.GP_X, x);
+		networkPublish(NetworkConstants.GP_Y, y);
+		networkPublish(NetworkConstants.GP_VX, vx);
+		networkPublish(NetworkConstants.GP_VY, vy);
 	};
 	
 	static void resetPose(double X, double Y, double theta){//meters, meters, radians
 		x = X;
 		y = Y;
+		vx = 0;
+		vy = 0;
+		
 		ahrs.setAngleAdjustment(theta*180.0/PI-ahrs.getAngle());
 	}
 	
@@ -94,6 +113,18 @@ public class GlobalMapping extends RunnableNotifier{
 		
 		x += dFieldX;
 		y += dFieldY;
+		
+		
+		//velocity stuff
+		double dt = Timer.getFPGATimestamp() - prevTimeStamp;
+		double temp_vx = dFieldX / dt; 
+		double temp_vy = dFieldY / dt; 
+		
+		//exponential filtering
+		vx = smoothingFactor*temp_vx + (1 - smoothingFactor)*vx;
+		vy = smoothingFactor*temp_vy + (1 - smoothingFactor)*vy;
+				
+		prevTimeStamp = Timer.getFPGATimestamp();
 		
 	}
 	

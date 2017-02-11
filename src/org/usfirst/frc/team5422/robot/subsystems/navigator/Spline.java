@@ -9,7 +9,7 @@ public class Spline {
 	/* a spline is a set of parametric cubic polynomial for Cartesian coordinates in the form:
 	 * x(t) = a_x*t^3 + b_x*t^2 + c_x*t + d_x
 	 * y(t) = a_y*t^3 + b_y*t^2 + c_y*t + d_y
-	 * 
+	 * x
 	 * this describes a path form an initial pose (x_i, y_i, v_xi, v_yi) to a final pose (x_f, y_f, v_xf, v_yf)
 	 * a path that describes the movement between two poses is defined to be a segment
 	 * 
@@ -85,17 +85,30 @@ public class Spline {
     
     //returns the x,y, v_x, v_y of any segment of each spline, 
     //with internal parameter u, u must be between 0.0 and 1.0
-    private double x(int seg, double u) {
+    public double x(int seg, double u) {
     	
     	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set u to within bounds if out of bounds
     	
 		return a(seg, 0)*(u*u*u) + b(seg, 0)*(u*u) + c(seg, 0)*u + d(seg, 0);
 	}
-    private double y(int seg, double u) {
+    public double y(int seg, double u) {
     	
     	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set t to within bounds if out of bounds
     	
 		return a(seg, 1)*(u*u*u) + b(seg, 1)*(u*u) + c(seg, 1)*u + d(seg, 1);
+	}
+    
+    public double vx(int seg, double u) {
+    	
+    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set u to within bounds if out of bounds
+    	
+    	return 3*a(seg, 0)*(u*u) + 2*b(seg, 0)*u + c(seg, 0);
+	}
+    public double vy(int seg, double u) {
+    	
+    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set t to within bounds if out of bounds
+    	
+		return 3*a(seg, 1)*(u*u) + 2*b(seg, 1)*u + c(seg, 1);
 	}
     
     public void updatePose(int index, Pose argPose){

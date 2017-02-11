@@ -11,10 +11,17 @@ public class RunnableNotifier implements Runnable{
 	
 	private double period;
 	
-	protected NetworkTable networkTable;
+	private NetworkTable networkTable;
 	
-	public RunnableNotifier(String networkKey, double periodS){
+	protected void networkPublish(String string, double number){
+		networkTable.putNumber(string, number);
+	}
+	
+	private String networkKey;
+	
+	public RunnableNotifier(String NetworkKey, double periodS){
 		networkTable = NetworkTable.getTable(networkKey);
+		networkKey = NetworkKey;
 		thread = new Notifier(this);
 		period = periodS;
 	}
@@ -27,9 +34,9 @@ public class RunnableNotifier implements Runnable{
 		thread.stop();
 	}
 	
-	public RunnableNotifier getInstance() throws Exception{
+	RunnableNotifier getInstance() throws Exception{
 		if(instance==null){
-			throw new Exception("RunnableNotifier not initialized");
+			throw new Exception("RunnableNotifier not initialized\nPlease Initialize in SensorManager.java");
 		}
 		return instance;
 	}
