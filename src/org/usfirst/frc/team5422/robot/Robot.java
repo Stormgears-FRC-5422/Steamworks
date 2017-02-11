@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5422.robot;
 
 import org.usfirst.frc.team5422.robot.subsystems.climber.Climber;
-import org.usfirst.frc.team5422.robot.subsystems.climber.Intake;
+import org.usfirst.frc.team5422.robot.subsystems.intake.Intake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;

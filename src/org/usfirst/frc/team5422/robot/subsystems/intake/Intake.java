@@ -1,4 +1,4 @@
-package org.usfirst.frc.team5422.robot.subsystems.climber;
+package org.usfirst.frc.team5422.robot.subsystems.intake;
 
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
