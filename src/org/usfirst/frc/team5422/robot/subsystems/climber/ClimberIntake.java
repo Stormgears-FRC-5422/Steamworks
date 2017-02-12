@@ -7,10 +7,10 @@ import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Climber extends Subsystem {
+public class ClimberIntake extends Subsystem {
 	public CANTalon climberTalon;
 
-	public Climber() {
+	public ClimberIntake() {
 		climberTalon = new CANTalon(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 	}
 

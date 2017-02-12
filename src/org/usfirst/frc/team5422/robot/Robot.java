@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5422.robot;
 
-import org.usfirst.frc.team5422.robot.subsystems.climber.Climber;
-import org.usfirst.frc.team5422.robot.subsystems.climber.Intake;
+import org.usfirst.frc.team5422.robot.subsystems.climber.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.MecanumDrive;
@@ -19,18 +18,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//TODO: get max vel
-//TODO: PID tune with F val
-//TODO: figure out twist 
-// Ferd was here.
-
 public class Robot extends IterativeRobot {
 	//subsystems
 	public static Navigator navigatorSubsystem;
 	public static Shooter shooterSubsystem;
-	public static Climber climberSubsystem;
+	public static ClimberIntake climberIntakeSubsystem;
 	public static Manipulator gearManipulatorSubsystem;
-	public static Intake intakeSubsystem;
 	public static MecanumDrive mecanumDrive;
 	public static DSIO dsio;
 	
@@ -45,8 +38,7 @@ public class Robot extends IterativeRobot {
         navigatorSubsystem = new Navigator();
         shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
         gearManipulatorSubsystem = new Manipulator();
-        climberSubsystem = new Climber();		
-        intakeSubsystem = new Intake();
+        climberIntakeSubsystem = new ClimberIntake();		
 	}
 
 	public void robotInit() {
@@ -87,9 +79,9 @@ public class Robot extends IterativeRobot {
 
 		boolean climberButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
 		double climberVelocity = (DSIO.joystick.getThrottle()-1)/2;
-		climberSubsystem.climb(climberVelocity, climberButtonPressed );
+		climberIntakeSubsystem.climb(climberVelocity, climberButtonPressed );
 		boolean intakeButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
-		intakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
+//		climberIntakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
 		
         //Run WPILib commands
         Scheduler.getInstance().run();
@@ -112,12 +104,12 @@ public class Robot extends IterativeRobot {
 		Robot.shooterSubsystem = shooterSubsystem;
 	}
 
-	public static Climber getClimberSubsystem() {
-		return climberSubsystem;
+	public static ClimberIntake getClimberSubsystem() {
+		return climberIntakeSubsystem;
 	}
 
-	public static void setClimberSubsystem(Climber climberSubsystem) {
-		Robot.climberSubsystem = climberSubsystem;
+	public static void setClimberSubsystem(ClimberIntake climberSubsystem) {
+		Robot.climberIntakeSubsystem = climberSubsystem;
 	}
 
 	public static Manipulator getGearManipulatorSubsystem() {
@@ -126,14 +118,6 @@ public class Robot extends IterativeRobot {
 
 	public static void setGearManipulatorSubsystem(Manipulator gearManipulatorSubsystem) {
 		Robot.gearManipulatorSubsystem = gearManipulatorSubsystem;
-	}
-
-	public static Intake getIntakeSubsystem() {
-		return intakeSubsystem;
-	}
-
-	public static void setIntakeSubsystem(Intake intakeSubsystem) {
-		Robot.intakeSubsystem = intakeSubsystem;
 	}
 
 }
