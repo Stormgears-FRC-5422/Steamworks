@@ -9,7 +9,7 @@ public class ClimbCommand extends Command{
 	private double sliderVal = 0;
 	
 	public ClimbCommand(double sliderVelocity) {
-		requires(Robot.climber);
+		requires(Robot.climberIntake);
 		sliderVal = sliderVelocity;
 	}
 	
@@ -26,7 +26,7 @@ public class ClimbCommand extends Command{
 	@Override
 	protected void execute() {
 		
-		Robot.climber.climb(sliderVal);
+		Robot.climberIntake.climb(sliderVal);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

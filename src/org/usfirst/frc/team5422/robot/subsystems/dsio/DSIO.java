@@ -2,10 +2,8 @@ package org.usfirst.frc.team5422.robot.subsystems.dsio;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.Scheduler;
 
-import org.usfirst.frc.team5422.robot.commands.ClimbCommand;
-import org.usfirst.frc.team5422.robot.commands.IntakeCommand;
+import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.intake_motor_mode;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.shooter_mode;
@@ -21,11 +19,10 @@ public class DSIO {
 
 	JoystickButton bigBlue, smallBlue, greenSwitch, orangeSwitch, redSwitch;
 
-	intake_motor_mode robotIntakeMotorMode = intake_motor_mode.INTAKE;
-	intake_motor_mode robotClimberMotorMode = intake_motor_mode.CLIMB;
 	shooter_mode robotShooterMode = shooter_mode.MANUAL;
 
 	public DSIO(int joystickUsbChannel, int buttonBoardUsbChannel) {
+		System.out.println("[DSIO] initializing...");
 		// Initialize joystick and buttons
 
 		joystick = new Joystick(joystickUsbChannel);
@@ -34,38 +31,29 @@ public class DSIO {
 		bigBlue = new JoystickButton(buttonBoard, ButtonIds.BIG_BLUE);
 		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE);
 		greenSwitch = new JoystickButton(buttonBoard, ButtonIds.GREEN_SWITCH);
-		orangeSwitch = new JoystickButton(buttonBoard,ButtonIds.INTAKE_ORANGE_SWITCH_ID);
-		redSwitch = new JoystickButton(buttonBoard,ButtonIds.INTAKE_CLIMBER_RED_SWITCH_ID);
+		orangeSwitch = new JoystickButton(buttonBoard,ButtonIds.ORANGE_SWITCH);
+		redSwitch = new JoystickButton(buttonBoard,ButtonIds.RED_SWITCH);
 
 		// Assign commands to pushable buttons
 
 		// Big Blue Button
 		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
 
-		//Red Switch Button
-		if(getFunctionForRedSwitch()){
-			//Forcefully stops intake
-			Scheduler.getInstance().add(new IntakeCommand (false));
-			redSwitch.whenPressed(new ClimbCommand (getSliderValueClimber()));
-
-		} else{ 
-			//Forcefully stops climber
-			Scheduler.getInstance().add(new ClimbCommand (0));
-			redSwitch.whenReleased(new IntakeCommand(orangeSwitch.get()));
-
 
 		// TODO: add the rest of the buttons we are using
-		}
 	}
+	
 
 	public void checkSwitches() {
 
-		// RED SWITCH
+		
+		// RED SWITCH (Climb when in ON position)
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH))
-			robotIntakeMotorMode = intake_motor_mode.INTAKE;
+			Robot.climberIntake.climb(getSliderValueClimber());
 		else
-			robotIntakeMotorMode = intake_motor_mode.CLIMB;
+			Robot.climberIntake.stop();
 
+		
 		// GREEN SWITCH
 		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH))
 			robotShooterMode = shooter_mode.AUTONOMOUS;
@@ -73,7 +61,16 @@ public class DSIO {
 			robotShooterMode = shooter_mode.MANUAL;
 		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode)); // Update shooter mode
 
-		// TODO: add the rest of the switches we are using
+		// ORANGE SWITCH
+		if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH))
+			Robot.climberIntake.takeIn();
+		else
+			Robot.climberIntake.stop();
+		
+		
+		//Error Check for both switches
+		if(buttonBoard.getRawButton(ButtonIds.RED_SWITCH) && buttonBoard.getRawButton(ButtonIds.RED_SWITCH))
+			Robot.climberIntake.stop();
 	}
 
 	public double getManualShooterVelocity()
