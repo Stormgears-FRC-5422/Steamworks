@@ -14,6 +14,7 @@ import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,10 +33,8 @@ public class Robot extends IterativeRobot {
 	public static Intake intakeSubsystem;
 	public static MecanumDrive mecanumDrive;
 	public static DSIO dsio;
-
-//	public Joystick joy = new Joystick(SteamworksConstants.JOYSTICK_USB_CHANNEL);
-//	public Joystick buttonBoard = new Joystick(SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
-//	public CANTalon[] talons = new CANTalon[4];
+	
+    public Command autonomousCommand = null;
 	
 	public Robot() {
         NetworkTable.globalDeleteAll(); //Removes unused garbage from SmartDashboard
@@ -51,16 +50,37 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void robotInit() {
+        System.out.println("robot init started.");
 	}
 
 	public void autonomousInit() {
+        System.out.println("autonomous init started.");
+		//select the autonomous command for this run
+		
+		//execute autonomous command
+		if (autonomousCommand != null) {
 
+            autonomousCommand.start();
+    	}
+
+	}
+	
+	public void autonomousPeriodic() {
+		if (autonomousCommand != null) {
+            Scheduler.getInstance().run();
+    	}
 	}
 
 	public void teleopInit() {
+        System.out.println("teleop init started.");
+        if (autonomousCommand != null) {
+        	autonomousCommand.cancel();
+        }
 	}
 
 	public void teleopPeriodic() {
+        System.out.println("teleop periodic started.");
+		
         //Run the openDrive() method
         //driver.openDrive(DSIO.getLinearX(), DSIO.getLinearY(), CANTalon.TalonControlMode.Speed);
 		//while(isOperatorControl() && isEnabled()) {
