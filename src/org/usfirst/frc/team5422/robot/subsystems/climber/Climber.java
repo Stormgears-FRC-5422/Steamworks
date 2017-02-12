@@ -10,11 +10,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Climber extends Subsystem {
 	public CANTalon climberTalon;
 
-
-	public Climber(){
+	public Climber() {
 		climberTalon = new CANTalon(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
-
-
 	}
 
 	public void climb(double throttleValue, boolean climberSwitch) {

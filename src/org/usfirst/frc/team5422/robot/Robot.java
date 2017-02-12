@@ -3,6 +3,9 @@ package org.usfirst.frc.team5422.robot;
 import org.usfirst.frc.team5422.robot.subsystems.climber.Climber;
 import org.usfirst.frc.team5422.robot.subsystems.climber.Intake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
+import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.MecanumDrive;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
@@ -11,6 +14,8 @@ import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //TODO: get max vel
@@ -19,18 +24,49 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Ferd was here.
 
 public class Robot extends IterativeRobot {
-	public static final Shooter shooter = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
-	public static final DSIO dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
+	//subsystems
+	public static Navigator navigatorSubsystem;
+	public static Shooter shooterSubsystem;
+	public static Climber climberSubsystem;
+	public static Manipulator gearManipulatorSubsystem;
+	public static Intake intakeSubsystem;
+	public static MecanumDrive mecanumDrive;
+	public static DSIO dsio;
 
-	Joystick joy = new Joystick(SteamworksConstants.JOYSTICK_USB_CHANNEL);
-	Joystick buttonBoard = new Joystick(SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
-	CANTalon[] talons = new CANTalon[4];
-	Climber climberSubsystem;
-	Intake intakeSubsystem;
+//	public Joystick joy = new Joystick(SteamworksConstants.JOYSTICK_USB_CHANNEL);
+//	public Joystick buttonBoard = new Joystick(SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
+//	public CANTalon[] talons = new CANTalon[4];
 	
 	public Robot() {
-	climberSubsystem = new Climber();
-	intakeSubsystem = new Intake();
+        NetworkTable.globalDeleteAll(); //Removes unused garbage from SmartDashboard
+        dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);		
+        mecanumDrive = new MecanumDrive();
+        navigatorSubsystem = new Navigator();
+        shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
+        gearManipulatorSubsystem = new Manipulator();
+        climberSubsystem = new Climber();		
+        intakeSubsystem = new Intake();
+	}
+
+	public void robotInit() {
+//		for(int i = 0; i < talons.length; i ++) {
+//			talons[i] = new CANTalon(i);
+//			talons[i].reverseOutput(true);
+//			talons[i].changeControlMode(TalonControlMode.Speed);
+//			//Velocity PID Values
+//			talons[i].setP(0.08);
+//			talons[i].setI(0.0002);
+//			talons[i].setD(10.24);
+//			talons[i].setF(0.16);
+//			talons[i].setIZone(1500);	
+//
+//			//Position PID Values
+//			//			talons[i].setP(0.64);
+//			//			talons[i].setI(0.001);
+//			//			talons[i].setD(2.56);
+//			//			talons[i].setF(0);
+//			//			talons[i].setIZone(1000);
+//		}
 	}
 
 	public void autonomousInit() {
@@ -38,106 +74,136 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		while(isOperatorControl() && isEnabled()) {
-			double theta = Math.atan2(joy.getX(), joy.getY());
-			if(theta < 0) theta = 2 * Math.PI + theta;
-			if(Math.abs(joy.getX()) > 0.1 || Math.abs(joy.getY()) > 0.1 || Math.abs(joy.getZ()) > 0.2)
-				mecMove(6300 * Math.sqrt(joy.getX() * joy.getX() + joy.getY() * 
-						joy.getY() + joy.getZ() * joy.getZ()), theta, joy.getZ());
-			else {
-				for(int i = 0; i < talons.length; i ++) {
-					talons[i].set(0);
-				}
-			}
-			SmartDashboard.putNumber("Joy in Radians", theta);
-			SmartDashboard.putNumber("0: ", talons[0].getEncVelocity());
-			SmartDashboard.putNumber("1: ", talons[1].getEncVelocity());
-			SmartDashboard.putNumber("2: ", talons[2].getEncVelocity());
-			SmartDashboard.putNumber("3: ", talons[3].getEncVelocity());
-
-			boolean climberButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
-			double climberVelocity = (joy.getThrottle()-1)/2;
-
-			climberSubsystem.climb(climberVelocity, climberButtonPressed );
-
-			boolean intakeButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
-			intakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
-		}
+//		while(isOperatorControl() && isEnabled()) {
+//			double theta = Math.atan2(joy.getX(), joy.getY());
+//			if(theta < 0) theta = 2 * Math.PI + theta;
+//			if(Math.abs(joy.getX()) > 0.1 || Math.abs(joy.getY()) > 0.1 || Math.abs(joy.getZ()) > 0.2)
+//				mecMove(6300 * Math.sqrt(joy.getX() * joy.getX() + joy.getY() * 
+//						joy.getY() + joy.getZ() * joy.getZ()), theta, joy.getZ());
+//			else {
+//				for(int i = 0; i < talons.length; i ++) {
+//					talons[i].set(0);
+//				}
+//			}
+//			SmartDashboard.putNumber("Joy in Radians", theta);
+//			SmartDashboard.putNumber("0: ", talons[0].getEncVelocity());
+//			SmartDashboard.putNumber("1: ", talons[1].getEncVelocity());
+//			SmartDashboard.putNumber("2: ", talons[2].getEncVelocity());
+//			SmartDashboard.putNumber("3: ", talons[3].getEncVelocity());
+//
+//			boolean climberButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
+//			double climberVelocity = (joy.getThrottle()-1)/2;
+//
+//			climberSubsystem.climb(climberVelocity, climberButtonPressed );
+//
+//			boolean intakeButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
+//			intakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
+//		}
 	}
 
-	public void robotInit() {
-		for(int i = 0; i < talons.length; i ++) {
-			talons[i] = new CANTalon(i);
-			talons[i].reverseOutput(true);
-			talons[i].changeControlMode(TalonControlMode.Speed);
-			//Velocity PID Values
-			talons[i].setP(0.08);
-			talons[i].setI(0.0002);
-			talons[i].setD(10.24);
-			talons[i].setF(0.16);
-			talons[i].setIZone(1500);	
+	public void teleopPeriodic() {
+        //Run the openDrive() method
+        //driver.openDrive(DSIO.getLinearX(), DSIO.getLinearY(), CANTalon.TalonControlMode.Speed);
+		//while(isOperatorControl() && isEnabled()) {
+			mecanumDrive.move();
+		//}
 
-			//Position PID Values
-			//			talons[i].setP(0.64);
-			//			talons[i].setI(0.001);
-			//			talons[i].setD(2.56);
-			//			talons[i].setF(0);
-			//			talons[i].setIZone(1000);
-		}
+		boolean climberButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
+		double climberVelocity = (DSIO.joystick.getThrottle()-1)/2;
+		climberSubsystem.climb(climberVelocity, climberButtonPressed );
+		boolean intakeButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
+		intakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
+		
+        //Run WPILib commands
+        Scheduler.getInstance().run();
+
+	}
+	
+	public static Shooter getShooterSubsystem() {
+		return shooterSubsystem;
 	}
 
-	private void mecMove(double tgtVel, double theta, double changeVel) {
-
-		double[] vels = new double[talons.length];
-
-		if(Math.abs(theta - 0) <= Math.PI / 6.0 || Math.abs(theta - 2.0 * Math.PI) <= Math.PI / 12.0) {
-			theta = 0;
-		}
-		if(Math.abs(theta - Math.PI / 2.0) <= Math.PI / 12.0) {
-			theta = Math.PI / 2.0;
-		}
-		if(Math.abs(theta - Math.PI) <= Math.PI / 12.0) {
-			theta = Math.PI;
-		}
-		if(Math.abs(theta - 3.0 * Math.PI / 2.0) <= Math.PI / 12.0) {
-			theta = 3.0 * Math.PI / 2.0;
-		}
-		vels[0] = -(Math.sin(theta + Math.PI / 2.0) + Math.cos(theta + Math.PI / 2.0));
-		vels[1] = (Math.sin(theta + Math.PI / 2.0) - Math.cos(theta + Math.PI / 2.0));
-		vels[2] = -(Math.sin(theta + Math.PI / 2.0) - Math.cos(theta + Math.PI / 2.0));
-		vels[3] = (Math.sin(theta + Math.PI / 2.0) + Math.cos(theta + Math.PI / 2.0));
-
-		if(Math.abs(changeVel) > 0.5) {
-			for(int i = 0; i < vels.length; i ++) {
-				vels[i] -= changeVel;
-			}
-		}
-
-		while(Math.abs(vels[0]) > 1.0 || Math.abs(vels[1]) > 1.0 || Math.abs(vels[2]) > 1.0 || Math.abs(vels[3]) > 1.0) {
-			double max = Math.max(Math.max(Math.max(Math.abs(vels[0]), Math.abs(vels[1])), Math.abs(vels[2])), Math.abs(vels[3]));
-			for(int i = 0; i < vels.length; i ++) {
-				vels[i] /= max;
-			}
-		}
-
-		if(Math.abs(joy.getX()) < 0.2 && Math.abs(joy.getY()) < 0.2) {
-			for(int i = 0; i < vels.length; i ++) {
-				vels[i] = -changeVel;
-			}
-		}
-
-		for(int i = 0; i < vels.length; i ++) {
-			vels[i] *= tgtVel;
-		}
-
-		SmartDashboard.putNumber("Set value for 0:", vels[0]);
-		SmartDashboard.putNumber("Set value for 1:", vels[1]);
-		SmartDashboard.putNumber("Set value for 2:", vels[2]);
-		SmartDashboard.putNumber("Set value for 3:", vels[3]);
-
-		for(int i = 0; i < talons.length; i ++) {
-			talons[i].set(vels[i]);
-		}
+	public static void setShooterSubsystem(Shooter shooterSubsystem) {
+		Robot.shooterSubsystem = shooterSubsystem;
 	}
+
+	public static Climber getClimberSubsystem() {
+		return climberSubsystem;
+	}
+
+	public static void setClimberSubsystem(Climber climberSubsystem) {
+		Robot.climberSubsystem = climberSubsystem;
+	}
+
+	public static Manipulator getGearManipulatorSubsystem() {
+		return gearManipulatorSubsystem;
+	}
+
+	public static void setGearManipulatorSubsystem(Manipulator gearManipulatorSubsystem) {
+		Robot.gearManipulatorSubsystem = gearManipulatorSubsystem;
+	}
+
+	public static Intake getIntakeSubsystem() {
+		return intakeSubsystem;
+	}
+
+	public static void setIntakeSubsystem(Intake intakeSubsystem) {
+		Robot.intakeSubsystem = intakeSubsystem;
+	}
+
+	
+//	private void mecMove(double tgtVel, double theta, double changeVel) {
+//
+//		double[] vels = new double[talons.length];
+//
+//		if(Math.abs(theta - 0) <= Math.PI / 6.0 || Math.abs(theta - 2.0 * Math.PI) <= Math.PI / 12.0) {
+//			theta = 0;
+//		}
+//		if(Math.abs(theta - Math.PI / 2.0) <= Math.PI / 12.0) {
+//			theta = Math.PI / 2.0;
+//		}
+//		if(Math.abs(theta - Math.PI) <= Math.PI / 12.0) {
+//			theta = Math.PI;
+//		}
+//		if(Math.abs(theta - 3.0 * Math.PI / 2.0) <= Math.PI / 12.0) {
+//			theta = 3.0 * Math.PI / 2.0;
+//		}
+//		vels[0] = -(Math.sin(theta + Math.PI / 2.0) + Math.cos(theta + Math.PI / 2.0));
+//		vels[1] = (Math.sin(theta + Math.PI / 2.0) - Math.cos(theta + Math.PI / 2.0));
+//		vels[2] = -(Math.sin(theta + Math.PI / 2.0) - Math.cos(theta + Math.PI / 2.0));
+//		vels[3] = (Math.sin(theta + Math.PI / 2.0) + Math.cos(theta + Math.PI / 2.0));
+//
+//		if(Math.abs(changeVel) > 0.5) {
+//			for(int i = 0; i < vels.length; i ++) {
+//				vels[i] -= changeVel;
+//			}
+//		}
+//
+//		while(Math.abs(vels[0]) > 1.0 || Math.abs(vels[1]) > 1.0 || Math.abs(vels[2]) > 1.0 || Math.abs(vels[3]) > 1.0) {
+//			double max = Math.max(Math.max(Math.max(Math.abs(vels[0]), Math.abs(vels[1])), Math.abs(vels[2])), Math.abs(vels[3]));
+//			for(int i = 0; i < vels.length; i ++) {
+//				vels[i] /= max;
+//			}
+//		}
+//
+//		if(Math.abs(joy.getX()) < 0.2 && Math.abs(joy.getY()) < 0.2) {
+//			for(int i = 0; i < vels.length; i ++) {
+//				vels[i] = -changeVel;
+//			}
+//		}
+//
+//		for(int i = 0; i < vels.length; i ++) {
+//			vels[i] *= tgtVel;
+//		}
+//
+//		SmartDashboard.putNumber("Set value for 0:", vels[0]);
+//		SmartDashboard.putNumber("Set value for 1:", vels[1]);
+//		SmartDashboard.putNumber("Set value for 2:", vels[2]);
+//		SmartDashboard.putNumber("Set value for 3:", vels[3]);
+//
+//		for(int i = 0; i < talons.length; i ++) {
+//			talons[i].set(vels[i]);
+//		}
+//	}
 
 }

@@ -29,7 +29,7 @@ public class ShooterRunnable implements Runnable
             e.printStackTrace();
         }
 
-        Robot.shooter.stop();
+        Robot.shooterSubsystem.stop();
         Diagnostics.log("shooterThread is stopped.");
     }
 }

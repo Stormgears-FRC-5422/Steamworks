@@ -12,8 +12,8 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.shooter_mode;
  * If you want to use a button, YOU MUST do it through here; ask Michael to add it
  */
 public class DSIO {
-    Joystick joystick;
-    Joystick buttonBoard;
+    public static Joystick joystick;
+    public static Joystick buttonBoard;
 
     JoystickButton bigBlue, smallBlue, redSwitch, greenSwitch;
 
@@ -62,4 +62,21 @@ public class DSIO {
     {
         return (joystick.getZ());
     }
+
+    public Joystick getJoystick() {
+		return joystick;
+	}
+
+	public void setJoystick(Joystick joystick) {
+		this.joystick = joystick;
+	}
+
+	public Joystick getButtonBoard() {
+		return buttonBoard;
+	}
+
+	public void setButtonBoard(Joystick buttonBoard) {
+		this.buttonBoard = buttonBoard;
+	}
+	    
 }

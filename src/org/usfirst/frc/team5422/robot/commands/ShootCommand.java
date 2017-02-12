@@ -18,7 +18,7 @@ public class ShootCommand extends Command
     public ShootCommand(int shootTimeSeconds, shooter_mode shooterMode)
     {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.shooter);
+        requires(Robot.shooterSubsystem);
 
         shooterRunnable = new ShooterRunnable(shootTimeSeconds);
         this.shooterMode = shooterMode;
@@ -28,7 +28,7 @@ public class ShootCommand extends Command
     protected void initialize()
     {
         if (shooterMode == shooter_mode.MANUAL)
-            Robot.shooter.setShootVelocity(Robot.dsio.getManualShooterVelocity());
+            Robot.shooterSubsystem.setShootVelocity(Robot.dsio.getManualShooterVelocity());
         else
             ;
 
@@ -40,7 +40,7 @@ public class ShootCommand extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
-        Robot.shooter.shoot();
+        Robot.shooterSubsystem.shoot();
     }
 
     // Make this return true when this Command no longer needs to run execute()
