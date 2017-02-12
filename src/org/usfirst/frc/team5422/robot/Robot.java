@@ -70,6 +70,10 @@ public class Robot extends IterativeRobot {
 	
 	public void autoPeriodic() {
         System.out.println("auto periodic started.");
+        if (autonomousCommand != null) {
+            Scheduler.getInstance().run();
+        }
+
 	}
 	
 	public void teleopPeriodic() {
