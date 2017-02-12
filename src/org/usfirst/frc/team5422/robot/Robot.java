@@ -75,12 +75,6 @@ public class Robot extends IterativeRobot {
 		mecanumDrive.move();
 
 		dsio.checkSwitches();
-		//
-		boolean climberButtonPressed = dsio.buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
-		double climberVelocity = (dsio.joystick.getThrottle()-1)/2;
-		climberIntakeSubsystem.climb(climberVelocity);
-		boolean intakeButtonPressed = dsio.buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
-		climberIntakeSubsystem.takeIn();
 		
         //Run WPILib commands
         Scheduler.getInstance().run();
