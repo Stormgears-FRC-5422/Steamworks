@@ -74,11 +74,12 @@ public class Robot extends IterativeRobot {
         //Move the MecanumDrive
 		mecanumDrive.move();
 
+		dsio.checkSwitches();
 		//
-		boolean climberButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
-		double climberVelocity = (DSIO.joystick.getThrottle()-1)/2;
+		boolean climberButtonPressed = dsio.buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
+		double climberVelocity = (dsio.joystick.getThrottle()-1)/2;
 		climberIntakeSubsystem.climb(climberVelocity);
-		boolean intakeButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
+		boolean intakeButtonPressed = dsio.buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
 		climberIntakeSubsystem.takeIn();
 		
         //Run WPILib commands
