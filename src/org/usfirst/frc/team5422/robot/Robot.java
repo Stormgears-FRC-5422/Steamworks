@@ -38,9 +38,6 @@ public class Robot extends IterativeRobot {
 //	public CANTalon[] talons = new CANTalon[4];
 	
 	public Robot() {
-	}
-
-	public void robotInit() {
         NetworkTable.globalDeleteAll(); //Removes unused garbage from SmartDashboard
         dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
         
@@ -51,6 +48,9 @@ public class Robot extends IterativeRobot {
         gearManipulatorSubsystem = new Manipulator();
         climberSubsystem = new Climber();		
         intakeSubsystem = new Intake();
+	}
+
+	public void robotInit() {
 	}
 
 	public void autonomousInit() {
