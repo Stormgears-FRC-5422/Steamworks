@@ -1,6 +1,6 @@
 package org.usfirst.frc.team5422.robot;
 
-import org.usfirst.frc.team5422.robot.subsystems.climber.ClimberIntake;
+import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.MecanumDrive;
@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
         navigatorSubsystem = new Navigator();
         shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
         gearManipulatorSubsystem = new Manipulator();
-        climberIntakeSubsystem = new ClimberIntake();		
+        climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);		
 	}
 
 	public void robotInit() {
@@ -71,17 +71,15 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
         System.out.println("teleop periodic started.");
 		
-        //Run the openDrive() method
-        //driver.openDrive(DSIO.getLinearX(), DSIO.getLinearY(), CANTalon.TalonControlMode.Speed);
-		//while(isOperatorControl() && isEnabled()) {
-			mecanumDrive.move();
-		//}
+        //Move the MecanumDrive
+		mecanumDrive.move();
 
+		//
 		boolean climberButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
 		double climberVelocity = (DSIO.joystick.getThrottle()-1)/2;
-		climberIntakeSubsystem.climb(climberVelocity, climberButtonPressed );
+		climberIntakeSubsystem.climb(climberVelocity);
 		boolean intakeButtonPressed = DSIO.buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
-//		climberIntakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
+		climberIntakeSubsystem.takeIn();
 		
         //Run WPILib commands
         Scheduler.getInstance().run();
