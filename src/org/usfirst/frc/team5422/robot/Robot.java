@@ -68,6 +68,10 @@ public class Robot extends IterativeRobot {
 		
 	}
 	
+	public void autoPeriodic() {
+        System.out.println("auto periodic started.");
+	}
+	
 	public void teleopPeriodic() {
         System.out.println("teleop periodic started.");
 		
