@@ -65,12 +65,6 @@ public class Robot extends IterativeRobot {
 
 	}
 	
-	public void autonomousPeriodic() {
-		if (autonomousCommand != null) {
-            Scheduler.getInstance().run();
-    	}
-	}
-
 	public void teleopInit() {
         System.out.println("teleop init started.");
         if (autonomousCommand != null) {
@@ -78,6 +72,10 @@ public class Robot extends IterativeRobot {
         }
 	}
 
+	public void disabledInit() {
+		
+	}
+	
 	public void teleopPeriodic() {
         System.out.println("teleop periodic started.");
 		
@@ -98,6 +96,14 @@ public class Robot extends IterativeRobot {
 
 	}
 	
+	public void disabledPeriodic() {
+		
+	}
+	
+	public void robotPeriodic() {
+		
+	}
+		
 	public static Shooter getShooterSubsystem() {
 		return shooterSubsystem;
 	}
