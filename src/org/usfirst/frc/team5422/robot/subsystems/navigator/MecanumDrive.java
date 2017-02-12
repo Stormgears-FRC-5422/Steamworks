@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MecanumDrive {
 	public static CANTalon[] talons = new CANTalon[4];
 
-	public void MecanumDrive() {
+	public MecanumDrive() {		
 		for(int i = 0; i < talons.length; i ++) {
 			
 			talons[i] = new CANTalon(i);

@@ -22,7 +22,6 @@ public class DSIO {
 
     public DSIO(int joystickUsbChannel, int buttonBoardUsbChannel) {
         // Initialize joystick and buttons
-
         joystick = new Joystick(joystickUsbChannel);
         buttonBoard = new Joystick(buttonBoardUsbChannel);
 
@@ -34,7 +33,7 @@ public class DSIO {
         // Assign commands to pushable buttons
 
         // Big Blue Button
-        bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
+//        bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
 
         // TODO: add the rest of the buttons we are using
 
