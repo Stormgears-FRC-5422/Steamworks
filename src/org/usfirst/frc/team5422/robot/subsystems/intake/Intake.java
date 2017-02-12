@@ -11,27 +11,18 @@ public class Intake extends Subsystem {
 	public CANTalon climberIntakeTalon;
 
 
-	public Intake(){
+	public Intake(int climberIntakeTalonId){
 		climberIntakeTalon = new CANTalon(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
-
 	}
-	
-	public void takeIn(boolean climberSwitch, boolean intakeSwitch){
+
+	public void takeIn(){
 		if(climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus){
 			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
 		}
-		
-		if(climberSwitch = false){
-			if(intakeSwitch = true){
-				
-				climberIntakeTalon.set(0.3);
-			}
-			
-		}
-		
-	}
+		climberIntakeTalon.set(0.3);
 
+	}
 
 	@Override
 	protected void initDefaultCommand() {

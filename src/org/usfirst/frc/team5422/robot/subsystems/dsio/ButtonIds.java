@@ -12,4 +12,6 @@ public class ButtonIds {
     public static final int SMALL_BLUE = 1;
     public static final int RED_SWITCH = 2;
     public static final int GREEN_SWITCH = 3;
+ 	public static final int INTAKE_CLIMBER_RED_SWITCH_ID = 3;
+ 	public static final int INTAKE_ORANGE_SWITCH_ID = 15;
 }

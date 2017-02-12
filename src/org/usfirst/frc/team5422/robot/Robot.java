@@ -2,6 +2,7 @@ package org.usfirst.frc.team5422.robot;
 
 import org.usfirst.frc.team5422.robot.subsystems.climber.Climber;
 import org.usfirst.frc.team5422.robot.subsystems.intake.Intake;
+import org.usfirst.frc.team5422.robot.subsystems.dsio.ButtonIds;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	public static final Shooter shooter = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
+	public static final Climber climber = new Climber(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
+	public static final Intake intake = new Intake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 	public static final DSIO dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 
 	Joystick joy = new Joystick(SteamworksConstants.JOYSTICK_USB_CHANNEL);
@@ -29,8 +32,7 @@ public class Robot extends IterativeRobot {
 	Intake intakeSubsystem;
 	
 	public Robot() {
-	climberSubsystem = new Climber();
-	intakeSubsystem = new Intake();
+
 	}
 
 	public void autonomousInit() {
@@ -55,13 +57,7 @@ public class Robot extends IterativeRobot {
 			SmartDashboard.putNumber("2: ", talons[2].getEncVelocity());
 			SmartDashboard.putNumber("3: ", talons[3].getEncVelocity());
 
-			boolean climberButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_CLIMBER_RED_SWITCH_ID);
-			double climberVelocity = (joy.getThrottle()-1)/2;
-
-			climberSubsystem.climb(climberVelocity, climberButtonPressed );
-
-			boolean intakeButtonPressed = buttonBoard.getRawButton(SteamworksConstants.INTAKE_ORANGE_SWITCH_ID);
-			intakeSubsystem.takeIn(climberButtonPressed, intakeButtonPressed);
+	
 		}
 	}
 

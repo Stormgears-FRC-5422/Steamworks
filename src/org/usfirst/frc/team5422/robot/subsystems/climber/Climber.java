@@ -11,34 +11,21 @@ public class Climber extends Subsystem {
 	public CANTalon climberTalon;
 
 
-	public Climber(){
+	public Climber(int climberIntakeTalonId){
 		climberTalon = new CANTalon(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
-
-
 	}
 
-	public void climb(double throttleValue, boolean climberSwitch) {
+	public void climb(double throttleValue) {
 		if(climberTalon.getControlMode() != TalonControlMode.PercentVbus){
 			climberTalon.changeControlMode(TalonControlMode.PercentVbus);
 		}
 
-		if(climberSwitch){
-			climberTalon.set(throttleValue);	
-		}
+		climberTalon.set(throttleValue);	
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-
-
-
 	}
 
-
-
-
 }
-
-
-
 
