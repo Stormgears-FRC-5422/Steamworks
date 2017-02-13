@@ -27,11 +27,11 @@ public class DSIO {
         joystick = new Joystick(joystickUsbChannel);
         buttonBoard = new Joystick(buttonBoardUsbChannel);
 
-		bigBlue = new JoystickButton(buttonBoard, ButtonIds.BIG_BLUE);
-		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE);
-		greenSwitch = new JoystickButton(buttonBoard, ButtonIds.GREEN_SWITCH);
-		orangeSwitch = new JoystickButton(buttonBoard,ButtonIds.ORANGE_SWITCH);
-		redSwitch = new JoystickButton(buttonBoard,ButtonIds.RED_SWITCH);
+		bigBlue = new JoystickButton(buttonBoard, ButtonIds.BIG_BLUE_BUTTON_ID);
+		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE_BUTTON_ID);
+		greenSwitch = new JoystickButton(buttonBoard, ButtonIds.GREEN_SWITCH_ID);
+		orangeSwitch = new JoystickButton(buttonBoard,ButtonIds.ORANGE_SWITCH_ID);
+		redSwitch = new JoystickButton(buttonBoard,ButtonIds.RED_SWITCH_ID);
 
         // Assign commands to pushable buttons
 
@@ -43,29 +43,39 @@ public class DSIO {
     }
 
 	public void checkSwitches() {
+		System.out.println("in check switches method...");
 		// RED SWITCH (Climb when in ON position)
-		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH))
+		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID)) {
+			//System.out.println("RED SWITCH Pressed...");
 			Robot.climberIntakeSubsystem.climb(getSliderValueClimber());
-		else
+		} else {
 			Robot.climberIntakeSubsystem.stop();
-
+		}
 		
 		// GREEN SWITCH
-		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH))
+		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID)) {
+			//System.out.println("GREEN SWITCH Pressed...");
 			robotShooterMode = shooter_mode.AUTONOMOUS;
-		else
+		} else {
 			robotShooterMode = shooter_mode.MANUAL;
-		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode)); // Update shooter mode
-
+		}
+		
+		if (buttonBoard.getRawButton(ButtonIds.BIG_BLUE_BUTTON_ID)) {
+			//System.out.println("BIG BLUE Pressed...");
+			//bigBlue.whenPressed(new ShootCommand(3, robotShooterMode)); // Update shooter mode
+		}
+		
 		// ORANGE SWITCH
-		if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH))
+		if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID)) {
+			//System.out.println("ORANGE SWITCH Pressed...");
 			Robot.climberIntakeSubsystem.takeIn();
-		else
+		} else {
 			Robot.climberIntakeSubsystem.stop();
+		}
 		
-		
+		//TODO:why are both switches RED_SWITCH
 		//Error Check for both switches
-		if(buttonBoard.getRawButton(ButtonIds.RED_SWITCH) && buttonBoard.getRawButton(ButtonIds.RED_SWITCH))
+		if(buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID) && buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID))
 			Robot.climberIntakeSubsystem.stop();
 	}
 
