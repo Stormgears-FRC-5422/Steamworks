@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5422.robot;
 
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
@@ -24,17 +25,20 @@ public class Robot extends IterativeRobot {
 	public static Shooter shooterSubsystem;
 	public static ClimberIntake climberIntakeSubsystem;
 	public static Manipulator gearManipulatorSubsystem;
-	public static MecanumDrive mecanumDrive;
 	public static DSIO dsio;
 	
     public Command autonomousCommand = null;
 	
 	public Robot() {
         NetworkTable.globalDeleteAll(); //Removes unused garbage from SmartDashboard
-        dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
-        
-        mecanumDrive = new MecanumDrive();
-        
+		NetworkTable.initialize();
+
+		//TODO:: initialize sensors here 
+		//TODO: turn on these two lines of code when ready to test
+//		SensorManager.initiateSensorSystems();
+//		SensorManager.startPublishingToNetwork();
+		
+        dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);        
         navigatorSubsystem = new Navigator();
         shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
         gearManipulatorSubsystem = new Manipulator();
@@ -80,7 +84,7 @@ public class Robot extends IterativeRobot {
         System.out.println("teleop periodic started.");
 		
         //Move the MecanumDrive
-		mecanumDrive.move();
+		Navigator.getInstance().getMecanumDrive().move();
 
 		dsio.checkSwitches();
 		
