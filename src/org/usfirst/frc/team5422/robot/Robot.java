@@ -26,27 +26,29 @@ public class Robot extends IterativeRobot {
 	public static ClimberIntake climberIntakeSubsystem;
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
-	
+
     public Command autonomousCommand = null;
 	
 	public Robot() {
         NetworkTable.globalDeleteAll(); //Removes unused garbage from SmartDashboard
 		NetworkTable.initialize();
 
-		//TODO:: initialize sensors here 
-		//TODO: turn on these two lines of code when ready to test
-//		SensorManager.initiateSensorSystems();
-//		SensorManager.startPublishingToNetwork();
-		
         dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);        
         navigatorSubsystem = new Navigator();
         shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
         gearManipulatorSubsystem = new Manipulator();
-        climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);		
+        climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);				
+
+        //TODO:: initialize sensors here 
+		//TODO: turn on these two lines of code when ready to test
+		SensorManager.initiateSensorSystems();
+		SensorManager.startPublishingToNetwork();
 	}
 
 	public void robotInit() {
         System.out.println("robot init started.");
+        
+        
 	}
 
 	public void autonomousInit() {

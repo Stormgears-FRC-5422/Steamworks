@@ -10,9 +10,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
 
 public class GlobalMapping extends RunnableNotifier{
-	
-	
-	
+
 	static final double SQRT_2 = Math.sqrt(2);
 	static final int ENCODER_RESOLUTION = 2048;//?????
 	static final double PI = Math.PI;

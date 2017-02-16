@@ -10,8 +10,6 @@ public class Navigator extends Subsystem{
 	
 	public Notifier splineFollowThread;
 	
-	//public CANTalon[] talons = new CANTalon[4];
-	
 	private static Navigator instance;
 	private static MecanumDrive mecanumDrive;
 

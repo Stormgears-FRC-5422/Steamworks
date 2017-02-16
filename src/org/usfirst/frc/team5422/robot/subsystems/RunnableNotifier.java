@@ -19,9 +19,9 @@ public class RunnableNotifier implements Runnable{
 	
 	private String networkKey;
 	
-	public RunnableNotifier(String NetworkKey, double periodS){
+	public RunnableNotifier(String networkKey, double periodS){
 		networkTable = NetworkTable.getTable(networkKey);
-		networkKey = NetworkKey;
+		this.networkKey = networkKey;
 		thread = new Notifier(this);
 		period = periodS;
 	}
