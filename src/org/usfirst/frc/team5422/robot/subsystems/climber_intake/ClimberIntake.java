@@ -37,6 +37,7 @@ public class ClimberIntake extends Subsystem {
 
 	@Override
 	protected void initDefaultCommand() {
+		climberIntakeTalon.set(0);
 	}
 
 }
