@@ -41,8 +41,8 @@ public class Robot extends IterativeRobot {
 
         //TODO:: initialize sensors here 
 		//TODO: turn on these two lines of code when ready to test
-		SensorManager.initiateSensorSystems();
-		SensorManager.startPublishingToNetwork();
+//		SensorManager.initiateSensorSystems();
+//		SensorManager.startPublishingToNetwork();
 	}
 
 	public void robotInit() {
