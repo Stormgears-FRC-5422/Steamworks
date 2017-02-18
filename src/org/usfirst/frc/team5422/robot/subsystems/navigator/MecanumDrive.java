@@ -50,6 +50,7 @@ public class MecanumDrive {
 	}
 	
 	public void move() {
+		System.out.println("Mecanum Drive moving...");
 		Joystick joy = Robot.dsio.getJoystick();
 
 		double theta = Math.atan2(joy.getX(), joy.getY());

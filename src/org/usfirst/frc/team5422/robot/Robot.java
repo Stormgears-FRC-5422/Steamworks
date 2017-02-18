@@ -1,23 +1,19 @@
 package org.usfirst.frc.team5422.robot;
 
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
+import org.usfirst.frc.team5422.robot.commands.AutonomousCommand;
+import org.usfirst.frc.team5422.robot.commands.PlaceGearCommand;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.MecanumDrive;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
-
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
-
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousModeOptions;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	//subsystems
@@ -27,6 +23,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 
+	public autonomousModeOptions autonomousModeSelected = autonomousModeOptions.JUST_CROSS_LINE;
     public Command autonomousCommand = null;
 	
 	public Robot() {
@@ -53,14 +50,15 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
         System.out.println("autonomous init started.");
-		//select the autonomous command for this run
-		
+
+        //select the autonomous command for this run
+        selectAutonomousCommand();
+        
 		//execute autonomous command
 		if (autonomousCommand != null) {
 
             autonomousCommand.start();
     	}
-
 	}
 	
 	public void teleopInit() {
@@ -103,7 +101,34 @@ public class Robot extends IterativeRobot {
 		
 	}
 		
-	public static Shooter getShooterSubsystem() {
+    private void selectAutonomousCommand() {
+
+        autonomousModeSelected = (autonomousModeOptions)dsio.autonomousModeChooser.getSelected();
+        switch (autonomousModeSelected) {
+            case PLACE_GEAR_LEFT_AIRSHIP:
+                //System.out.println("selecting Place Gear Left of Airship command.");
+            	autonomousCommand = new PlaceGearCommand();
+            	break;
+            case PLACE_GEAR_RIGHT_AIRSHIP:
+            	//for autonomous reach, cross and shoot independently using separate trapezoidal motion profile
+                //System.out.println("selecting reach 'n cross 'n shoot command.");
+            	autonomousCommand = new PlaceGearCommand();
+            	break;
+            case PLACE_GEAR_CENTER_AIRSHIP:
+            	//autonomous reach using SINGLE trapezoidal motion profile
+                //System.out.println("selecting reach command.");
+            	autonomousCommand = new PlaceGearCommand();
+            case JUST_CROSS_LINE:
+            case NONE:
+            default:
+            	//autonomous reach AND cross with NO shoot using SINGLE trapezoidal motion profile
+            	autonomousCommand = new AutonomousCommand();
+            	break;
+        }
+    	
+    }
+
+    public static Shooter getShooterSubsystem() {
 		return shooterSubsystem;
 	}
 
@@ -127,4 +152,5 @@ public class Robot extends IterativeRobot {
 		Robot.gearManipulatorSubsystem = gearManipulatorSubsystem;
 	}
 
+	
 }

@@ -29,7 +29,16 @@ public class SteamworksConstants
 	public static double POSITION_D = 2.56;
 	public static int POSITION_IZONE = 1000;
 
-    // INTAKE MOTOR MODE
+	//autonomous mode options
+	public enum autonomousModeOptions {
+		PLACE_GEAR_LEFT_AIRSHIP,
+		PLACE_GEAR_RIGHT_AIRSHIP,
+		PLACE_GEAR_CENTER_AIRSHIP,
+		JUST_CROSS_LINE,
+		NONE
+	}
+
+	// INTAKE MOTOR MODE
     public enum intake_motor_mode {
         INTAKE,
         CLIMB

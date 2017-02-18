@@ -2,9 +2,12 @@ package org.usfirst.frc.team5422.robot.subsystems.dsio;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.commands.ShootCommand;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousModeOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.intake_motor_mode;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.shooter_mode;
 
@@ -16,6 +19,7 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.shooter_mode;
 public class DSIO {
     public static Joystick joystick;
     public static Joystick buttonBoard;
+    public static SendableChooser<autonomousModeOptions> autonomousModeChooser;
 
 	JoystickButton bigBlue, smallBlue, greenSwitch, orangeSwitch, redSwitch;
 
@@ -26,6 +30,15 @@ public class DSIO {
         // Initialize joystick and buttons
         joystick = new Joystick(joystickUsbChannel);
         buttonBoard = new Joystick(buttonBoardUsbChannel);
+        
+        autonomousModeChooser = new SendableChooser<autonomousModeOptions>();
+        
+        autonomousModeChooser.addObject("Place Gear Left", autonomousModeOptions.PLACE_GEAR_LEFT_AIRSHIP);
+        autonomousModeChooser.addDefault("Place Gear Center", autonomousModeOptions.PLACE_GEAR_CENTER_AIRSHIP);
+        autonomousModeChooser.addObject("Place Gear Right", autonomousModeOptions.PLACE_GEAR_RIGHT_AIRSHIP);
+        autonomousModeChooser.addObject("Cross the Line", autonomousModeOptions.JUST_CROSS_LINE);
+        autonomousModeChooser.addObject("Not Moving in Autonomous", autonomousModeOptions.NONE);
+        SmartDashboard.putData("Autonomous Mode Chooser", autonomousModeChooser);
 
 		bigBlue = new JoystickButton(buttonBoard, ButtonIds.BIG_BLUE_BUTTON_ID);
 		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE_BUTTON_ID);
