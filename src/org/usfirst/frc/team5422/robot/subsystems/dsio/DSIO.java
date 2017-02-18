@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.commands.ShootCommand;
-import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousModeOptions;
-import org.usfirst.frc.team5422.utils.SteamworksConstants.intake_motor_mode;
-import org.usfirst.frc.team5422.utils.SteamworksConstants.shooter_mode;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.shooterMode;
 
 /**
  * Driver Station Input Output (D.S.I.O.)
@@ -17,43 +17,45 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.shooter_mode;
  * If you want to use a button, YOU MUST do it through here; ask Michael to add it
  */
 public class DSIO {
-    public static Joystick joystick;
-    public static Joystick buttonBoard;
-    public static SendableChooser<autonomousModeOptions> autonomousModeChooser;
+	public Joystick joystick;
+	public Joystick buttonBoard;
+	public SendableChooser<alliances> allianceChooser;
+	public SendableChooser<autonomousGearPlacementOptions> autonomousGearPlacementOptionsChooser;
+	public SendableChooser<autonomousDropOffLocationOptions> autonomousDropOffLocationOptionsChooser;
 
 	JoystickButton bigBlue, smallBlue, greenSwitch, orangeSwitch, redSwitch;
 
-    intake_motor_mode robotIntakeMotorMode = intake_motor_mode.INTAKE;
-    shooter_mode robotShooterMode = shooter_mode.MANUAL;
+	shooterMode robotShooterMode = shooterMode.MANUAL;
 
-    public DSIO(int joystickUsbChannel, int buttonBoardUsbChannel) {
-        // Initialize joystick and buttons
-        joystick = new Joystick(joystickUsbChannel);
-        buttonBoard = new Joystick(buttonBoardUsbChannel);
-        
-        autonomousModeChooser = new SendableChooser<autonomousModeOptions>();
-        
-        autonomousModeChooser.addObject("Place Gear Left", autonomousModeOptions.PLACE_GEAR_LEFT_AIRSHIP);
-        autonomousModeChooser.addDefault("Place Gear Center", autonomousModeOptions.PLACE_GEAR_CENTER_AIRSHIP);
-        autonomousModeChooser.addObject("Place Gear Right", autonomousModeOptions.PLACE_GEAR_RIGHT_AIRSHIP);
-        autonomousModeChooser.addObject("Cross the Line", autonomousModeOptions.JUST_CROSS_LINE);
-        autonomousModeChooser.addObject("Not Moving in Autonomous", autonomousModeOptions.NONE);
-        SmartDashboard.putData("Autonomous Mode Chooser", autonomousModeChooser);
+	public DSIO(int joystickUsbChannel, int buttonBoardUsbChannel) {
+		// Initialize joystick and buttons
+		joystick = new Joystick(joystickUsbChannel);
+		buttonBoard = new Joystick(buttonBoardUsbChannel);
+
+		allianceChooser = new SendableChooser<alliances>();
+		allianceChooser.addDefault("Red Alliance", alliances.RED);
+		allianceChooser.addObject("Blue Alliance", alliances.BLUE);
+		SmartDashboard.putData("Alliance Chooser", allianceChooser);
+
+		autonomousGearPlacementOptionsChooser = new SendableChooser<autonomousGearPlacementOptions>();
+		autonomousGearPlacementOptionsChooser.addObject("Place Gear Left", autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP);
+		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
+		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
+		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
+		SmartDashboard.putData("Autonomous Mode Chooser", autonomousGearPlacementOptionsChooser);
 
 		bigBlue = new JoystickButton(buttonBoard, ButtonIds.BIG_BLUE_BUTTON_ID);
 		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE_BUTTON_ID);
 		greenSwitch = new JoystickButton(buttonBoard, ButtonIds.GREEN_SWITCH_ID);
-		orangeSwitch = new JoystickButton(buttonBoard,ButtonIds.ORANGE_SWITCH_ID);
-		redSwitch = new JoystickButton(buttonBoard,ButtonIds.RED_SWITCH_ID);
+		orangeSwitch = new JoystickButton(buttonBoard, ButtonIds.ORANGE_SWITCH_ID);
+		redSwitch = new JoystickButton(buttonBoard, ButtonIds.RED_SWITCH_ID);
 
-        // Assign commands to pushable buttons
+		// Assign commands to pushable buttons
 
-		//Temporarily commented out this bigblue whenpressed - shooter until the code is all aligned
-		
-        // Big Blue Button
-//        bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
+		// Big Blue Button
+		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
 
-    }
+	}
 
 	public void checkSwitches() {
 		System.out.println("in check switches method...");
@@ -64,13 +66,13 @@ public class DSIO {
 		else
 			Robot.climberIntakeSubsystem.stop();
 
-		
+
 		// GREEN SWITCH
 		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID))
 			//System.out.println("GREEN SWITCH Pressed...");
-			robotShooterMode = shooter_mode.AUTONOMOUS;
+			robotShooterMode = shooterMode.AUTONOMOUS;
 		else
-			robotShooterMode = shooter_mode.MANUAL;
+			robotShooterMode = shooterMode.MANUAL;
 
 
 		// ORANGE SWITCH
@@ -101,42 +103,18 @@ public class DSIO {
 		}
 	}
 
-	public double getManualShooterVelocity()
-	{
+	public double getManualShooterVelocity() {
 		return (joystick.getZ());
 	}
 
 	public double getSliderValueClimber() {
-		double climberVelocity = (joystick.getThrottle()-1)/2;
+		double climberVelocity = (joystick.getThrottle() - 1) / 2;
 
 
 		return climberVelocity;
-	} 
-
-	public boolean getFunctionForRedSwitch (){
-		boolean isClimber;
-
-		if(redSwitch.get()){
-			isClimber = true;
-		}else isClimber = false;
-
-		return isClimber;
 	}
 
-    public Joystick getJoystick() {
+	public Joystick getJoystick() {
 		return joystick;
 	}
-
-	public void setJoystick(Joystick joystick) {
-		this.joystick = joystick;
-	}
-
-	public Joystick getButtonBoard() {
-		return buttonBoard;
-	}
-
-	public void setButtonBoard(Joystick buttonBoard) {
-		this.buttonBoard = buttonBoard;
-	}
-	    
 }

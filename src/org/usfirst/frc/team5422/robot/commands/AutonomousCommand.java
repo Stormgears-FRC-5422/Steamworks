@@ -4,7 +4,7 @@ import org.usfirst.frc.team5422.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class AutonomousCommand extends Command{
+public class AutonomousCommand extends Command {
 	public AutonomousCommand() {
     	requires(Robot.navigatorSubsystem);
 	}

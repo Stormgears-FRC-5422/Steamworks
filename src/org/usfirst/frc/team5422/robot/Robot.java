@@ -9,21 +9,26 @@ import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
-import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousModeOptions;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Robot extends IterativeRobot {
-	//subsystems
+	// Subsystems
 	public static Navigator navigatorSubsystem;
 	public static Shooter shooterSubsystem;
 	public static ClimberIntake climberIntakeSubsystem;
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 
-	public autonomousModeOptions autonomousModeSelected = autonomousModeOptions.JUST_CROSS_LINE;
+	public alliances allianceSelected = alliances.RED;
+	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
+	public autonomousDropOffLocationOptions autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
+
     public Command autonomousCommand = null;
 	
 	public Robot() {
@@ -36,7 +41,7 @@ public class Robot extends IterativeRobot {
         gearManipulatorSubsystem = new Manipulator();
         climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);				
 
-        //TODO:: initialize sensors here 
+        //TODO: initialize sensors here
 		//TODO: turn on these two lines of code when ready to test
 		SensorManager.initiateSensorSystems();
 		SensorManager.startPublishingToNetwork();
@@ -99,11 +104,15 @@ public class Robot extends IterativeRobot {
 	public void robotPeriodic() {
 		
 	}
-		
-    private void selectAutonomousCommand() {
-        autonomousModeSelected = (autonomousModeOptions)dsio.autonomousModeChooser.getSelected();
 
-        switch (autonomousModeSelected) {
+	private void selectAlliance() {
+
+	}
+
+    private void selectAutonomousCommand() {
+        autonomousGearPlacementSelected = (autonomousGearPlacementOptions) dsio.autonomousGearPlacementOptionsChooser.getSelected();
+
+        switch (autonomousGearPlacementSelected) {
             case PLACE_GEAR_LEFT_AIRSHIP:
                 //System.out.println("selecting Place Gear Left of Airship command.");
             	autonomousCommand = new PlaceGearCommand();
@@ -117,14 +126,13 @@ public class Robot extends IterativeRobot {
             	//autonomous reach using SINGLE trapezoidal motion profile
                 //System.out.println("selecting reach command.");
             	autonomousCommand = new PlaceGearCommand();
-            case JUST_CROSS_LINE:
             case NONE:
+            	break;
             default:
             	//autonomous reach AND cross with NO shoot using SINGLE trapezoidal motion profile
             	autonomousCommand = new AutonomousCommand();
             	break;
         }
-    	
     }
 
     public static Shooter getShooterSubsystem() {

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.shooter_thread.ShooterRunnable;
-import org.usfirst.frc.team5422.utils.SteamworksConstants.shooter_mode;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 /**
  * Created by michael on 1/29/17.
@@ -13,9 +13,9 @@ public class ShootCommand extends Command
 {
     ShooterRunnable shooterRunnable;
     Thread shooterThread;
-    shooter_mode shooterMode;
+    SteamworksConstants.shooterMode shooterMode;
 
-    public ShootCommand(int shootTimeSeconds, shooter_mode shooterMode)
+    public ShootCommand(int shootTimeSeconds, SteamworksConstants.shooterMode shooterMode)
     {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.shooterSubsystem);
@@ -27,7 +27,7 @@ public class ShootCommand extends Command
     // Called just before this Command runs the first time
     protected void initialize()
     {
-        if (shooterMode == shooter_mode.MANUAL)
+        if (shooterMode == SteamworksConstants.shooterMode.MANUAL)
             Robot.shooterSubsystem.setShootVelocity(Robot.dsio.getManualShooterVelocity());
         else
             ;

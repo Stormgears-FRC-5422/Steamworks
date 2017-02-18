@@ -4,6 +4,7 @@ public class Pose {
 
     public double x;
     public double y;
+    public double theta;
     public double v_x;
     public double v_y;
 
@@ -21,8 +22,19 @@ public class Pose {
         this.v_y = Math.sin(theta) * v;
     }
 
+    public Pose(Pose p) {
+        this.x = p.x;
+        this.y = p.y;
+        this.v_x = p.v_x;
+        this.v_y = p.v_y;
+    }
+
     public void print() {
         System.out.println("( " + this.x + ", " + this.y + ", " + this.v_x + ", " + this.v_y + " )");
     }
 
+    public void setV(float v) {
+        this.v_x = Math.cos(theta) * v;
+        this.v_y = Math.sin(theta) * v;
+    }
 }
