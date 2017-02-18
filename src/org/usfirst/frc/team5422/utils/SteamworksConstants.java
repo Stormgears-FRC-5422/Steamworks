@@ -30,6 +30,9 @@ public class SteamworksConstants
 	public static double POSITION_D = 2.56;
 	public static int POSITION_IZONE = 1000;
 
+	//StormNet IDs
+	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 0;
+	public static int NUMBER_OF_STORMNET_ULTRASONIC_SENSORS = 4;	
 	//autonomous mode options
 	public enum autonomousModeOptions {
 		PLACE_GEAR_LEFT_AIRSHIP,
