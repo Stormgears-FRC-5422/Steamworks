@@ -32,24 +32,14 @@ public class DSIO {
 		joystick = new Joystick(joystickUsbChannel);
 		buttonBoard = new Joystick(buttonBoardUsbChannel);
 
-		allianceChooser = new SendableChooser<alliances>();
-		allianceChooser.addDefault("Red Alliance", alliances.RED);
-		allianceChooser.addObject("Blue Alliance", alliances.BLUE);
-		SmartDashboard.putData("Alliance Chooser", allianceChooser);
-
-		autonomousGearPlacementOptionsChooser = new SendableChooser<autonomousGearPlacementOptions>();
-		autonomousGearPlacementOptionsChooser.addObject("Place Gear Left", autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP);
-		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
-		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
-		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
-		SmartDashboard.putData("Autonomous Mode Chooser", autonomousGearPlacementOptionsChooser);
-
 		bigBlue = new JoystickButton(buttonBoard, ButtonIds.BIG_BLUE_BUTTON_ID);
 		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE_BUTTON_ID);
 		greenSwitch = new JoystickButton(buttonBoard, ButtonIds.GREEN_SWITCH_ID);
 		orangeSwitch = new JoystickButton(buttonBoard, ButtonIds.ORANGE_SWITCH_ID);
 		redSwitch = new JoystickButton(buttonBoard, ButtonIds.RED_SWITCH_ID);
 
+		initializeAlliance();
+		
 		// Assign commands to pushable buttons
 
 		// Big Blue Button
@@ -116,5 +106,25 @@ public class DSIO {
 
 	public Joystick getJoystick() {
 		return joystick;
+	}
+	private void initializeAlliance() {
+		
+		allianceChooser = new SendableChooser<alliances>();
+		allianceChooser.addDefault("Red Alliance", alliances.RED);
+		allianceChooser.addObject("Blue Alliance", alliances.BLUE);
+		SmartDashboard.putData("Alliance Chooser", allianceChooser);
+
+		autonomousGearPlacementOptionsChooser = new SendableChooser<autonomousGearPlacementOptions>();
+		autonomousGearPlacementOptionsChooser.addObject("Place Gear Left", autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP);
+		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
+		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
+		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
+		SmartDashboard.putData("Autonomous Mode Chooser", autonomousGearPlacementOptionsChooser);
+
+		autonomousDropOffLocationOptionsChooser = new SendableChooser<autonomousDropOffLocationOptions>();
+		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
+		autonomousDropOffLocationOptionsChooser.addObject("Drop off at BaseLine", autonomousDropOffLocationOptions.BASELINE);
+		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);
+		
 	}
 }
