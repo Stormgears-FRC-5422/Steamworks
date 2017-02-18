@@ -58,7 +58,7 @@ public class GlobalMapping extends RunnableNotifier{
 		
 		prevTimeStamp = Timer.getFPGATimestamp();
 		
-		resetPose(0, 0, 0);
+		resetPose(0, 0, Math.PI/2);
 		
 		
 	}
@@ -67,6 +67,7 @@ public class GlobalMapping extends RunnableNotifier{
 	public void run(){
 		System.out.println("in global mapping...");
 		updatePose();
+		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
 		networkPublish(NetworkConstants.GP_Y, y);
 		networkPublish(NetworkConstants.GP_VX, vx);
