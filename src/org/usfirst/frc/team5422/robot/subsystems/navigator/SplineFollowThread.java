@@ -40,7 +40,7 @@ public class SplineFollowThread implements Runnable{
 		double desiredVX = spline.vx(1, 0.05);
 		double desiredVY = spline.vy(1, 0.05);
 		
-		//TODO::
+		//TODO::complete
 	}
 
 	public static Runnable getInstance() {
