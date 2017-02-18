@@ -23,7 +23,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 
-	public autonomousModeOptions autonomousModeSelected = autonomousModeOptions.JUST_CROSS_LINE;
+	public autonomousModeOptions autonomousModeSelected = autonomousModeOptions.CROSS_BASELINE;
     public Command autonomousCommand = null;
 	
 	public Robot() {
@@ -118,7 +118,7 @@ public class Robot extends IterativeRobot {
             	//autonomous reach using SINGLE trapezoidal motion profile
                 //System.out.println("selecting reach command.");
             	autonomousCommand = new PlaceGearCommand();
-            case JUST_CROSS_LINE:
+            case CROSS_BASELINE:
             case NONE:
             default:
             	//autonomous reach AND cross with NO shoot using SINGLE trapezoidal motion profile

@@ -36,7 +36,7 @@ public class DSIO {
         autonomousModeChooser.addObject("Place Gear Left", autonomousModeOptions.PLACE_GEAR_LEFT_AIRSHIP);
         autonomousModeChooser.addDefault("Place Gear Center", autonomousModeOptions.PLACE_GEAR_CENTER_AIRSHIP);
         autonomousModeChooser.addObject("Place Gear Right", autonomousModeOptions.PLACE_GEAR_RIGHT_AIRSHIP);
-        autonomousModeChooser.addObject("Cross the Line", autonomousModeOptions.JUST_CROSS_LINE);
+        autonomousModeChooser.addObject("Cross the Line", autonomousModeOptions.CROSS_BASELINE);
         autonomousModeChooser.addObject("Not Moving in Autonomous", autonomousModeOptions.NONE);
         SmartDashboard.putData("Autonomous Mode Chooser", autonomousModeChooser);
 
