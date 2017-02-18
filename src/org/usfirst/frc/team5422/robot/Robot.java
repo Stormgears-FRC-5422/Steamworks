@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
 
         dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);        
         navigatorSubsystem = new Navigator();
-        shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID);
+        shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
         gearManipulatorSubsystem = new Manipulator();
         climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);				
 
@@ -56,7 +56,6 @@ public class Robot extends IterativeRobot {
         
 		//execute autonomous command
 		if (autonomousCommand != null) {
-
             autonomousCommand.start();
     	}
 	}
@@ -102,8 +101,8 @@ public class Robot extends IterativeRobot {
 	}
 		
     private void selectAutonomousCommand() {
-
         autonomousModeSelected = (autonomousModeOptions)dsio.autonomousModeChooser.getSelected();
+
         switch (autonomousModeSelected) {
             case PLACE_GEAR_LEFT_AIRSHIP:
                 //System.out.println("selecting Place Gear Left of Airship command.");
