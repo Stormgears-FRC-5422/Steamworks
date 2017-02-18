@@ -12,4 +12,9 @@ public class NetworkConstants {
 	public static final String GP_THETA = "theta";
 	public static final String GP_VX = "vx";
 	public static final String GP_VY = "vy";
+	
+	public static final String US_1_KEY = "ULTRASONIC_1";
+	public static final String US_2_KEY = "ULTRASONIC_2";
+	public static final String US_3_KEY = "ULTRASONIC_3";
+	public static final String US_4_KEY = "ULTRASONIC_4";
 }
