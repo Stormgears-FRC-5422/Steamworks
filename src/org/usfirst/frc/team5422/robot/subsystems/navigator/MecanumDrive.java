@@ -14,15 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Aditya Naik
  */
 
-
-public class MecanumDrive {
-	public static CANTalon[] talons = new CANTalon[4];
+public class MecanumDrive extends Drive {
 
 	public MecanumDrive() {		
-		for(int i = 0; i < talons.length; i ++) {
-			
-			talons[i] = new CANTalon(i);
-			
+		super();
+		
+		for(int i = 0; i < talons.length; i ++) {			
 			talons[i].reverseOutput(true);
 			talons[i].changeControlMode(TalonControlMode.Speed);
 			//Velocity PID Values

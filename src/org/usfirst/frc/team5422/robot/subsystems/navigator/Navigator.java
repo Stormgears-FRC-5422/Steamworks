@@ -11,14 +11,18 @@ public class Navigator extends Subsystem{
 	public Notifier splineFollowThread;
 	
 	private static Navigator instance;
-	private static MecanumDrive mecanumDrive;
+	private static Drive mecanumDrive;
 
 	
 	public Navigator() {
+		//using Stormgears Mecanum Drive
         mecanumDrive = new MecanumDrive();
+		
+		//to test using WPI Mecanum Drive
+        //mecanumDrive = new WPIMecanumDrive();        
 	}
 	
-	public static MecanumDrive getMecanumDrive() {
+	public static Drive getMecanumDrive() {
 		return mecanumDrive;
 	}
 
