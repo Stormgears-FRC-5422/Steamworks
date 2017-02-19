@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommand;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
@@ -12,6 +14,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
@@ -82,12 +85,20 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+
+		//if any residual commands exist, cancel them
+		if (autonomousCommand != null) {
+			autonomousCommand.cancel();
+		}
+
 		//Robot in Autonomous mode
 		robotMode = RobotModes.AUTONOMOUS;
 
 		//initializing the Robot for motionprofile mode
 		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
+		SmartDashboard.putString("entered telop in", "");
+		navigatorSubsystem.getInstance().getMecanumDrive().autoMove();		
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
@@ -116,6 +127,7 @@ public class Robot extends IterativeRobot {
 
 	public void autoPeriodic() {
 		System.out.println("auto periodic started.");
+		
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
 		}

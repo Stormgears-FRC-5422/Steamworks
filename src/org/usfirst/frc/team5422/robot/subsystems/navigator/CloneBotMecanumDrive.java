@@ -1,6 +1,8 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.robot.Robot;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
@@ -60,7 +62,17 @@ public class CloneBotMecanumDrive extends Drive {
 						
 		}
 	}
-
+	
+	public void autoMove() {
+		MotionManager m = new MotionManager(talons);
+		SmartDashboard.putString("created motion manager", "");
+		
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(5,300,Math.PI/3,0), true, true);
+		SmartDashboard.putString("pushed profile", "");
+		m.startProfile();		
+	}
+	
+	
 	public void move() {
 		System.out.println("Mecanum Drive moving...");
 		Joystick joy = Robot.dsio.getJoystick();

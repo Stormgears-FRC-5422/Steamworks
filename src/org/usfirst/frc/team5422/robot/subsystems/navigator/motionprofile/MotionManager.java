@@ -98,8 +98,8 @@ public class MotionManager {
 	private double[] getFuncs1(boolean neg) {
 		double[] temp =  new double[1000];
 		for(int i = 0; i < 1000; i ++) {
-			if(neg) temp[i] = -Math.sqrt(2) * (Math.sin(2 * Math.PI  * i / 1000.0) - Math.cos(2 * Math.PI * i / 1000.0));
-			else temp[i] = Math.sqrt(2) * (Math.sin(2 * Math.PI * i / 1000.0) - Math.cos(2 * Math.PI * i / 1000.0));
+			if(neg) temp[i] = -Math.sqrt(2) * (Math.sin(2 * Math.PI  * i / 1000.0 +  Math.PI / 2) - Math.cos(2 * Math.PI * i / 1000.0 + Math.PI / 2));
+			else temp[i] = Math.sqrt(2) * (Math.sin(2 * Math.PI * i / 1000.0 + Math.PI / 2) - Math.cos(2 * Math.PI * i / 1000.0 + Math.PI / 2));
 		}
 		return temp;
 	}
@@ -107,8 +107,8 @@ public class MotionManager {
 	private double[] getFuncs2(boolean neg) {
 		double[] temp = new double[1000];
 		for(int i = 0; i < 1000; i ++) {
-			if(neg) temp[i] = -Math.sqrt(2) * (Math.sin(2 * Math.PI * i / 1000.0) + Math.cos(2 * Math.PI * i / 1000.0));
-			else temp[i] = Math.sqrt(2) * (Math.sin(2 * Math.PI * i / 1000.0) + Math.cos(2 * Math.PI * i / 1000.0));
+			if(neg) temp[i] = -Math.sqrt(2) * (Math.sin(2 * Math.PI * i / 1000.0 + Math.PI / 2) + Math.cos(2 * Math.PI * i / 1000.0 + Math.PI / 2));
+			else temp[i] = Math.sqrt(2) * (Math.sin(2 * Math.PI * i / 1000.0 + Math.PI / 2) + Math.cos(2 * Math.PI * i / 1000.0 + Math.PI / 2));
 		}
 		return temp;
 	}

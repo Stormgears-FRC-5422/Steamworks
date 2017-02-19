@@ -28,7 +28,12 @@ public class WPIMecanumDrive extends Drive {
 	// 	to change or remove this to match your robot
 		robotDrive.setExpiration(0.1);
 	}
+
+	public void autoMove() {
+		
+	}
 	
+
 	public void move() {
 		System.out.println("Mecanum Drive moving...");
 		Joystick joy = Robot.dsio.getJoystick();

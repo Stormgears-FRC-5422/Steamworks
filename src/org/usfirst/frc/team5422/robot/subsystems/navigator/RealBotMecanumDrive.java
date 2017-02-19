@@ -78,6 +78,10 @@ public class RealBotMecanumDrive extends Drive {
 						
 		}
 	}
+
+	public void autoMove() {
+		
+	}
 	
 	public void move() {
 		System.out.println("Mecanum Drive moving...");
