@@ -1,5 +1,8 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
+import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
+
 import com.ctre.CANTalon;
 
 public abstract class Drive {
@@ -14,5 +17,15 @@ public abstract class Drive {
 	
 	//implement this method in classes derived from this Drive class
 	abstract public void move();
+
+	abstract public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile);
+
+	public void setDriveTalonsZeroVelocity() {
+		for(int i = 0; i < talons.length; i ++) {
+			talons[i].set(0);
+		}
+		
+	}
+	
 	
 }

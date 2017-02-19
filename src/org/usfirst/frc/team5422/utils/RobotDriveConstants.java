@@ -15,7 +15,7 @@ public class RobotDriveConstants extends SteamworksConstants{
 	//Motion Profile PID Values for Clone Robot
 	public static double CLONEBOT_MOTIONPROFILE_F = 0;
 	public static double CLONEBOT_MOTIONPROFILE_P = 0.16;
-	public static double CLONEBOT_MOTIONPROFILE_I = 0.001;
+	public static double CLONEBOT_MOTIONPROFILE_I = 0.0001;
 	public static double CLONEBOT_MOTIONPROFILE_D = 10.24;
 	public static int CLONEBOT_MOTIONPROFILE_IZONE = 0;
 	
@@ -23,7 +23,7 @@ public class RobotDriveConstants extends SteamworksConstants{
 	//Motion Profile PID Values for Real Robot
 	public static double REALBOT_MOTIONPROFILE_F = 0;
 	public static double REALBOT_MOTIONPROFILE_P = 0.16;
-	public static double REALBOT_MOTIONPROFILE_I = 0.001;
+	public static double REALBOT_MOTIONPROFILE_I = 0.0001;
 	public static double REALBOT_MOTIONPROFILE_D = 10.24;
 	public static int REALBOT_MOTIONPROFILE_IZONE = 0;
 	
@@ -54,5 +54,11 @@ public class RobotDriveConstants extends SteamworksConstants{
 	public static double REALBOT_POSITION_I = 0.001;
 	public static double REALBOT_POSITION_D = 2.56;
 	public static int REALBOT_POSITION_IZONE = 1000;	
+	
+	public enum RobotDriveProfile {
+		MOTIONPROFILE,
+		VELOCITY,
+		PERCENTVBUS
+	}
 
 }

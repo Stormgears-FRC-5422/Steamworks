@@ -53,6 +53,11 @@ public class SteamworksConstants
     	UNKNOWN   
     }
     
+    public enum RobotModes {
+    	AUTONOMOUS,
+    	TELEOP
+    }
+    
     // Field width in inches
 	public static final int FIELD_WIDTH_IN = 327;
 	

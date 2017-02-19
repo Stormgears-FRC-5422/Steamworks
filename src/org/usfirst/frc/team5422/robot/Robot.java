@@ -14,7 +14,9 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
+import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
@@ -26,7 +28,7 @@ public class Robot extends IterativeRobot {
 	public static ClimberIntake climberIntakeSubsystem;
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
-
+	public static RobotModes robotMode =  RobotModes.AUTONOMOUS;
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
 	public autonomousDropOffLocationOptions autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
@@ -80,6 +82,11 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+		//Robot in Autonomous mode
+		robotMode = RobotModes.AUTONOMOUS;
+
+		//initializing the Robot for motionprofile mode
+		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
 		//select the autonomous command for this run
 		selectAutonomousCommand();
@@ -92,6 +99,12 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit() {
 		System.out.println("teleop init started.");
+		//Robot in Teleop Mode
+		robotMode = RobotModes.TELEOP;
+		
+		//initializing the Robot for joystick Velocity mode
+		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
+
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
