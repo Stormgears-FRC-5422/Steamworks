@@ -16,6 +16,12 @@ public class SteamworksConstants
 	public static int DRIVE_TALON_LEFT_BACK = 2;
 	public static int DRIVE_TALON_RIGHT_BACK  = 3;
 
+	// Channels for the CANTalon wheels
+	public static final int kFrontLeftChannel = 0;
+	public static final int kRearLeftChannel = 3;
+	public static final int kFrontRightChannel = 1;
+	public static final int kRearRightChannel = 2;
+	
 	// Velocity PID Values
 	public static double VELOCITY_F = 0.16; //1023.0/6700.0  //1.705;
 	public static double VELOCITY_P = 0.08;
