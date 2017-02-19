@@ -27,4 +27,9 @@ public class IRSensor extends StormgearsI2CSensor {
 
 	}
 	
+	public float getAlignmentOffset() {
+		//this can be 0, +1.25, +1.75, -1.25, -1.75
+		return 0;
+	}
+	
 }

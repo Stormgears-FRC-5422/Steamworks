@@ -34,6 +34,10 @@ public class SteamworksConstants
 	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 0;
 	public static int NUMBER_OF_STORMNET_ULTRASONIC_SENSORS = 4;
 
+	public static int STORMNET_IR_ARDUINO_ADDRESS = 0;
+	public static int NUMBER_OF_STORMNET_IRSENSOR = 1;
+	
+	
 	// Alliance options
 	public enum alliances {
 		RED,
@@ -63,10 +67,15 @@ public class SteamworksConstants
     public enum gearStates {
     	FULL,
     	EMPTY,
-    	ENTERING,
-    	EXITING
-    
+    	LIFTING,
+    	EXITING, 
+    	UNKNOWN   
     }
+    
     // Field width in inches
 	public static final int FIELD_WIDTH_IN = 327;
+	
+	// Vision constants
+	public static final int RINGLIGHT_PORT = 13;	
+	
 }
