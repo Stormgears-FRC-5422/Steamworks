@@ -1,5 +1,4 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
-
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -16,21 +15,6 @@ public class IRSensor extends StormgearsI2CSensor {
 	GEAR_EXITING, // Gear is breaking beam on the way out 
 	UNKNOWN_STATE // Undefined states (Need more sensor data)  
 */
-	public enum GearState {
-		EMPTY_BIN, GEAR_LIFTING, FULL_BIN, GEAR_EXITING, UNKNOWN_STATE;
-		
-		@Override
-		public String toString() {
-			switch(this) {
-			case EMPTY_BIN: return "Emtpy Bin";
-			case GEAR_LIFTING: return "Gear Lifting";
-			case FULL_BIN: return "Full Bin";
-			case GEAR_EXITING: return "Gear Exiting";
-			case UNKNOWN_STATE:
-			default: return "Unknown State";
-			}
-		}	
-	}
 		
 	IRSensor(int deviceAddress, int numSensors) {
 		super(I2C.Port.kOnboard, deviceAddress);
@@ -58,19 +42,19 @@ public class IRSensor extends StormgearsI2CSensor {
 		return sensorValues[sensorNumber];
 	}
 
-	public GearState getState() {
+	public SteamworksConstants.gearState getState() {
 		switch (gearState[0]) {
 		case 0:
-			return GearState.EMPTY_BIN;
+			return SteamworksConstants.gearState.EMPTY;
 		case 1: 
-			return GearState.GEAR_LIFTING;
+			return SteamworksConstants.gearState.LIFTING;
 		case 2:
-			return GearState.FULL_BIN;
+			return SteamworksConstants.gearState.FULL;
 		case 3:
-			return GearState.GEAR_EXITING;
+			return SteamworksConstants.gearState.EXITING;
 		case 4:
 		default:
-			return GearState.UNKNOWN_STATE;
+			return SteamworksConstants.gearState.UNKNOWN;
 		}
 	}
 	
