@@ -2,7 +2,6 @@ package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants;
-import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 

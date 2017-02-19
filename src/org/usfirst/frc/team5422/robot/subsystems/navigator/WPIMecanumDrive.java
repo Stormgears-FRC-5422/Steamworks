@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants;
-import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
@@ -60,23 +59,22 @@ public class WPIMecanumDrive extends Drive {
 			}
 						
 		} else { //RobotModes.TELEOP
-			for(int i = 0; i < talons.length; i ++) {			
-				talons[i].reverseOutput(true);
-				talons[i].changeControlMode(TalonControlMode.Speed);
-				//Velocity PID Values
-				talons[i].setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
-						RobotDriveConstants.CLONEBOT_VELOCITY_I, 
-						RobotDriveConstants.CLONEBOT_VELOCITY_D);
-				talons[i].setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
-				talons[i].setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);	
-				
-				//Position PID Values
-//				talons[i].setPID(SteamworksConstants.CLONEBOT_POSITION_P, 
-//								 SteamworksConstants.CLONEBOT_POSITION_I, 
-//								 SteamworksConstants.CLONEBOT_POSITION_D);
-//				talons[i].setF(SteamworksConstants.CLONEBOT_POSITION_F);
-//				talons[i].setIZone(SteamworksConstants.CLONEBOT_POSITION_IZONE);
-			}
+			robotDrive.setInvertedMotor(MotorType.kFrontLeft, true); // invert the
+			// left side motors
+			robotDrive.setInvertedMotor(MotorType.kRearLeft, true); // you may need
+		// 	to change or remove this to match your robot
+			robotDrive.setExpiration(0.1);
+
+//			for(int i = 0; i < talons.length; i ++) {			
+//				talons[i].reverseOutput(true);
+//				talons[i].changeControlMode(TalonControlMode.Speed);
+//				//Velocity PID Values
+//				talons[i].setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
+//						RobotDriveConstants.CLONEBOT_VELOCITY_I, 
+//						RobotDriveConstants.CLONEBOT_VELOCITY_D);
+//				talons[i].setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
+//				talons[i].setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);	
+//			}
 						
 		}
 	}
