@@ -34,10 +34,10 @@ public class Navigator extends Subsystem{
 	}
 	
 	public synchronized void driveSpline(Spline spline){
-		splineFollowThread = new Notifier(SplineFollowThread.getInstance());
+		splineFollowThread = (Notifier) SplineFollowThread.getInstance();
 		splineFollowThread.startPeriodic(0.01);
-		while(true){
-			SplineFollowThread.isFollowingSpline();
+		while(SplineFollowThread.isFollowingSpline()){
+			
 			Timer.delay(0.001);
 		}
 	}

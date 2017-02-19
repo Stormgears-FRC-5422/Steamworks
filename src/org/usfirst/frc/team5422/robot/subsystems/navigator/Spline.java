@@ -110,6 +110,18 @@ public class Spline {
     	
 		return 3*a(seg, 1)*(u*u) + 2*b(seg, 1)*u + c(seg, 1);
 	}
+    public double ax(int seg, double u) {
+    	
+    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set u to within bounds if out of bounds
+    	
+    	return 6*a(seg, 0)*u + 2*b(seg, 0);
+	}
+    public double ay(int seg, double u) {
+    	
+    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set t to within bounds if out of bounds
+    	
+		return 6*a(seg, 1)*u + 2*b(seg, 1);
+	}
     
     public void updatePose(int index, Pose argPose){
     	//TODO:: verify this is the correct way
