@@ -44,7 +44,6 @@ public class Robot extends IterativeRobot {
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
 		//TODO: initialize sensors here
-		//TODO: turn on these two lines of code when ready to test
 		SensorManager.initiateSensorSystems();
 		SensorManager.startPublishingToNetwork();
 	}
