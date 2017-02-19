@@ -6,7 +6,8 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
-public class Vision extends RunnableNotifier{
+public class Vision extends RunnableNotifier {
+
 	private DigitalOutput lights;
 	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
 	
@@ -45,8 +46,18 @@ public class Vision extends RunnableNotifier{
 		double [] defaultXArray = new double[0];
 		double [] defaultYArray = new double[0];
 		
-//		double [] centerX = visionTable.getNumberArray("centerX", defaultXArray);
-//		double [] centerY = visionTable.getNumberArray("centerY", defaultYArray);
+		double [] centerX = visionTable.getNumberArray("centerX", defaultXArray);
+		double [] centerY = visionTable.getNumberArray("centerY", defaultYArray);
 		
+	}
+
+
+	public void alignToGear() {
+		//target: (centerX[0] + centerX[1])/2 = pixel width/2
+
+//		double pegHorizDisplacement = 160.0 - (centerX[0] + centerX[1]) / 2;
+
+		//if displacement < 0, move left
+		//if displacement > 0, move right
 	}
 }
