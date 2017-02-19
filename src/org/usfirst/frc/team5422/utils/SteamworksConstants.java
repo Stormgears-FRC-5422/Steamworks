@@ -59,7 +59,14 @@ public class SteamworksConstants
         MANUAL,
         AUTONOMOUS
     }
-
+    
+    public enum gearStates {
+    	FULL,
+    	EMPTY,
+    	ENTERING,
+    	EXITING
+    
+    }
     // Field width in inches
 	public static final int FIELD_WIDTH_IN = 327;
 }
