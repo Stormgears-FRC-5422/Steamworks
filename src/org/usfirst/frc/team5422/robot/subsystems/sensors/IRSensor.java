@@ -17,7 +17,19 @@ public class IRSensor extends StormgearsI2CSensor {
 	UNKNOWN_STATE // Undefined states (Need more sensor data)  
 */
 	public enum GearState {
-		EMPTY_BIN, GEAR_LIFTING, FULL_BIN, GEAR_EXITING, UNKNOWN_STATE
+		EMPTY_BIN, GEAR_LIFTING, FULL_BIN, GEAR_EXITING, UNKNOWN_STATE;
+		
+		@Override
+		public String toString() {
+			switch(this) {
+			case EMPTY_BIN: return "Emtpy Bin";
+			case GEAR_LIFTING: return "Gear Lifting";
+			case FULL_BIN: return "Full Bin";
+			case GEAR_EXITING: return "Gear Exiting";
+			case UNKNOWN_STATE:
+			default: return "Unknown State";
+			}
+		}	
 	}
 		
 	IRSensor(int deviceAddress, int numSensors) {
