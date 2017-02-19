@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.robot.Robot;
-import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
@@ -38,7 +37,7 @@ public class DSIO {
 		orangeSwitch = new JoystickButton(buttonBoard, ButtonIds.ORANGE_SWITCH_ID);
 		redSwitch = new JoystickButton(buttonBoard, ButtonIds.RED_SWITCH_ID);
 
-		initializeAlliance();
+		initializeChoosers();
 		
 		// Assign commands to pushable buttons
 
@@ -107,7 +106,7 @@ public class DSIO {
 	public Joystick getJoystick() {
 		return joystick;
 	}
-	private void initializeAlliance() {
+	private void initializeChoosers() {
 		
 		allianceChooser = new SendableChooser<alliances>();
 		allianceChooser.addDefault("Red Alliance (Boiler to the right)", alliances.RED);
@@ -119,11 +118,11 @@ public class DSIO {
 		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
-		SmartDashboard.putData("Autonomous Mode Chooser", autonomousGearPlacementOptionsChooser);
+		SmartDashboard.putData("Autonomous Gear Placement Chooser", autonomousGearPlacementOptionsChooser);
 
 		autonomousDropOffLocationOptionsChooser = new SendableChooser<autonomousDropOffLocationOptions>();
 		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
-		autonomousDropOffLocationOptionsChooser.addObject("Drop off at BaseLine", autonomousDropOffLocationOptions.BASELINE);
+		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
 		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);
 		
 	}
