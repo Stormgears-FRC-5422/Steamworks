@@ -1,4 +1,4 @@
-package org.usfirst.frc.team5422.robot.subsystems.dsio;
+package org.usfirst.frc.team5422.utils;
 
 /**
  * Class to store button IDs in

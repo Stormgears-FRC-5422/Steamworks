@@ -1,7 +1,5 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
-import com.ctre.CANTalon;
-
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -15,10 +13,13 @@ public class Navigator extends Subsystem{
 
 	
 	public Navigator() {
-		//using Stormgears Mecanum Drive
-        mecanumDrive = new MecanumDrive();
+		//using Stormgears CloneBot Mecanum Drive
+        mecanumDrive = new CloneBotMecanumDrive();
 		
-		//to test using WPI Mecanum Drive
+		//using Stormgears CloneBot Mecanum Drive
+        //mecanumDrive = new RealBotMecanumDrive();
+
+        //to test using WPI Mecanum Drive
         //mecanumDrive = new WPIMecanumDrive();        
 	}
 	

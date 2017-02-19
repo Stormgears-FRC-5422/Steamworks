@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
-import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,8 +20,7 @@ public class StormNet extends RunnableNotifier{
 		super.run();
 		usSensors.pollDistance();
 		for (int sensorNumber=0; sensorNumber < 4; sensorNumber++) {
-			float distance = usSensors.getDistance(sensorNumber);
-			networkPublish("ULTRASONIC_" + Integer.toString(sensorNumber + 1),  distance);
+			networkPublish("ULTRASONIC_" + Integer.toString(sensorNumber + 1),  usSensors.getDistance(sensorNumber));
 		}
 		
 		SmartDashboard.putString("Gear State", irSensor.getState().toString());

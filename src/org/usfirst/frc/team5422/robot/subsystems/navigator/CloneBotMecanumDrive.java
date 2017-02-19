@@ -1,7 +1,9 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.robot.Robot;
-import org.usfirst.frc.team5422.utils.SteamworksConstants;
+import org.usfirst.frc.team5422.utils.RobotDriveConstants;
+import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
@@ -14,38 +16,51 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Aditya Naik
  */
 
-public class MecanumDrive extends Drive {
+public class CloneBotMecanumDrive extends Drive {
 
-	public MecanumDrive() {		
+	public CloneBotMecanumDrive() {		
 		super();
-		
-		for(int i = 0; i < talons.length; i ++) {			
-			talons[i].reverseOutput(true);
-			talons[i].changeControlMode(TalonControlMode.Speed);
-			//Velocity PID Values
-			talons[i].setPID(SteamworksConstants.VELOCITY_P, 
-							 SteamworksConstants.VELOCITY_I, 
-							 SteamworksConstants.VELOCITY_D);
-			talons[i].setF(SteamworksConstants.VELOCITY_F);
-			talons[i].setIZone(SteamworksConstants.VELOCITY_IZONE);	
-			
-			//Position PID Values
-//			talons[i].setPID(SteamworksConstants.POSITION_P, 
-//							 SteamworksConstants.POSITION_I, 
-//							 SteamworksConstants.POSITION_D);
-//			talons[i].setF(SteamworksConstants.POSITION_F);
-//			talons[i].setIZone(SteamworksConstants.POSITION_IZONE);
-		}
 	}
 	
-	
-	public void initializeDriveTalons() {
-		for(int i = 0; i < talons.length; i ++) {
-			talons[i].set(0);
+	public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile) {
+		if (robotRunMode == RobotModes.AUTONOMOUS) {
+			for(int i = 0; i < talons.length; i ++) {
+				CANTalon talon = talons[i];
+				talon.reverseOutput(true); 
+				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				talon.configEncoderCodesPerRev(2048);
+				talon.changeControlMode(TalonControlMode.MotionProfile);
+				
+				//MOTION PROFILE PID for talons 0, 1, 3
+				talon.setP(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_P);
+				talon.setI(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_I); //0.0002
+				talon.setD(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_D); //10.24
+				talon.setIZone(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_IZONE); //1500
+				talon.setF(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_F);
+			}
+						
+		} else { //RobotModes.TELEOP
+			for(int i = 0; i < talons.length; i ++) {			
+				talons[i].reverseOutput(true);
+				talons[i].changeControlMode(TalonControlMode.Speed);
+				//Velocity PID Values
+				talons[i].setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
+						RobotDriveConstants.CLONEBOT_VELOCITY_I, 
+						RobotDriveConstants.CLONEBOT_VELOCITY_D);
+				talons[i].setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
+				talons[i].setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);	
+				
+				//Position PID Values
+//				talons[i].setPID(SteamworksConstants.CLONEBOT_POSITION_P, 
+//								 SteamworksConstants.CLONEBOT_POSITION_I, 
+//								 SteamworksConstants.CLONEBOT_POSITION_D);
+//				talons[i].setF(SteamworksConstants.CLONEBOT_POSITION_F);
+//				talons[i].setIZone(SteamworksConstants.CLONEBOT_POSITION_IZONE);
+			}
+						
 		}
-		
 	}
-	
+
 	public void move() {
 		System.out.println("Mecanum Drive moving...");
 		Joystick joy = Robot.dsio.getJoystick();
@@ -57,7 +72,7 @@ public class MecanumDrive extends Drive {
 			mecMove(6300 * Math.sqrt(joy.getX() * joy.getX() + joy.getY() * 
 					joy.getY() + joy.getZ() * joy.getZ()), theta, joy.getZ());
 		else {
-			initializeDriveTalons();
+			setDriveTalonsZeroVelocity();
 		}
 		
 	}
