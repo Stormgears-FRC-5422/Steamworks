@@ -14,27 +14,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Aditya Naik
  */
 
-public class MecanumDrive extends Drive {
+public class CloneBotMecanumDrive extends Drive {
 
-	public MecanumDrive() {		
+	public CloneBotMecanumDrive() {		
 		super();
 		
 		for(int i = 0; i < talons.length; i ++) {			
 			talons[i].reverseOutput(true);
 			talons[i].changeControlMode(TalonControlMode.Speed);
 			//Velocity PID Values
-			talons[i].setPID(SteamworksConstants.VELOCITY_P, 
-							 SteamworksConstants.VELOCITY_I, 
-							 SteamworksConstants.VELOCITY_D);
-			talons[i].setF(SteamworksConstants.VELOCITY_F);
-			talons[i].setIZone(SteamworksConstants.VELOCITY_IZONE);	
+			talons[i].setPID(SteamworksConstants.CLONEBOT_VELOCITY_P, 
+							 SteamworksConstants.CLONEBOT_VELOCITY_I, 
+							 SteamworksConstants.CLONEBOT_VELOCITY_D);
+			talons[i].setF(SteamworksConstants.CLONEBOT_VELOCITY_F);
+			talons[i].setIZone(SteamworksConstants.CLONEBOT_VELOCITY_IZONE);	
 			
 			//Position PID Values
-//			talons[i].setPID(SteamworksConstants.POSITION_P, 
-//							 SteamworksConstants.POSITION_I, 
-//							 SteamworksConstants.POSITION_D);
-//			talons[i].setF(SteamworksConstants.POSITION_F);
-//			talons[i].setIZone(SteamworksConstants.POSITION_IZONE);
+//			talons[i].setPID(SteamworksConstants.CLONEBOT_POSITION_P, 
+//							 SteamworksConstants.CLONEBOT_POSITION_I, 
+//							 SteamworksConstants.CLONEBOT_POSITION_D);
+//			talons[i].setF(SteamworksConstants.CLONEBOT_POSITION_F);
+//			talons[i].setIZone(SteamworksConstants.CLONEBOT_POSITION_IZONE);
 		}
 	}
 	

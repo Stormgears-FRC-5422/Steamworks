@@ -16,7 +16,7 @@ public class Navigator extends Subsystem{
 	
 	public Navigator() {
 		//using Stormgears Mecanum Drive
-        mecanumDrive = new MecanumDrive();
+        mecanumDrive = new CloneBotMecanumDrive();
 		
 		//to test using WPI Mecanum Drive
         //mecanumDrive = new WPIMecanumDrive();        

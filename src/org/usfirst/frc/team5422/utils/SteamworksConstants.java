@@ -22,19 +22,48 @@ public class SteamworksConstants
 	public static final int kFrontRightChannel = 1;
 	public static final int kRearRightChannel = 2;
 	
-	// Velocity PID Values
-	public static double VELOCITY_F = 0.16; //1023.0/6700.0  //1.705;
-	public static double VELOCITY_P = 0.08;
-	public static double VELOCITY_I = 0.002;
-	public static double VELOCITY_D = 10.24;
-	public static int VELOCITY_IZONE = 1500;
+	//Motion Profile PID Values for Clone Robot
+	public static double CLONEBOT_MOTIONPROFILE_F = 0;
+	public static double CLONEBOT_MOTIONPROFILE_P = 0.16;
+	public static double CLONEBOT_MOTIONPROFILE_I = 0.001;
+	public static double CLONEBOT_MOTIONPROFILE_D = 10.24;
+	public static int CLONEBOT_MOTIONPROFILE_IZONE = 0;
+	
 
-	// Position PID Values
-	public static double POSITION_F = 0; //1023.0/6700.0  //1.705;
-	public static double POSITION_P = 0.64;
-	public static double POSITION_I = 0.001;
-	public static double POSITION_D = 2.56;
-	public static int POSITION_IZONE = 1000;
+	//Motion Profile PID Values for Real Robot
+	public static double REALBOT_MOTIONPROFILE_F = 0;
+	public static double REALBOT_MOTIONPROFILE_P = 0.16;
+	public static double REALBOT_MOTIONPROFILE_I = 0.001;
+	public static double REALBOT_MOTIONPROFILE_D = 10.24;
+	public static int REALBOT_MOTIONPROFILE_IZONE = 0;
+	
+	// CLONEBOT Velocity PID Values
+	public static double CLONEBOT_VELOCITY_F = 0.16; //1023.0/6700.0  //1.705;
+	public static double CLONEBOT_VELOCITY_P = 0.08;
+	public static double CLONEBOT_VELOCITY_I = 0.002;
+	public static double CLONEBOT_VELOCITY_D = 10.24;
+	public static int CLONEBOT_VELOCITY_IZONE = 1500;
+
+	// REALBOT Velocity PID Values
+	public static double REALBOT_VELOCITY_F = 0.16; //1023.0/6700.0  //1.705;
+	public static double REALBOT_VELOCITY_P = 0.08;
+	public static double REALBOT_VELOCITY_I = 0.002;
+	public static double REALBOT_VELOCITY_D = 10.24;
+	public static int REALBOT_VELOCITY_IZONE = 1500;
+
+	// CLONEBOT Position PID Values
+	public static double CLONEBOT_POSITION_F = 0; //1023.0/6700.0  //1.705;
+	public static double CLONEBOT_POSITION_P = 0.64;
+	public static double CLONEBOT_POSITION_I = 0.001;
+	public static double CLONEBOT_POSITION_D = 2.56;
+	public static int CLONEBOT_POSITION_IZONE = 1000;
+
+	// REALBOT Position PID Values
+	public static double REALBOT_POSITION_F = 0; //1023.0/6700.0  //1.705;
+	public static double REALBOT_POSITION_P = 0.64;
+	public static double REALBOT_POSITION_I = 0.001;
+	public static double REALBOT_POSITION_D = 2.56;
+	public static int REALBOT_POSITION_IZONE = 1000;
 
 	// StormNet IDs
 	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 0;
