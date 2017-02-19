@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.robot.Robot;
+import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import com.ctre.CANTalon;
@@ -14,27 +15,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Aditya Naik
  */
 
-public class MecanumDrive extends Drive {
+public class RealBotMecanumDrive extends Drive {
 
-	public MecanumDrive() {		
+	public RealBotMecanumDrive() {		
 		super();
 		
 		for(int i = 0; i < talons.length; i ++) {			
 			talons[i].reverseOutput(true);
 			talons[i].changeControlMode(TalonControlMode.Speed);
 			//Velocity PID Values
-			talons[i].setPID(SteamworksConstants.VELOCITY_P, 
-							 SteamworksConstants.VELOCITY_I, 
-							 SteamworksConstants.VELOCITY_D);
-			talons[i].setF(SteamworksConstants.VELOCITY_F);
-			talons[i].setIZone(SteamworksConstants.VELOCITY_IZONE);	
+			talons[i].setPID(RobotDriveConstants.REALBOT_VELOCITY_P, 
+							 RobotDriveConstants.REALBOT_VELOCITY_I, 
+							 RobotDriveConstants.REALBOT_VELOCITY_D);
+			talons[i].setF(RobotDriveConstants.REALBOT_VELOCITY_F);
+			talons[i].setIZone(RobotDriveConstants.REALBOT_VELOCITY_IZONE);	
 			
 			//Position PID Values
-//			talons[i].setPID(SteamworksConstants.POSITION_P, 
-//							 SteamworksConstants.POSITION_I, 
-//							 SteamworksConstants.POSITION_D);
-//			talons[i].setF(SteamworksConstants.POSITION_F);
-//			talons[i].setIZone(SteamworksConstants.POSITION_IZONE);
+//			talons[i].setPID(SteamworksConstants.REALBOT_POSITION_P, 
+//							 SteamworksConstants.REALBOT_POSITION_I, 
+//							 SteamworksConstants.REALBOT_POSITION_D);
+//			talons[i].setF(SteamworksConstants.REALBOT_POSITION_F);
+//			talons[i].setIZone(SteamworksConstants.CLONEBOT_POSITION_IZONE);
 		}
 	}
 	

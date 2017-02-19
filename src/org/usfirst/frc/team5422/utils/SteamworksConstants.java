@@ -11,31 +11,6 @@ public class SteamworksConstants
     public static final int SHOOTER_RELAY_ID = 0;
     public static final int CLIMBER_INTAKE_TALON_ID = 1;
 
-	public static int DRIVE_TALON_LEFT_FRONT = 0;
-	public static int DRIVE_TALON_RIGHT_FRONT  = 1;
-	public static int DRIVE_TALON_LEFT_BACK = 2;
-	public static int DRIVE_TALON_RIGHT_BACK  = 3;
-
-	// Channels for the CANTalon wheels
-	public static final int kFrontLeftChannel = 0;
-	public static final int kRearLeftChannel = 3;
-	public static final int kFrontRightChannel = 1;
-	public static final int kRearRightChannel = 2;
-	
-	// Velocity PID Values
-	public static double VELOCITY_F = 0.16; //1023.0/6700.0  //1.705;
-	public static double VELOCITY_P = 0.08;
-	public static double VELOCITY_I = 0.002;
-	public static double VELOCITY_D = 10.24;
-	public static int VELOCITY_IZONE = 1500;
-
-	// Position PID Values
-	public static double POSITION_F = 0; //1023.0/6700.0  //1.705;
-	public static double POSITION_P = 0.64;
-	public static double POSITION_I = 0.001;
-	public static double POSITION_D = 2.56;
-	public static int POSITION_IZONE = 1000;
-
 	// StormNet IDs
 	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 0;
 	public static int NUMBER_OF_STORMNET_ULTRASONIC_SENSORS = 4;
