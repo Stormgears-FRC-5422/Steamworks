@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.robot.Robot;
+import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import com.ctre.CANTalon;
@@ -23,11 +24,11 @@ public class CloneBotMecanumDrive extends Drive {
 			talons[i].reverseOutput(true);
 			talons[i].changeControlMode(TalonControlMode.Speed);
 			//Velocity PID Values
-			talons[i].setPID(SteamworksConstants.CLONEBOT_VELOCITY_P, 
-							 SteamworksConstants.CLONEBOT_VELOCITY_I, 
-							 SteamworksConstants.CLONEBOT_VELOCITY_D);
-			talons[i].setF(SteamworksConstants.CLONEBOT_VELOCITY_F);
-			talons[i].setIZone(SteamworksConstants.CLONEBOT_VELOCITY_IZONE);	
+			talons[i].setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
+					RobotDriveConstants.CLONEBOT_VELOCITY_I, 
+					RobotDriveConstants.CLONEBOT_VELOCITY_D);
+			talons[i].setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
+			talons[i].setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);	
 			
 			//Position PID Values
 //			talons[i].setPID(SteamworksConstants.CLONEBOT_POSITION_P, 

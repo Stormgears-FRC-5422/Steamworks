@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 
 import org.usfirst.frc.team5422.robot.Robot;
+import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 public class WPIMecanumDrive extends Drive {
@@ -14,10 +15,10 @@ public class WPIMecanumDrive extends Drive {
 	
 	public WPIMecanumDrive() {
 		super();
-		robotDrive = new RobotDrive(talons[SteamworksConstants.kFrontLeftChannel], 
-									talons[SteamworksConstants.kRearLeftChannel], 
-									talons[SteamworksConstants.kFrontRightChannel], 
-									talons[SteamworksConstants.kRearRightChannel]);
+		robotDrive = new RobotDrive(talons[RobotDriveConstants.kFrontLeftChannel], 
+									talons[RobotDriveConstants.kRearLeftChannel], 
+									talons[RobotDriveConstants.kFrontRightChannel], 
+									talons[RobotDriveConstants.kRearRightChannel]);
 
 		robotDrive.setInvertedMotor(MotorType.kFrontLeft, true); // invert the
 		// left side motors
