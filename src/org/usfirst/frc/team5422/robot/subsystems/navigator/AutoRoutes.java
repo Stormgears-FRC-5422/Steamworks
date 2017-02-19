@@ -1,5 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
+import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
+
 /**
  * Routes for robot in AUTONOMOUS ONLY!!!
  */
@@ -21,43 +23,76 @@ public class AutoRoutes {
 
 	}
 
-	public static void initialize() {
-		leftStartToGear[0] = new Pose(FieldPositions.leftStarting);
-		leftStartToGear[1] = new Pose(FieldPositions.leftGearPeg);
+	public static void initialize(alliances alliance) {
+		if (alliance == alliances.BLUE) {
+			leftStartToGear[0] = new Pose(FieldPositions.rightStarting);
+			leftStartToGear[1] = new Pose(FieldPositions.rightGearPeg);
 
-		leftGearToBaseline[0] = new Pose(FieldPositions.leftGearPeg);
-		leftGearToBaseline[1] = new Pose(FieldPositions.leftIntermediateStop);
+			leftGearToBaseline[0] = new Pose(FieldPositions.rightGearPeg);
+			leftGearToBaseline[1] = new Pose(FieldPositions.rightIntermediateStop);
 
-		leftGearToGearPickup[0] = new Pose(FieldPositions.leftGearPeg);
-		leftGearToGearPickup[1] = new Pose(FieldPositions.leftIntermediateContinue);
-		leftGearToGearPickup[2] = new Pose(FieldPositions.left_CenterDropOff);
-
-
-		rightStartToGear[0] = new Pose(FieldPositions.rightStarting);
-		rightStartToGear[1] = new Pose(FieldPositions.rightGearPeg);
-
-		rightGearToBaseline[0] = new Pose(FieldPositions.rightGearPeg);
-		rightGearToBaseline[1] = new Pose(FieldPositions.rightIntermediateStop);
-
-		rightGearToGearPickup[0] = new Pose(FieldPositions.rightGearPeg);
-		rightGearToGearPickup[1] = new Pose(FieldPositions.rightIntermediateContinue);
-		rightGearToGearPickup[2] = new Pose(FieldPositions.rightDropOff);
+			leftGearToGearPickup[0] = new Pose(FieldPositions.rightGearPeg);
+			leftGearToGearPickup[1] = new Pose(FieldPositions.rightIntermediateContinue);
+			leftGearToGearPickup[2] = new Pose(FieldPositions.rightDropOff);
 
 
-		centerStartToGear[0] = new Pose(FieldPositions.centerStarting);
-		centerStartToGear[1] = new Pose(FieldPositions.centerGearPeg);
+			rightStartToGear[0] = new Pose(FieldPositions.leftStarting);
+			rightStartToGear[1] = new Pose(FieldPositions.leftGearPeg);
 
-		centerGearToBaseline[0] = new Pose(FieldPositions.centerGearPeg);
-		centerGearToBaseline[1] = new Pose(FieldPositions.centerIntermediate1Continue);
-		centerGearToGearPickup[2] = new Pose(FieldPositions.centerIntermediate2Stop);
+			rightGearToBaseline[0] = new Pose(FieldPositions.leftGearPeg);
+			rightGearToBaseline[1] = new Pose(FieldPositions.leftIntermediateStop);
 
-
-		centerGearToGearPickup[0] = new Pose(FieldPositions.centerGearPeg);
-		centerGearToGearPickup[1] = new Pose(FieldPositions.centerIntermediate1Continue);
-		centerGearToGearPickup[2] = new Pose(FieldPositions.centerIntermediate2Continue);
-		centerGearToGearPickup[3] = new Pose(FieldPositions.left_CenterDropOff);
+			rightGearToGearPickup[0] = new Pose(FieldPositions.leftGearPeg);
+			rightGearToGearPickup[1] = new Pose(FieldPositions.leftIntermediateContinue);
+			rightGearToGearPickup[2] = new Pose(FieldPositions.left_CenterDropOff);
 
 
+			centerStartToGear[0] = new Pose(FieldPositions.centerStarting);
+			centerStartToGear[1] = new Pose(FieldPositions.centerGearPeg);
 
+			centerGearToBaseline[0] = new Pose(FieldPositions.centerGearPeg);
+			centerGearToBaseline[1] = new Pose(FieldPositions.centerIntermediate1Continue);
+			centerGearToBaseline[2] = new Pose(FieldPositions.centerIntermediate2Stop);
+
+			centerGearToGearPickup[0] = new Pose(FieldPositions.centerGearPeg);
+			centerGearToGearPickup[1] = new Pose(FieldPositions.centerIntermediate1Continue);
+			centerGearToGearPickup[2] = new Pose(FieldPositions.centerIntermediate2Continue);
+			centerGearToGearPickup[3] = new Pose(FieldPositions.left_CenterDropOff);
+		} else {
+			leftStartToGear[0] = new Pose(FieldPositions.leftStarting);
+			leftStartToGear[1] = new Pose(FieldPositions.leftGearPeg);
+
+			leftGearToBaseline[0] = new Pose(FieldPositions.leftGearPeg);
+			leftGearToBaseline[1] = new Pose(FieldPositions.leftIntermediateStop);
+
+			leftGearToGearPickup[0] = new Pose(FieldPositions.leftGearPeg);
+			leftGearToGearPickup[1] = new Pose(FieldPositions.leftIntermediateContinue);
+			leftGearToGearPickup[2] = new Pose(FieldPositions.left_CenterDropOff);
+
+
+			rightStartToGear[0] = new Pose(FieldPositions.rightStarting);
+			rightStartToGear[1] = new Pose(FieldPositions.rightGearPeg);
+
+			rightGearToBaseline[0] = new Pose(FieldPositions.rightGearPeg);
+			rightGearToBaseline[1] = new Pose(FieldPositions.rightIntermediateStop);
+
+			rightGearToGearPickup[0] = new Pose(FieldPositions.rightGearPeg);
+			rightGearToGearPickup[1] = new Pose(FieldPositions.rightIntermediateContinue);
+			rightGearToGearPickup[2] = new Pose(FieldPositions.rightDropOff);
+
+
+			centerStartToGear[0] = new Pose(FieldPositions.centerStarting);
+			centerStartToGear[1] = new Pose(FieldPositions.centerGearPeg);
+
+			centerGearToBaseline[0] = new Pose(FieldPositions.centerGearPeg);
+			centerGearToBaseline[1] = new Pose(FieldPositions.centerIntermediate1Continue);
+			centerGearToBaseline[2] = new Pose(FieldPositions.centerIntermediate2Stop);
+
+			centerGearToGearPickup[0] = new Pose(FieldPositions.centerGearPeg);
+			centerGearToGearPickup[1] = new Pose(FieldPositions.centerIntermediate1Continue);
+			centerGearToGearPickup[2] = new Pose(FieldPositions.centerIntermediate2Continue);
+			centerGearToGearPickup[3] = new Pose(FieldPositions.left_CenterDropOff);
+		}
+		
 	}
 }

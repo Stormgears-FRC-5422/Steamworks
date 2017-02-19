@@ -1,5 +1,8 @@
 package org.usfirst.frc.team5422.robot;
 
+import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommand;
 import org.usfirst.frc.team5422.robot.commands.PlaceGearCommand;
@@ -106,33 +109,101 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAlliance() {
+		allianceSelected = (alliances) dsio.allianceChooser.getSelected();
 
+		switch (allianceSelected) {
+			case RED:
+				// BOILER IS TO THE RIGHT
+				break;
+			case BLUE:
+				// BOILER IS TO THE LEFT
+				break;
+		}
 	}
 
     private void selectAutonomousCommand() {
         autonomousGearPlacementSelected = (autonomousGearPlacementOptions) dsio.autonomousGearPlacementOptionsChooser.getSelected();
+	    System.out.println("selected auto pos: " + autonomousGearPlacementSelected.toString());
+	    Pose[] routeToGear, routeToDropOff;
+
+        selectAlliance();
+	    System.out.println(allianceSelected.toString());
+
+	    FieldPositions.initialize(allianceSelected);
+        AutoRoutes.initialize(allianceSelected);
 
         switch (autonomousGearPlacementSelected) {
             case PLACE_GEAR_LEFT_AIRSHIP:
-                //System.out.println("selecting Place Gear Left of Airship command.");
-            	autonomousCommand = new PlaceGearCommand();
+	            System.out.println("[Autonomous Routing] Starting at left starting position, going to left gear hook.");
+	            routeToGear = AutoRoutes.leftStartToGear;
+
+	            switch (autonomousDropOffLocationSelected) {
+		            case BASELINE:
+			            System.out.println("[Autonomous Routing] Continuing on to baseline from left gear.");
+			            routeToDropOff = AutoRoutes.leftGearToBaseline;
+			            break;
+		            case GEAR_PICKUP:
+			            System.out.println("[Autonomous Routing] Continuing on to gear pickup from left gear.");
+			            routeToDropOff = AutoRoutes.leftGearToGearPickup;
+			            break;
+		            default:
+			            routeToDropOff = new Pose[1];
+			            break;
+	            }
             	break;
             case PLACE_GEAR_RIGHT_AIRSHIP:
-            	//for autonomous reach, cross and shoot independently using separate trapezoidal motion profile
-                //System.out.println("selecting reach 'n cross 'n shoot command.");
-            	autonomousCommand = new PlaceGearCommand();
+	            System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
+	            routeToGear = AutoRoutes.rightStartToGear;
+
+	            switch (autonomousDropOffLocationSelected) {
+		            case BASELINE:
+			            System.out.println("[Autonomous Routing] Continuing on to baseline from right gear.");
+			            routeToDropOff = AutoRoutes.rightGearToBaseline;
+			            break;
+		            case GEAR_PICKUP:
+			            System.out.println("[Autonomous Routing] Continuing on to gear pickup from right gear.");
+			            routeToDropOff = AutoRoutes.rightGearToGearPickup;
+			            break;
+		            default:
+			            routeToDropOff = new Pose[1];
+			            break;
+	            }
             	break;
             case PLACE_GEAR_CENTER_AIRSHIP:
-            	//autonomous reach using SINGLE trapezoidal motion profile
-                //System.out.println("selecting reach command.");
-            	autonomousCommand = new PlaceGearCommand();
+	            System.out.println("[Autonomous Routing] Starting at center starting position, going to center gear hook.");
+	            routeToGear = AutoRoutes.centerStartToGear;
+
+	            switch (autonomousDropOffLocationSelected) {
+		            case BASELINE:
+			            System.out.println("[Autonomous Routing] Continuing on to baseline from center gear.");
+			            routeToDropOff = AutoRoutes.centerGearToBaseline;
+			            break;
+		            case GEAR_PICKUP:
+			            System.out.println("[Autonomous Routing] Continuing on to gear pickup from center gear.");
+			            routeToDropOff = AutoRoutes.centerGearToGearPickup;
+			            break;
+		            default:
+			            routeToDropOff = new Pose[1];
+			            break;
+	            }
+	            break;
             case NONE:
-            	break;
-            default:
-            	//autonomous reach AND cross with NO shoot using SINGLE trapezoidal motion profile
-            	autonomousCommand = new AutonomousCommand();
-            	break;
+	            autonomousCommand = new AutonomousCommand();
+	            return;
+	        default:
+	        	routeToGear = new Pose[1];
+	        	routeToDropOff = new Pose[1];
+	        	break;
         }
+
+	    for (int i = 0; i < routeToGear.length; i++) {
+		    System.out.println("X: " + routeToGear[i].x + " Y: " + routeToGear[i].y);
+	    }
+	    for (int i = 0; i < routeToDropOff.length; i++) {
+		    System.out.println("X: " + routeToDropOff[i].x + " Y: " + routeToDropOff[i].y);
+	    }
+
+        autonomousCommand = new AutonomousCommand(routeToGear, routeToDropOff);
     }
 
     public static Shooter getShooterSubsystem() {

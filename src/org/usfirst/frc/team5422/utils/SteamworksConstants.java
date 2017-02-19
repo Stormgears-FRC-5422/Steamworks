@@ -59,4 +59,7 @@ public class SteamworksConstants
         MANUAL,
         AUTONOMOUS
     }
+
+    // Field width in inches
+	public static final int FIELD_WIDTH_IN = 327;
 }

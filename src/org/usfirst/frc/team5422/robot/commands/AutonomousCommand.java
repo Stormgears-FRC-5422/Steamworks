@@ -3,10 +3,20 @@ package org.usfirst.frc.team5422.robot.commands;
 import org.usfirst.frc.team5422.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 
 public class AutonomousCommand extends Command {
+	private Pose[] routeToGear, routeToDropOff;
+
 	public AutonomousCommand() {
-    	requires(Robot.navigatorSubsystem);
+		// When this is called, autonomous isn't doing anything
+	}
+
+	public AutonomousCommand(Pose[] routeToGear, Pose[] routeToDropOff) {
+		requires(Robot.navigatorSubsystem);
+
+		this.routeToGear = routeToGear;
+		this.routeToDropOff = routeToDropOff;
 	}
 	
 	// Called just before this Command runs the first time
@@ -25,7 +35,7 @@ public class AutonomousCommand extends Command {
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	// Called once after isFinished returns true
@@ -39,5 +49,6 @@ public class AutonomousCommand extends Command {
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+
 	}
 }

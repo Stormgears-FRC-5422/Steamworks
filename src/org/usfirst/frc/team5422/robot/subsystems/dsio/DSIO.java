@@ -43,7 +43,7 @@ public class DSIO {
 		// Assign commands to pushable buttons
 
 		// Big Blue Button
-		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
+//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
 
 	}
 
@@ -110,8 +110,8 @@ public class DSIO {
 	private void initializeAlliance() {
 		
 		allianceChooser = new SendableChooser<alliances>();
-		allianceChooser.addDefault("Red Alliance", alliances.RED);
-		allianceChooser.addObject("Blue Alliance", alliances.BLUE);
+		allianceChooser.addDefault("Red Alliance (Boiler to the right)", alliances.RED);
+		allianceChooser.addObject("Blue Alliance (Boiler to the left)", alliances.BLUE);
 		SmartDashboard.putData("Alliance Chooser", allianceChooser);
 
 		autonomousGearPlacementOptionsChooser = new SendableChooser<autonomousGearPlacementOptions>();
