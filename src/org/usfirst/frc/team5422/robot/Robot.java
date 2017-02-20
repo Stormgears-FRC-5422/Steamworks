@@ -142,6 +142,8 @@ public class Robot extends IterativeRobot {
 
 		//Move the MecanumDrive
 		Navigator.getInstance().getMecanumDrive().move();
+		
+		SensorManager.vision.alignToGear();
 
 		dsio.checkSwitches();
 

@@ -1,9 +1,12 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
+import java.util.Set;
+
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision extends RunnableNotifier {
 
@@ -62,13 +65,63 @@ public class Vision extends RunnableNotifier {
 		
 	}
 
+	private double getCenterX(int index) {
+	      double [] defaultArray = new double[0];
+	      double [] visionArray = visionTable.getNumberArray("centerX", defaultArray);
 
-	public void alignToGear() {
-		//target: (centerX[0] + centerX[1])/2 = pixel width/2
-
-//		double pegHorizDisplacement = 160.0 - (centerX[0] + centerX[1]) / 2;
-
-		//if displacement < 0, move left
-		//if displacement > 0, move right
+	      if(visionArray.length > 0)
+	        try {
+	        	return visionArray[index];
+	        }
+	        catch(Exception e) {
+	        	return -1;
+	        }
+	      else
+	         return -1;
 	}
+
+   private double getRectWidth(int index) {
+      double [] defaultArray = new double[1];
+      double [] visionArray = visionTable.getNumberArray("width", defaultArray);
+
+      if(visionArray.length > 0) {
+         try {
+        	 return visionArray[index];
+         }
+         catch(Exception e) {
+        	 return -1;
+         }
+      } else {
+
+         return -1;
+      }
+   }
+
+   public void alignToGear() {
+      // Angular displacement
+      double distLeft = NetworkTable.getTable("StormNet").getNumber("ULTRASONIC_1", 6.0);
+      double distRight = NetworkTable.getTable("StormNet").getNumber("ULTRASONIC_2", 6.0);
+      double diffAng = Math.asin((distLeft - distRight) / SteamworksConstants.ROBOT_ULTRASONIC_SEPARATION_IN);
+
+//      System.out.println("DiffAngle:" + diffAng);
+      // TODO: Turn in place by -diffAng
+      SmartDashboard.putNumber("Angular Displacement to Gear Hook", diffAng * 180 / Math.PI);
+
+      // Distance
+      double distIn = (distLeft + distRight) / 2;
+      // TODO: Calculate this after the robot has straightened itself out
+      SmartDashboard.putNumber("Distance to Gear Hook", distIn);
+//      System.out.println("Distance in Inches from Gear:" + distIn);
+
+      // Horizontal Displacement
+//	    double pixelsPerIn = (Math.pow(83.328 * Math.E, -0.018 * distIn)) / 5;
+      double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
+//      System.out.println("Vision CenterX1: " + getCenterX(0) + " Vision CenterX2: " + getCenterX(1) );
+      double diffHorizIn = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
+      SmartDashboard.putNumber("Horizontal Displacement to Gear Hook", diffHorizIn);
+//      System.out.println("Horizontal Displacement :" + diffHorizIn);
+
+      //if displacement < 0, move left
+      //if displacement > 0, move right
+   }
 }
