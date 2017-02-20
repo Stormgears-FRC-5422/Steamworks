@@ -12,11 +12,13 @@ public class SteamworksConstants
     public static final int CLIMBER_INTAKE_TALON_ID = 1;
 
 	// StormNet IDs
-	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 0;
-	public static int NUMBER_OF_STORMNET_ULTRASONIC_SENSORS = 4;
+	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 8;
+	public static int NUMBER_OF_STORMNET_ULTRASONIC_SENSORS = 5; // most are currently ignored
 
-	public static int STORMNET_IR_ARDUINO_ADDRESS = 0;
+	public static int STORMNET_IR_ARDUINO_ADDRESS = 11;
 	public static int NUMBER_OF_STORMNET_IRSENSOR = 1;
+	
+	public static int STORMNET_LIGHTS_ARDUINO_ADDRESS = 5;
 	
 	
 	// Alliance options
