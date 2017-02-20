@@ -4,6 +4,8 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionM
 import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 
+import com.sun.javafx.scene.traversal.WeightedClosestCorner;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
@@ -21,7 +23,7 @@ public class SplineFollowThread implements Runnable{
 	
 	private static boolean _isFollowingSpline = false;
 	
-	private final double CLOSE_ENOUGH = 0.1; //meters
+	private final double DISTANCE_TOLERANCE = 0.1; //meters
 	
 	private static double lastMotionProfilePushTime;
 	
@@ -38,22 +40,46 @@ public class SplineFollowThread implements Runnable{
 		lastMotionProfilePushTime = Timer.getFPGATimestamp();
 	}
 	
-	public void updateSpline(double x, double y, double vx, double vy){
+	public void updateSpline(Pose argPose){//arguments are robot's pose
+		
+		double x = argPose.x;
+		double y = argPose.y;
+		double vx = argPose.v_x;
+		double vy = argPose.v_y;
+		
+		// update spline so it points the robot toward the next waypoint by turning starting velocity
+		
 		double error_x = spline.x(1, 1.0) - x;
 		double error_y = spline.y(1, 1.0) - y;
 		
-		spline.removePose(0);
+		double theta = Math.atan2(error_x, error_y);
 		
+		double spline_v_mag = Math.sqrt(vx*vx + vy*vy);
 		
-		//if the poses are close, then remove one pose and segment
-		if( Math.sqrt(error_x*error_x + error_y*error_y) < CLOSE_ENOUGH ){
-			
-			spline.updatePose(0, new Pose(x, y, vx, vy));
-			
-		}else{//did not move past spline
-			
-			spline.addPose(0, new Pose(x, y, vx, vy));
+		double corrected_spline_vx = spline_v_mag*Math.cos(theta);
+		double corrected_spline_vy = spline_v_mag*Math.sin(theta);
+		
+		double corrected_weight = 0.4;//this weight controls how much the robot is really under spline control or not
+		
+		//weighted av between robot v and spline desired v
+		double weighted_v_x = corrected_spline_vx * corrected_weight + vx*(1-corrected_weight);
+		double weighted_v_y = corrected_spline_vy * corrected_weight + vy*(1-corrected_weight);
+		
+		//if close to next waypoint, then remove the waypoint to continue to next waypoint
+		if(Math.sqrt(error_x*error_x + error_y*error_y) < DISTANCE_TOLERANCE){
+			spline.removePose(1);
 		}
+		
+		spline.updatePose(0, new Pose(x, y, weighted_v_x, weighted_v_y));
+		
+		//change direction of waypoint's velocity, so robot can follow easier
+		
+		double waypt_vy = spline.vy(1, 1.0);
+		double waypt_vx = spline.vx(1, 1.0);
+		
+		double v_mag = Math.sqrt(waypt_vx*waypt_vx + waypt_vy*waypt_vy);
+		
+		spline.updatePose(1, new Pose(spline.x(1, 1.0), spline.y(1, 1.0), v_mag*Math.sin(theta), v_mag*Math.sin(theta)) );
 		
 		if(spline.getNumSegments() < 1){
 			
@@ -82,7 +108,7 @@ public class SplineFollowThread implements Runnable{
 			double vx = networkTable.getNumber(NetworkConstants.GP_VX, -1);
 			double vy = networkTable.getNumber(NetworkConstants.GP_VY, -1);
 			
-			updateSpline(x, y, vx, vy);
+			updateSpline(new Pose(x, y, vx, vy));
 			
 			
 			calculateVelocityBuffer(150);//recalculate
@@ -92,7 +118,7 @@ public class SplineFollowThread implements Runnable{
 				motionManager.shutDownProfiling();
 				
 			}else{
-				if(Timer.getFPGATimestamp() - lastMotionProfilePushTime > 1.0){//every second, push a new profile
+				if(Timer.getFPGATimestamp() - lastMotionProfilePushTime > 0.2){//every fraction of a second, push a new profile
 					
 					motionManager.endProfile();
 					motionManager.pushProfile(null, true, false);
