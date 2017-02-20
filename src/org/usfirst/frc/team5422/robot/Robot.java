@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommand;
+import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
@@ -92,6 +93,7 @@ public class Robot extends IterativeRobot {
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
+		SensorManager.vision.turnOffLights();
 
 		//Robot in Autonomous mode
 		robotMode = RobotModes.AUTONOMOUS;
@@ -99,8 +101,6 @@ public class Robot extends IterativeRobot {
 		//initializing the Robot for motionprofile mode
 		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
-		SmartDashboard.putString("entered telop in", "");
-		navigatorSubsystem.getInstance().getMecanumDrive().autoMove();		
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
@@ -114,6 +114,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("teleop init started.");
 		//Robot in Teleop Mode
 		robotMode = RobotModes.TELEOP;
+		SensorManager.vision.turnOnLights();
 		
 		//initializing the Robot for joystick Velocity mode
 		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
@@ -248,7 +249,7 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case NONE:
-				autonomousCommand = new AutonomousCommand();
+				//autonomousCommand = new AutonomousCommand();
 				return;
 			default:
 				routeToGear = new ArrayList<>();
@@ -263,7 +264,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
 		}
 
-		autonomousCommand = new AutonomousCommand(routeToGear, routeToDropOff);
+		autonomousCommand = new AutonomousCommandGroup(routeToGear, routeToDropOff);
 	}
 
 

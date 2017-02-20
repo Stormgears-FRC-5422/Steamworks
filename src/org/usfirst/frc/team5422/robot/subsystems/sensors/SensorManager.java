@@ -3,7 +3,7 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 public class SensorManager {
 	
 	private static GlobalMapping globalMapping;
-	private static Vision vision;
+	public static Vision vision;
 	private static ShootingSensors shootingSensors;
 	private static StormNet stormNet;
 	

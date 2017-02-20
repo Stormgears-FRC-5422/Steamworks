@@ -65,7 +65,6 @@ public class GlobalMapping extends RunnableNotifier{
 	
 	@Override
 	public void run(){
-		System.out.println("in global mapping...");
 		updatePose();
 		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());

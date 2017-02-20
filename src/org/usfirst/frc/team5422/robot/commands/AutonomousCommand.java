@@ -32,6 +32,7 @@ public class AutonomousCommand extends Command {
 	protected void execute() {
 		System.out.println("Robot executing AutonomousCommand...");
 
+		Robot.navigatorSubsystem.getInstance().getMecanumDrive().autoMove();		
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
