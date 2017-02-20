@@ -8,9 +8,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Navigator extends Subsystem{
 	
-	public Notifier splineFollowThread;
+	private Notifier splineFollowThread;
 	
 	private static Navigator instance;
+	
 	private static Drive mecanumDrive;
 
 	

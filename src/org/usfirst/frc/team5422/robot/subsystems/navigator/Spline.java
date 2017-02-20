@@ -20,20 +20,28 @@ public class Spline {
 	ArrayList<Pose> poses;
 	//here, a pose is defined to be a state describing the x and y positions and velocities
 	
-	int numPoses;
-	int numSegments;
+	private int numPoses;
+	private int numSegments;
 	//this list has n points, the first point is the current position of the robot {1,2,3,...,n}
 	//the number of segments is always n-1 {1,2,3,...,n-1}
 	
+	public int getNumPoses(){
+		return this.numPoses;
+	}
+	
+	public int getNumSegments(){
+		return this.numSegments;
+	}
+	
 	Spline(ArrayList<Pose> initial_poses){
-		poses = new ArrayList<Pose>();
+		this.poses = new ArrayList<Pose>();
 		
-		numPoses = initial_poses.size();
-		numSegments = numPoses - 1;
+		this.numPoses = initial_poses.size();
+		this.numSegments = numPoses - 1;
 		
 		for(int i = 0; i < numPoses; i++){
 			Pose pose = initial_poses.get(i); 
-			poses.add(new Pose(pose.x, pose.y, pose.v_x, pose.v_y));
+			this.poses.add(new Pose(pose.x, pose.y, pose.v_x, pose.v_y));
 		}
 	}
 	
@@ -123,6 +131,11 @@ public class Spline {
 		return 6*a(seg, 1)*u + 2*b(seg, 1);
 	}
     
+    private void updateCounts(){
+    	this.numPoses = this.poses.size();
+    	this.numSegments = this.numPoses - 1;
+    }
+    
     public void updatePose(int index, Pose argPose){
     	//TODO:: verify this is the correct way
     	Pose pose = this.poses.get(index);
@@ -132,15 +145,22 @@ public class Spline {
     	pose.v_y = argPose.v_y;
     	poses.remove(0);
     	poses.add(0, pose);
+    	
+    	this.updateCounts();
+    	
     }
     
     public void addPose(int index, Pose argPose){
     	Pose pose = new Pose(argPose.x, argPose.y, argPose.v_x, argPose.v_y);
     	this.poses.add(index, pose);
+    	
+    	this.updateCounts();
     }
     
     public void removePose(int index){
     	this.poses.remove(index);
+    	
+    	this.updateCounts();
     }
     	
 }
