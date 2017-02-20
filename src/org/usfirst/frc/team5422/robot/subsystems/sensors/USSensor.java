@@ -15,8 +15,8 @@ public class USSensor extends StormgearsI2CSensor {
 		fetchBytes("U", "Ultrasonic", sensorValues);	
 	}
 	
-	public float getDistance(int sensorNumber) {
-		return sensorValues[sensorNumber];
+	// Distance in inches
+	public int getDistance(int sensorNumber) {
+		return (0xFF & sensorValues[sensorNumber]); // Java wants bytes to be signed.  We want unsigned value
 	}
-	
 }
