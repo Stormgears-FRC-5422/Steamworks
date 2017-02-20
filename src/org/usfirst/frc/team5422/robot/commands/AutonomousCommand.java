@@ -4,6 +4,7 @@ import org.usfirst.frc.team5422.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,8 @@ public class AutonomousCommand extends Command {
 	protected void execute() {
 		System.out.println("Robot executing AutonomousCommand...");
 
-		Robot.navigatorSubsystem.getInstance().getMecanumDrive().autoMove();		
+		Robot.navigatorSubsystem.getInstance().getMecanumDrive().autoMove();
+		SensorManager.vision.alignToGear();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
