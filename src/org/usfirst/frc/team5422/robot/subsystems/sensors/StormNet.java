@@ -22,7 +22,7 @@ public class StormNet extends RunnableNotifier{
 	public void run() {
 		super.run();
 		usSensor.pollDistance();
-		for (int sensorNumber=0; sensorNumber < 4; sensorNumber++) {
+		for (int sensorNumber=0; sensorNumber < SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS; sensorNumber++) {
 			networkPublish("ULTRASONIC_" + Integer.toString(sensorNumber + 1),  
 							usSensor.getDistance(sensorNumber));
 			SmartDashboard.putString("ULTRASONIC_" + Integer.toString(sensorNumber + 1),  
