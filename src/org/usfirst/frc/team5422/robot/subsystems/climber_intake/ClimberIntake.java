@@ -16,6 +16,7 @@ public class ClimberIntake extends Subsystem {
 	}
 
 	public void climb(double throttleValue) {
+
 		if(climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus){
 			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
 		}
@@ -41,3 +42,28 @@ public class ClimberIntake extends Subsystem {
 
 }
 
+		if (climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus)			
+			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
+		
+		climberIntakeTalon.set(throttleValue);	 
+		
+	}
+	public void takeIn() {
+		if (climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus)			
+			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
+
+		climberIntakeTalon.set(0.5);
+
+	}
+
+	public void stop()
+	{
+		climberIntakeTalon.set(0);
+	}
+
+	@Override
+	protected void initDefaultCommand() {
+		climberIntakeTalon.set(0);
+	}
+
+}
