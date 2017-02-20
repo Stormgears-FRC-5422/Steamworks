@@ -88,15 +88,14 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+		//Robot in Autonomous mode
+		robotMode = RobotModes.AUTONOMOUS;
 
 		//if any residual commands exist, cancel them
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
-		SensorManager.vision.turnOffLights();
-
-		//Robot in Autonomous mode
-		robotMode = RobotModes.AUTONOMOUS;
+		SensorManager.vision.turnOnLights();
 
 		//initializing the Robot for motionprofile mode
 		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
@@ -114,7 +113,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("teleop init started.");
 		//Robot in Teleop Mode
 		robotMode = RobotModes.TELEOP;
-		SensorManager.vision.turnOnLights();
+		SensorManager.vision.turnOffLights();
 		
 		//initializing the Robot for joystick Velocity mode
 		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
@@ -142,7 +141,7 @@ public class Robot extends IterativeRobot {
 
 		//Move the MecanumDrive
 		Navigator.getInstance().getMecanumDrive().move();
-
+		
 		dsio.checkSwitches();
 
 		//Run WPILib commands

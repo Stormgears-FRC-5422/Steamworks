@@ -20,6 +20,9 @@ public class SteamworksConstants
 	
 	public static int STORMNET_LIGHTS_ARDUINO_ADDRESS = 5;
 	
+	public static int ROBOT_ULTRASONIC_SEPARATION_IN = 24;
+	public static int FRAME_WIDTH = 320;//in pixels
+	public static int FRAME_HEIGHT = 240;//in pixels
 	
 	// Alliance options
 	public enum alliances {
