@@ -6,13 +6,12 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Navigator extends Subsystem{
 	
-	private Notifier splineFollowThread;
+	private Notifier splineFollowThreadNotifier;
 	
 	private static Navigator instance;
 	
 	private static Drive mecanumDrive;
 
-	
 	public Navigator() {
 		//using Stormgears CloneBot Mecanum Drive
         mecanumDrive = new CloneBotMecanumDrive();
@@ -35,14 +34,24 @@ public class Navigator extends Subsystem{
 		return instance;
 	}
 	
+	//for convenience
+	public synchronized void driveSpline(){
+		
+	}
+	
 	public synchronized void driveSpline(Spline spline){
-		splineFollowThread = (Notifier) SplineFollowThread.getInstance();
-		splineFollowThread.startPeriodic(0.01);
+		
+		SplineFollowThread.loadInitialSpline(spline);
+		splineFollowThreadNotifier = new Notifier(SplineFollowThread.getInstance());
+		splineFollowThreadNotifier.startPeriodic(0.01);
+		
 		while(SplineFollowThread.isFollowingSpline()){
 			
 			Timer.delay(0.001);
 		}
 	}
+	
+	//TODO:: write rotate wrapper, and straight-line moving methods
 
 	@Override
 	protected void initDefaultCommand() {
