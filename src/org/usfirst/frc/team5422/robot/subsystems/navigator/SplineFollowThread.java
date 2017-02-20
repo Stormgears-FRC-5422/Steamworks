@@ -110,6 +110,7 @@ public class SplineFollowThread implements Runnable{
 			
 			
 			calculateVelocityBuffer(150);//recalculate
+			
 			if(!_isFollowingSpline){
 				motionManager.endProfile();
 				motionManager.pushProfile(null, true, true);
