@@ -3,7 +3,6 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Vision extends RunnableNotifier {
