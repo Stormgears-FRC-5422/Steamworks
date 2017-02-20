@@ -1,19 +1,18 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
+
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
-
-import com.sun.javafx.scene.traversal.WeightedClosestCorner;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class SplineFollowThread implements Runnable{
 	
-	private static NetworkTable networkTable;
+	private static MotionManager motionManager = new MotionManager(Drive.talons);//TODO:: maybe should only have one instance (in navigator)
 	
-	private static MotionManager motionManager = new MotionManager(Drive.talons);
+	private static NetworkTable networkTable;
 	
 	private static Spline spline;
 
@@ -112,16 +111,16 @@ public class SplineFollowThread implements Runnable{
 			calculateVelocityBuffer(150);//recalculate
 			
 			if(!_isFollowingSpline){
-				motionManager.endProfile();
+				
 				motionManager.pushProfile(null, true, true);
-				motionManager.shutDownProfiling();
+				
 				
 			}else{
 				if(Timer.getFPGATimestamp() - lastMotionProfilePushTime > 0.2){//every fraction of a second, push a new profile
 					
-					motionManager.endProfile();
+					
 					motionManager.pushProfile(null, true, false);
-					motionManager.startProfile();
+					
 					
 					lastMotionProfilePushTime = Timer.getFPGATimestamp(); 
 					

@@ -112,5 +112,10 @@ public class MotionManager {
 		}
 		return temp;
 	}
+
+	public void pushTurn(double theta, boolean b, boolean c) {
+		// TODO Auto-generated method stub Naik add this please
+		
+	}
 	
 }
