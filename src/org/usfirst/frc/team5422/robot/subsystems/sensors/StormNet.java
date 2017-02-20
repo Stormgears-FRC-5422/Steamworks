@@ -38,6 +38,17 @@ public class StormNet extends RunnableNotifier{
 		networkPublish("IR Alignment Offset", irSensor.getAlignmentOffset());
 		SmartDashboard.putString("IR Sensor Details", Arrays.toString(irSensor.getAllDetails()));			
 		networkPublish("IR Sensor Details", Arrays.toString(irSensor.getAllDetails()));
+		
+		// Turn ring light off
+		//ID - NEOPIXEL_SEGMENTID
+		//MODE - BEHAVIOR - ONLY ONE BEHAVIOR = 1 (All on or off) instead of flickering different LEDs in the neopixel
+		//COLOR - 0-OFF, 1-RED, 2-GREEN, 3-BLUE,  ... (this depends on the mode, in our case Behavior =1)
+		//BRIGHTNESS - 0(darkest) - 255 (brightest)
+		lightSensor.pushCommand(1, 1, 0, 0);
+		
+		// Turn ring light on, green, brightness 128
+		//lightSensor.pushCommand(1, 1, 2, 128);
+		
 	}
 		
 	@Override
