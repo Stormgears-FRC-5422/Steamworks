@@ -59,7 +59,7 @@ public class SplineFollowThread implements Runnable{
 		double corrected_spline_vx = spline_v_mag*Math.cos(theta);
 		double corrected_spline_vy = spline_v_mag*Math.sin(theta);
 		
-		double corrected_weight = 0.4;//this weight controls how much the robot is really under spline control or not
+		double corrected_weight = 0.4;//this weight controls how much the robot is not under pure spline control
 		
 		//weighted av between robot v and spline desired v
 		double weighted_v_x = corrected_spline_vx * corrected_weight + vx*(1-corrected_weight);
@@ -70,10 +70,10 @@ public class SplineFollowThread implements Runnable{
 			spline.removePose(1);
 		}
 		
+		//update the current pose with robot's manipulated
 		spline.updatePose(0, new Pose(x, y, weighted_v_x, weighted_v_y));
 		
 		//change direction of waypoint's velocity, so robot can follow easier
-		
 		double waypt_vy = spline.vy(1, 1.0);
 		double waypt_vx = spline.vx(1, 1.0);
 		
@@ -99,8 +99,6 @@ public class SplineFollowThread implements Runnable{
 				e.printStackTrace();
 			}
 		}else{
-			
-			
 			
 			//update spline
 			double x = networkTable.getNumber(NetworkConstants.GP_X, -1);
