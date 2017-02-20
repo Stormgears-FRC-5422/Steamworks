@@ -10,21 +10,21 @@ public class SensorManager {
 	public static void initiateSensorSystems(){
 		globalMapping = new GlobalMapping();
 		stormNet = new StormNet();
-//		vision = new Vision();
+		vision = new Vision();
 //		shootingSensors = new ShootingSensors();
 	}
 	
 	public static void startPublishingToNetwork(){
 		globalMapping.start();
 		stormNet.start();
-//		vision.start();
+		vision.start();
 //		shootingSensors.start();
 	}
 	
 	public static void stopPublishingToNetwork(){
 		globalMapping.stop();
 		stormNet.stop();
-//		vision.stop();
+		vision.stop();
 //		shootingSensors.stop();
 	}
 }
