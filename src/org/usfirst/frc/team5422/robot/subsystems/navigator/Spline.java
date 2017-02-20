@@ -22,10 +22,6 @@ public class Spline {
 	
 	ArrayList<Pose> poses;
 	
-	private int numPoses;
-	
-	private int numSegments;
-	
 	public int getNumPoses(){
 		
 		return this.poses.size();
@@ -41,8 +37,6 @@ public class Spline {
 		
 		this.poses = initial_poses;
 		
-		this.numPoses = this.poses.size();
-		this.numSegments = this.numPoses - 1;
 	}
 	
 	//constructor
@@ -52,7 +46,6 @@ public class Spline {
 			
 			poses.add(initial_poses[i]);
 		}
-		
 	}
 	
     //these are the coefficients (a,b,c,d) of the cubic polynomials
@@ -114,76 +107,58 @@ public class Spline {
     	}
 	}
     
-    //returns the x,y, v_x, v_y of any segment of each spline, 
-    //with internal parameter u, u must be between 0.0 and 1.0
+    /* returns movement function of any segment of spline, 
+     * with internal parameter u to each segment, 
+     * u must be between 0.0 and 1.0
+     */
+    
+    //position
     public double x(int seg, double u) {
-    	
-    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set u to within bounds if out of bounds
     	
 		return a(seg, 0)*(u*u*u) + b(seg, 0)*(u*u) + c(seg, 0)*u + d(seg, 0);
 	}
+    
     public double y(int seg, double u) {
-    	
-    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set t to within bounds if out of bounds
     	
 		return a(seg, 1)*(u*u*u) + b(seg, 1)*(u*u) + c(seg, 1)*u + d(seg, 1);
 	}
     
+    //velocity
     public double vx(int seg, double u) {
-    	
-    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set u to within bounds if out of bounds
     	
     	return 3*a(seg, 0)*(u*u) + 2*b(seg, 0)*u + c(seg, 0);
 	}
+    
     public double vy(int seg, double u) {
-    	
-    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set t to within bounds if out of bounds
     	
 		return 3*a(seg, 1)*(u*u) + 2*b(seg, 1)*u + c(seg, 1);
 	}
+    
+    //acceleration
     public double ax(int seg, double u) {
-    	
-    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set u to within bounds if out of bounds
     	
     	return 6*a(seg, 0)*u + 2*b(seg, 0);
 	}
+    
     public double ay(int seg, double u) {
-    	
-    	//u = u > 1.0 ? 1.0 : (u < 0.0 ? 0.0 : u);//set t to within bounds if out of bounds
     	
 		return 6*a(seg, 1)*u + 2*b(seg, 1);
 	}
     
-    private void updateCounts(){
-    	this.numPoses = this.poses.size();
-    	this.numSegments = this.numPoses - 1;
-    }
-    
+    //methods to update spline poses
     public void updatePose(int index, Pose argPose){
-    	//TODO:: verify this is the correct way
-    	Pose pose = this.poses.get(index);
-    	pose.x = argPose.x;
-    	pose.y = argPose.y;
-    	pose.v_x = argPose.v_x;
-    	pose.v_y = argPose.v_y;
-    	poses.remove(0);
-    	poses.add(0, pose);
     	
-    	this.updateCounts();
-    	
+    	poses.remove(index);
+    	poses.add(argPose);
     }
     
     public void addPose(int index, Pose argPose){
-    	Pose pose = new Pose(argPose.x, argPose.y, argPose.v_x, argPose.v_y);
-    	this.poses.add(index, pose);
     	
-    	this.updateCounts();
+    	this.poses.add(index, argPose);
     }
     
     public void removePose(int index){
+    	
     	this.poses.remove(index);
-    	
-    	this.updateCounts();
     }
-    	
 }
