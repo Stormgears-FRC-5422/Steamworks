@@ -1,7 +1,5 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
-import com.ctre.CANTalon;
-
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;

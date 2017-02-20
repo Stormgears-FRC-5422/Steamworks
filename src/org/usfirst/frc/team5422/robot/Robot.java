@@ -14,10 +14,14 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
+import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
+
+import java.util.ArrayList;
 
 public class Robot extends IterativeRobot {
 	// Subsystems
@@ -26,7 +30,7 @@ public class Robot extends IterativeRobot {
 	public static ClimberIntake climberIntakeSubsystem;
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
-
+	public static RobotModes robotMode =  RobotModes.AUTONOMOUS;
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
 	public autonomousDropOffLocationOptions autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
@@ -80,6 +84,11 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+		//Robot in Autonomous mode
+		robotMode = RobotModes.AUTONOMOUS;
+
+		//initializing the Robot for motionprofile mode
+		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
 		//select the autonomous command for this run
 		selectAutonomousCommand();
@@ -92,6 +101,12 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit() {
 		System.out.println("teleop init started.");
+		//Robot in Teleop Mode
+		robotMode = RobotModes.TELEOP;
+		
+		//initializing the Robot for joystick Velocity mode
+		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
+
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
@@ -152,7 +167,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAutonomousCommand() {
-		Pose[] routeToGear, routeToDropOff;
+		ArrayList<Pose> routeToGear, routeToDropOff;
 
 		selectAlliance();
 		selectAutonomousGearPlacement();
@@ -180,7 +195,7 @@ public class Robot extends IterativeRobot {
 						routeToDropOff = AutoRoutes.leftGearToGearPickup;
 						break;
 					default:
-						routeToDropOff = new Pose[1];
+						routeToDropOff = new ArrayList<>();
 						break;
 				}
 				break;
@@ -198,7 +213,7 @@ public class Robot extends IterativeRobot {
 						routeToDropOff = AutoRoutes.rightGearToGearPickup;
 						break;
 					default:
-						routeToDropOff = new Pose[1];
+						routeToDropOff = new ArrayList<>();
 						break;
 				}
 				break;
@@ -216,7 +231,7 @@ public class Robot extends IterativeRobot {
 						routeToDropOff = AutoRoutes.centerGearToGearPickup;
 						break;
 					default:
-						routeToDropOff = new Pose[1];
+						routeToDropOff = new ArrayList<>();
 						break;
 				}
 				break;
@@ -224,16 +239,16 @@ public class Robot extends IterativeRobot {
 				autonomousCommand = new AutonomousCommand();
 				return;
 			default:
-				routeToGear = new Pose[1];
-				routeToDropOff = new Pose[1];
+				routeToGear = new ArrayList<>();
+				routeToDropOff = new ArrayList<>();
 				break;
 		}
 
-		for (int i = 0; i < routeToGear.length; i++) {
-			System.out.println("X: " + routeToGear[i].x + " Y: " + routeToGear[i].y);
+		for (int i = 0; i < routeToGear.size(); i++) {
+			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
 		}
-		for (int i = 0; i < routeToDropOff.length; i++) {
-			System.out.println("X: " + routeToDropOff[i].x + " Y: " + routeToDropOff[i].y);
+		for (int i = 0; i < routeToDropOff.size(); i++) {
+			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
 		}
 
 		autonomousCommand = new AutonomousCommand(routeToGear, routeToDropOff);
