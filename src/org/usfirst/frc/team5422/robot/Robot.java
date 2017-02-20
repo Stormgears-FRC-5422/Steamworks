@@ -4,7 +4,10 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommand;
+import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
@@ -12,6 +15,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
@@ -84,6 +88,13 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+
+		//if any residual commands exist, cancel them
+		if (autonomousCommand != null) {
+			autonomousCommand.cancel();
+		}
+		SensorManager.vision.turnOffLights();
+
 		//Robot in Autonomous mode
 		robotMode = RobotModes.AUTONOMOUS;
 
@@ -103,6 +114,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("teleop init started.");
 		//Robot in Teleop Mode
 		robotMode = RobotModes.TELEOP;
+		SensorManager.vision.turnOnLights();
 		
 		//initializing the Robot for joystick Velocity mode
 		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
@@ -118,6 +130,7 @@ public class Robot extends IterativeRobot {
 
 	public void autoPeriodic() {
 		System.out.println("auto periodic started.");
+		
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
 		}
@@ -236,7 +249,7 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case NONE:
-				autonomousCommand = new AutonomousCommand();
+				//autonomousCommand = new AutonomousCommand();
 				return;
 			default:
 				routeToGear = new ArrayList<>();
@@ -251,7 +264,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
 		}
 
-		autonomousCommand = new AutonomousCommand(routeToGear, routeToDropOff);
+		autonomousCommand = new AutonomousCommandGroup(routeToGear, routeToDropOff);
 	}
 
 

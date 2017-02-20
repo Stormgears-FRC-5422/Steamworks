@@ -3,19 +3,17 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Vision extends RunnableNotifier {
 
-	private DigitalOutput lights;
+	private LightSensor lightSensor;
 	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
 	
 	public Vision() {
 		super("Vision", 0.001);
 		System.out.println("Vision system constructed");
-		lights = new DigitalOutput(SteamworksConstants.RINGLIGHT_PORT);
-		lights.set(false);
+		lightSensor = new LightSensor(SteamworksConstants.STORMNET_LIGHTS_ARDUINO_ADDRESS);
 	}
 
 	@Override
@@ -35,11 +33,24 @@ public class Vision extends RunnableNotifier {
 	}
 		
 	public void turnOffLights() {
-		lights.set(false);
+		//ID - NEOPIXEL_SEGMENTID
+		//MODE - BEHAVIOR - ONLY ONE BEHAVIOR = 1 (All on or off) instead of flickering different LEDs in the neopixel
+		//COLOR - 0-OFF, 1-RED, 2-GREEN, 3-BLUE,  ... (this depends on the mode, in our case Behavior =1)
+		//BRIGHTNESS - 0(darkest) - 255 (brightest)
+
+		// Turn ring light off
+		lightSensor.pushCommand(1, 1, 0, 0);
 	}
 	
 	public void turnOnLights() {
-		lights.set(true);
+		// Turn ring light off
+		//ID - NEOPIXEL_SEGMENTID
+		//MODE - BEHAVIOR - ONLY ONE BEHAVIOR = 1 (All on or off) instead of flickering different LEDs in the neopixel
+		//COLOR - 0-OFF, 1-RED, 2-GREEN, 3-BLUE,  ... (this depends on the mode, in our case Behavior =1)
+		//BRIGHTNESS - 0(darkest) - 255 (brightest)
+
+		// Turn ring light on, green, brightness 128
+		lightSensor.pushCommand(1, 1, 2, 128);
 	}
 	
 	public void getVisionCoordinatesFromNetworkTable() { 

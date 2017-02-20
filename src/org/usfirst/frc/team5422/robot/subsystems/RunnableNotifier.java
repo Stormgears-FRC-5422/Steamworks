@@ -17,6 +17,10 @@ public class RunnableNotifier implements Runnable{
 		networkTable.putNumber(string, number);
 	}
 	
+	protected void networkPublish(String string, String value){
+		networkTable.putString(string, value);
+	}
+	
 	private String networkKey;
 	
 	public RunnableNotifier(String networkKey, double periodS){

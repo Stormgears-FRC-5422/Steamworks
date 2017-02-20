@@ -14,12 +14,12 @@ public class LightSensor extends StormgearsI2CSensor {
 	}
 	
 	// generic command 
-	void pushCommand(byte id, byte mode, byte arg1, byte arg2) {
+	void pushCommand(int id, int mode, int arg1, int arg2) {
 		// L[id, mode, arg1, arg2]
-		lightCommand[1] = id;
-		lightCommand[2] = mode;
-		lightCommand[3] = arg1;
-		lightCommand[4] = arg2;
+		lightCommand[1] = (byte)id;
+		lightCommand[2] = (byte)mode;
+		lightCommand[3] = (byte)arg1;
+		lightCommand[4] = (byte)arg2;
 		// receivebuffer ends up holding a basic counter.  not really used.
 		fetchCommand(lightCommand, "PushCommand", receiveBuffer);
 	}

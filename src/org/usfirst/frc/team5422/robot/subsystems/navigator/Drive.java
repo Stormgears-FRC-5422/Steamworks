@@ -17,6 +17,9 @@ public abstract class Drive {
 	
 	//implement this method in classes derived from this Drive class
 	abstract public void move();
+	
+	abstract public void autoMove();
+	
 
 	abstract public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile);
 

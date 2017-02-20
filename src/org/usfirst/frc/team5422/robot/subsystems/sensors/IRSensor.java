@@ -60,10 +60,10 @@ public class IRSensor extends StormgearsI2CSensor {
 	
 	// Negative means robot needs to move to the left
 	public float getAlignmentOffset() {
-		/*	1-?-0-?-1 --> 0” (i.e. center robot on lift peg)
-			0-0-1-1-1 --> 1.75” left (offset robot to left of lift peg)
-			0-1-1-1-0 --> 1.25” left or right (offset robot to left or right of lift peg)
-			1-1-1-0-0 --> 1.75” right (offset robot to right of lift peg)
+		/*	1-?-0-?-1 --> 0" (i.e. center robot on lift peg)
+			0-0-1-1-1 --> 1.75" left (offset robot to left of lift peg)
+			0-1-1-1-0 --> 1.25" left or right (offset robot to left or right of lift peg)
+			1-1-1-0-0 --> 1.75" right (offset robot to right of lift peg)
 		 */
 		// note that these sensors start at index 1, not 0 (0 is the beam...)
 		boolean[] on = new boolean[numLinePins];
