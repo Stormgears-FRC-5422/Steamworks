@@ -24,6 +24,8 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 
+import java.util.ArrayList;
+
 public class Robot extends IterativeRobot {
 	// Subsystems
 	public static Navigator navigatorSubsystem;
@@ -177,7 +179,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAutonomousCommand() {
-		Pose[] routeToGear, routeToDropOff;
+		ArrayList<Pose> routeToGear, routeToDropOff;
 
 		selectAlliance();
 		selectAutonomousGearPlacement();
@@ -205,7 +207,7 @@ public class Robot extends IterativeRobot {
 						routeToDropOff = AutoRoutes.leftGearToGearPickup;
 						break;
 					default:
-						routeToDropOff = new Pose[1];
+						routeToDropOff = new ArrayList<>();
 						break;
 				}
 				break;
@@ -223,7 +225,7 @@ public class Robot extends IterativeRobot {
 						routeToDropOff = AutoRoutes.rightGearToGearPickup;
 						break;
 					default:
-						routeToDropOff = new Pose[1];
+						routeToDropOff = new ArrayList<>();
 						break;
 				}
 				break;
@@ -241,7 +243,7 @@ public class Robot extends IterativeRobot {
 						routeToDropOff = AutoRoutes.centerGearToGearPickup;
 						break;
 					default:
-						routeToDropOff = new Pose[1];
+						routeToDropOff = new ArrayList<>();
 						break;
 				}
 				break;
@@ -249,16 +251,16 @@ public class Robot extends IterativeRobot {
 				autonomousCommand = new AutonomousCommand();
 				return;
 			default:
-				routeToGear = new Pose[1];
-				routeToDropOff = new Pose[1];
+				routeToGear = new ArrayList<>();
+				routeToDropOff = new ArrayList<>();
 				break;
 		}
 
-		for (int i = 0; i < routeToGear.length; i++) {
-			System.out.println("X: " + routeToGear[i].x + " Y: " + routeToGear[i].y);
+		for (int i = 0; i < routeToGear.size(); i++) {
+			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
 		}
-		for (int i = 0; i < routeToDropOff.length; i++) {
-			System.out.println("X: " + routeToDropOff[i].x + " Y: " + routeToDropOff[i].y);
+		for (int i = 0; i < routeToDropOff.size(); i++) {
+			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
 		}
 
 		autonomousCommand = new AutonomousCommand(routeToGear, routeToDropOff);

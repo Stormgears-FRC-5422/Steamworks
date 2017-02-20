@@ -5,14 +5,16 @@ import org.usfirst.frc.team5422.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 
+import java.util.ArrayList;
+
 public class AutonomousCommand extends Command {
-	private Pose[] routeToGear, routeToDropOff;
+	private ArrayList<Pose> routeToGear, routeToDropOff;
 
 	public AutonomousCommand() {
 		// When this is called, autonomous isn't doing anything
 	}
 
-	public AutonomousCommand(Pose[] routeToGear, Pose[] routeToDropOff) {
+	public AutonomousCommand(ArrayList<Pose> routeToGear, ArrayList<Pose> routeToDropOff) {
 		requires(Robot.navigatorSubsystem);
 
 		this.routeToGear = routeToGear;
