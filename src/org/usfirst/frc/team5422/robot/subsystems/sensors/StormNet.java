@@ -25,14 +25,19 @@ public class StormNet extends RunnableNotifier{
 		for (int sensorNumber=0; sensorNumber < 4; sensorNumber++) {
 			networkPublish("ULTRASONIC_" + Integer.toString(sensorNumber + 1),  
 							usSensor.getDistance(sensorNumber));
+			SmartDashboard.putString("ULTRASONIC_" + Integer.toString(sensorNumber + 1),  
+					Float.toString(usSensor.getDistance(sensorNumber)));
 		}
 		
 		irSensor.pollGearState();
 		SmartDashboard.putString("IR Gear State", irSensor.getState().toString());
+		networkPublish("IR Gear State", irSensor.getState().toString());
 
 		irSensor.pollSensorStatus();
 		SmartDashboard.putString("IR Alignment Offset", Float.toString(irSensor.getAlignmentOffset()));	
+		networkPublish("IR Alignment Offset", irSensor.getAlignmentOffset());
 		SmartDashboard.putString("IR Sensor Details", Arrays.toString(irSensor.getAllDetails()));			
+		networkPublish("IR Sensor Details", Arrays.toString(irSensor.getAllDetails()));
 	}
 		
 	@Override
