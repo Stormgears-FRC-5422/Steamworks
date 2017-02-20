@@ -67,6 +67,7 @@ public class GlobalMapping extends RunnableNotifier{
 	public void run(){
 		System.out.println("in global mapping...");
 		updatePose();
+		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
 		networkPublish(NetworkConstants.GP_Y, y);
@@ -87,10 +88,10 @@ public class GlobalMapping extends RunnableNotifier{
 		
 		//TODO:: get encoder values
 		
-		enc_fl = Navigator.getInstance().getMecanumDrive().talons[0].getEncPosition();
-		enc_fr = Navigator.getInstance().getMecanumDrive().talons[1].getEncPosition();
-		enc_bl = Navigator.getInstance().getMecanumDrive().talons[3].getEncPosition();
-		enc_br = Navigator.getInstance().getMecanumDrive().talons[2].getEncPosition();
+		enc_fl = Navigator.getMecanumDrive().talons[0].getEncPosition();
+		enc_fr = Navigator.getMecanumDrive().talons[1].getEncPosition();
+		enc_bl = Navigator.getMecanumDrive().talons[3].getEncPosition();
+		enc_br = Navigator.getMecanumDrive().talons[2].getEncPosition();
 		
 		int d_enc_fl = (int) (enc_fl - prev_enc_fl);
 		int d_enc_fr = (int) (enc_fr - prev_enc_fr);
