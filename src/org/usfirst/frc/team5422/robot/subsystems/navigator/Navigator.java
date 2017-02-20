@@ -25,6 +25,10 @@ public class Navigator extends Subsystem{
 		
 		return _isMovingStraight;
 	}
+	
+	public static boolean isMoving(){
+		return _isMovingStraight || _isRotating || SplineFollowThread.isFollowingSpline();
+	}
 
 	public Navigator() {
 		//using Stormgears CloneBot Mecanum Drive
@@ -43,6 +47,7 @@ public class Navigator extends Subsystem{
 	}
 
 	public static Navigator getInstance(){
+		
 		if(instance==null){
 			instance = new Navigator();
 		}
@@ -52,7 +57,7 @@ public class Navigator extends Subsystem{
 	public synchronized void driveSpline(Spline spline){
 		
 		try{
-			if(_isMovingStraight || _isRotating){
+			if(isMoving()){
 				throw new Exception("cannot call two maneuvers at once!");
 			}else{
 				SplineFollowThread.loadInitialSpline(spline);
@@ -65,13 +70,15 @@ public class Navigator extends Subsystem{
 				}
 			}
 		}catch(Exception e){
+			
 			e.printStackTrace();
 		}
 	}
 	
 	private synchronized void driveStraight(){
 		try{
-			if(SplineFollowThread.isFollowingSpline() || _isRotating){
+			if(isMoving()){
+				
 				throw new Exception("cannot call two maneuvers at once!");
 			}else{
 				
@@ -88,13 +95,15 @@ public class Navigator extends Subsystem{
 	
 	public synchronized void driveRotate(double fieldTheta){
 		try{
-			if(SplineFollowThread.isFollowingSpline() || _isMovingStraight){
+			if(isMoving()){
 				throw new Exception("cannot call two maneuvers at once!");
 			}else{
 				
 				_isRotating = true;
 				
 				//TODO:: call aditya's rotate-in-place function, and block this thread
+				
+				
 				
 				_isRotating = false;
 			}
