@@ -1,4 +1,4 @@
-package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
+package org.usfirst.frc.team5422.robot;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
@@ -20,7 +20,7 @@ public class MotionManager {
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() {
 			synchronized (this) {
-				System.out.println(currIndex);
+//				System.out.println(currIndex);
 				if(immediate) {
 					currIndex = 0;
 					for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
@@ -80,6 +80,7 @@ public class MotionManager {
 		}
 		x /= vels.length;
 		y /= vels.length;
+		//double[] solution = {Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0, Math.atan(y / x)};
 		return Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0;
 	}
 	
@@ -98,15 +99,14 @@ public class MotionManager {
 	}
 	
 	public synchronized void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
-		go = true;
 		this.done = done;
 		this.immediate = immediate;
 		interrupt = immediate;
 		paths.add(pathArray);
 		turns.add(null);
+		go = true;
 	}
 	public synchronized void pushTurn(double theta, boolean immediate, boolean done) {
-		go = true;
 		this.immediate =  immediate;
 		interrupt = immediate;
 		this.done = done;
@@ -114,6 +114,7 @@ public class MotionManager {
 		d.theta = theta;
 		turns.add(d);
 		paths.add(getTurnProfile(d));
+		go = true;
 	}
 	
 	private double [][] generateTable() {
@@ -141,19 +142,22 @@ public class MotionManager {
 		if(tTheta > 0) {d.theta = Math.PI - tTheta; d.direction = true; }
 		d.direction = false;
 		double dist = robotRadius * d.theta/(2.0 * Math.PI * wheelRadius);
-		return TrapezoidalProfile.getTrapezoidZero(dist, maxVel, d.theta, 0);
+		return TrapezoidalProfile.getTrapezoidZero(dist, maxVel, d.theta, getRobotRPM());
 	}
 
 	public void pushTurn() {
 		SmartDashboard.putString("push profile started", "");
 		//clear existing profiles
-		if(immediate) for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
-	   
 		double [] positions = new double[4];
 		TrajectoryPoint pt = new TrajectoryPoint();
 		double[][] pathArray = paths.get(0);
 		boolean direc = turns.get(0).direction;
 		for(int i = currIndex; i < currIndex + batchSize; i ++) {
+			if(i >= pathArray.length) break;
+			if(interrupt) {
+				interrupt = false;
+				return;
+			}
 			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
 			for(int j = 0; j < controls.length; j ++) {
 				pt.position = 0;
