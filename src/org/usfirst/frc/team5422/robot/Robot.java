@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommand;
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
@@ -47,9 +45,6 @@ public class Robot extends IterativeRobot {
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
 
-		if(!SensorManager.isInitiated()){
-			SensorManager.initiateSensorSystems();
-		}
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = new Navigator();
 		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
@@ -57,7 +52,12 @@ public class Robot extends IterativeRobot {
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
 		//starts publishing all sensors here
-		SensorManager.startPublishingToNetwork();
+		if(!SensorManager.isInitiated()){
+			SensorManager.initiateSensorSystems();
+		}
+		if (!SensorManager.isPublishing()) {
+			SensorManager.startPublishingToNetwork();			
+		}
 	}
 
 	public static Shooter getShooterSubsystem() {
@@ -100,9 +100,7 @@ public class Robot extends IterativeRobot {
 		Spline spline = new Spline(poses);
 		Navigator.driveSpline(spline);*/
 		
-		Navigator.driveStraightRelativeInches(0, 12);
 		
-		/*
 		robotMode = RobotModes.AUTONOMOUS;
 
 		//if any residual commands exist, cancel them
@@ -114,6 +112,8 @@ public class Robot extends IterativeRobot {
 		//initializing the Robot for motionprofile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
+		//Navigator.driveStraightRelativeInches(0, 12);
+
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
@@ -123,7 +123,7 @@ public class Robot extends IterativeRobot {
 		}else{
 			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
 		}
-		*/
+		
 	}
 	
 	
