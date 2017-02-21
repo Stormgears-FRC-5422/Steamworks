@@ -21,6 +21,8 @@ public class MotionControl {
 	    	talon.processMotionProfileBuffer();
 	    	talon.getMotionProfileStatus(status);
 	    	i.process(status,talon);
+			SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
+			SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);
 		}	
 	}
 
@@ -35,8 +37,8 @@ public class MotionControl {
 	public void pushMotionProfileTrajectory(TrajectoryPoint pt) {
 		talon.pushMotionProfileTrajectory(pt);
 		talon.getMotionProfileStatus(status);
-		SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
-		SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);
+//		SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
+//		SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);
 	}
 	
 	public void clearMotionProfileTrajectories() {
@@ -49,6 +51,10 @@ public class MotionControl {
 	
 	public void changeControlMode(TalonControlMode mode) {
 		talon.changeControlMode(mode);
+	}
+	
+	public int getEncVel() {
+		return talon.getEncVelocity();
 	}
 	
 	//TODO: add in some edge case error checking

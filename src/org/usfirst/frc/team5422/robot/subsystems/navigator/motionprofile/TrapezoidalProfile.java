@@ -1,4 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class TrapezoidalProfile {
 	
 	/*
@@ -6,14 +9,14 @@ public class TrapezoidalProfile {
 	 * Postcondition: returns profile [] in the form of {velocity, theta}
 	 */
 	
-	public static void main(String [] args) {
-		double [][] profileTest = getTrapezoidZero(5,25,0, 0);
-		double position = 0;
-		for(int i = 0; i < profileTest.length; i ++) {
-			position += profileTest[i][0] * 0.01/60;
-			System.out.println(profileTest[i][0] + "," + profileTest[i][1] + "," + position);
-		}
-	}
+//	public static void main(String [] args) {
+//		double [][] profileTest = getTrapezoidZero(5,25,0, 0);
+//		double position = 0;
+//		for(int i = 0; i < profileTest.length; i ++) {
+//			position += profileTest[i][0] * 0.01/60;
+//			System.out.println(profileTest[i][0] + "," + profileTest[i][1] + "," + position);
+//		}
+//	}
 	
 	public static double [][] getTrapezoidZero(double rotations, double maxVel, double theta, double vStart) {
 		return generateZeroProfile(maxVel/480.0, maxVel/60.0, rotations,theta, vStart); //should want starting ticks as 0 here
@@ -33,6 +36,7 @@ public class TrapezoidalProfile {
 			profile[i] = generatePointZero(maxVel, maxAccel, distance, time, theta, vStart); //testing with changing back to RPS
 			time += 0.01;
 		}
+		SmartDashboard.putNumber("Length: ", profile.length);
 		return profile;
 	}
 
