@@ -16,10 +16,21 @@ public class MotionManager {
 	private boolean immediate, done, go = false, interrupt = false;
 	private int batchSize = 256;
 	private int currIndex = 0;
+	private MotionControl [] controls;
+	
+	private Notifier notifier = new Notifier(new PeriodicRunnable());
+	private final double [][] table = generateTable();
 	
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() {
 			synchronized (this) {
+				if(paths.isEmpty()) {
+					for(int i = 0; i < controls.length; i ++) {
+						controls[i].stopControlThread();
+					}
+					notifier.stop();
+					System.out.println("Stopped");
+				}
 //				System.out.println(currIndex);
 				if(immediate) {
 					currIndex = 0;
@@ -50,10 +61,7 @@ public class MotionManager {
 		boolean direction;
 	}
 	
-	private Notifier notifier = new Notifier(new PeriodicRunnable());
-	private MotionControl [] controls;
-	private final double [][] table = generateTable();
-	
+
 	/*
 	 * Preconditions: All talons must be set to the following
 	 * 
@@ -95,7 +103,6 @@ public class MotionManager {
 	public MotionManager(CANTalon [] talons) {
 		controls = new MotionControl[talons.length];
 		for(int i = 0; i < controls.length; i ++) controls[i] = new MotionControl(talons[i]);
-		notifier.startPeriodic(0.005);
 	}
 	
 	public synchronized void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
@@ -105,6 +112,11 @@ public class MotionManager {
 		paths.add(pathArray);
 		turns.add(null);
 		go = true;
+		notifier.startPeriodic(0.005);
+		for(int i = 0; i < controls.length; i ++) {
+			controls[i].startControlThread();
+			System.out.println("Control started again turn");
+		}
 	}
 	public synchronized void pushTurn(double theta, boolean immediate, boolean done) {
 		this.immediate =  immediate;
@@ -115,6 +127,11 @@ public class MotionManager {
 		turns.add(d);
 		paths.add(getTurnProfile(d));
 		go = true;
+		notifier.startPeriodic(0.005);
+		for(int i = 0; i < controls.length; i ++) {
+			controls[i].startControlThread();
+			System.out.println("Control started again profile");
+		}
 	}
 	
 	private double [][] generateTable() {
