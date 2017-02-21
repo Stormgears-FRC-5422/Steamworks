@@ -35,20 +35,6 @@ public class Navigator extends Subsystem{
 	
 	private static CANTalon [] talons = {new CANTalon(0), new CANTalon(1), new CANTalon(2), new CANTalon(3)};
 	
-	public static boolean isRotating(){
-		
-		return _isRotating;
-	}
-	
-	public static boolean isMovingStraight(){
-		
-		return _isMovingStraight;
-	}
-	
-	public static boolean isMoving(){
-		return _isMovingStraight || _isRotating || SplineFollowThread.isFollowingSpline();
-	}
-
 	public Navigator() {
 		
 		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
@@ -71,6 +57,20 @@ public class Navigator extends Subsystem{
 
         //to test using WPI Mecanum Drive
         //mecanumDrive = new WPIMecanumDrive();        
+	}
+	
+	public static boolean isRotating(){
+		
+		return _isRotating;
+	}
+	
+	public static boolean isMovingStraight(){
+		
+		return _isMovingStraight;
+	}
+	
+	public static boolean isMoving(){
+		return _isMovingStraight || _isRotating || SplineFollowThread.isFollowingSpline();
 	}
 	
 	public static Drive getMecanumDrive(){
