@@ -45,6 +45,7 @@ public class Robot extends IterativeRobot {
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from SmartDashboard
 		NetworkTable.initialize();
 
+		SensorManager.initiateSensorSystems();
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = new Navigator();
 		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
@@ -52,7 +53,6 @@ public class Robot extends IterativeRobot {
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
 		//TODO: initialize sensors here
-		SensorManager.initiateSensorSystems();
 		SensorManager.startPublishingToNetwork();
 	}
 
