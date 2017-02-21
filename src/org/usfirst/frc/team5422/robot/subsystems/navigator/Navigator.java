@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Navigator extends Subsystem{
 	
-	private NetworkTable networkTable;
+	private static NetworkTable networkTable;
 	
-	private Notifier splineFollowThreadNotifier;
+	private static Notifier splineFollowThreadNotifier;
 	
 	private static Navigator instance;
 	
@@ -29,7 +29,11 @@ public class Navigator extends Subsystem{
 	
 	private static MotionManager motionManager;
 	
-	private CANTalon [] talons = {new CANTalon(0), new CANTalon(1), new CANTalon(2), new CANTalon(3)};
+	public static double inchesToMeters(double inches){
+		return inches*2.54/100.0;
+	}
+	
+	private static CANTalon [] talons = {new CANTalon(0), new CANTalon(1), new CANTalon(2), new CANTalon(3)};
 	
 	public static boolean isRotating(){
 		
@@ -56,6 +60,11 @@ public class Navigator extends Subsystem{
 		
 		//using Stormgears CloneBot Mecanum Drive
         mecanumDrive = new CloneBotMecanumDrive();
+        
+        //instantiates Navigator's instance
+        if(instance==null){
+        	instance = new Navigator();
+        }
 		
 		//using Stormgears CloneBot Mecanum Drive
         //mecanumDrive = new RealBotMecanumDrive();
@@ -80,21 +89,21 @@ public class Navigator extends Subsystem{
 	
 	//driveSpline takes arraylist or poses, array of poses, or spline
 	
-	public void driveSpline(ArrayList<Pose> poses){
+	public synchronized static void driveSpline(ArrayList<Pose> poses){
 		
 		Spline spline = new Spline(poses);
 		
 		driveSpline(spline);
 	}
 	
-	public void driveSpline(Pose[] poses){
+	public synchronized static void driveSpline(Pose[] poses){
 		
 		Spline spline = new Spline(poses);
 		
 		driveSpline(spline);
 	}
 	
-	public synchronized void driveSpline(Spline spline){
+	public synchronized static void driveSpline(Spline spline){
 		
 		try{
 			if(isMoving()){
@@ -116,7 +125,7 @@ public class Navigator extends Subsystem{
 	}
 	
 	//both trap wrappers will use this utility
-	private synchronized void pushToMotionManagerTrap(double x, double y){//meters
+	private synchronized static void pushToMotionManagerTrap(double x, double y){//meters
 		
 		//autogenerates trap profile
 		double[][] profile = TrapezoidalProfile.getTrapezoidZero(Math.sqrt(x*x  + y*y), 300, 0, 0);
@@ -124,7 +133,7 @@ public class Navigator extends Subsystem{
 		motionManager.startProfile();
 	} 
 	
-	public synchronized void driveStraightRelative(double x, double y){//meters
+	public synchronized static void driveStraightRelative(double x, double y){//meters
 		try{
 			if(isMoving()){
 				
@@ -146,7 +155,7 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	public synchronized void driveStraightAbsolute(double field_x, double field_y){//meters
+	public synchronized static void driveStraightAbsolute(double field_x, double field_y){//meters
 		try{
 			if(isMoving()){
 				
@@ -172,7 +181,7 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	public synchronized void rotateAbsolute(double fieldTheta){//radians
+	public synchronized static void rotateAbsolute(double fieldTheta){//radians
 		try{
 			if(isMoving()){
 				throw new Exception("cannot call two maneuvers at once!");
@@ -202,7 +211,7 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	public synchronized void rotateRelative(double theta){//radians
+	public synchronized static void rotateRelative(double theta){//radians
 		try{
 			if(isMoving()){
 				throw new Exception("cannot call two maneuvers at once!");
