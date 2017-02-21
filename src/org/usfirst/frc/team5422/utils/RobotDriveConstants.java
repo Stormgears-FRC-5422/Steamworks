@@ -5,6 +5,8 @@ public class RobotDriveConstants extends SteamworksConstants{
 	public static int DRIVE_TALON_RIGHT_FRONT  = 1;
 	public static int DRIVE_TALON_LEFT_REAR = 2;
 	public static int DRIVE_TALON_RIGHT_REAR  = 3;
+	
+	public static int NUM_DRIVE_TALONS = 4;
 
 	// Channels for the CANTalon wheels
 	public static final int kFrontLeftChannel = 0;

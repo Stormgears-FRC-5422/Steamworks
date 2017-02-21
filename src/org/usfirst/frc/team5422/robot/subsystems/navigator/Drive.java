@@ -1,12 +1,13 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
+import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
 import com.ctre.CANTalon;
 
 public abstract class Drive {
-	public static CANTalon[] talons = new CANTalon[4];
+	public static CANTalon[] talons = new CANTalon[RobotDriveConstants.NUM_DRIVE_TALONS];
 
 	public Drive() {
 		for(int i = 0; i < talons.length; i ++) {
