@@ -15,6 +15,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Spline;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
@@ -42,7 +43,8 @@ public class Robot extends IterativeRobot {
 	public Command autonomousCommand = null;
 
 	public Robot() {
-		NetworkTable.globalDeleteAll(); //Removes unused garbage from SmartDashboard
+		
+		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
 
 		SensorManager.initiateSensorSystems();
@@ -52,7 +54,7 @@ public class Robot extends IterativeRobot {
 		gearManipulatorSubsystem = new Manipulator();
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
-		//TODO: initialize sensors here
+		//starts publishing all sensors here
 		SensorManager.startPublishingToNetwork();
 	}
 
@@ -89,6 +91,16 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
 		//Robot in Autonomous mode
+		
+		/*ArrayList<Pose> poses = new ArrayList<Pose>();
+		poses.add(new Pose(0, 0, 0, 0));
+		poses.add(new Pose(0, 2, 0, 0));
+		Spline spline = new Spline(poses);
+		Navigator.driveSpline(spline);*/
+		
+		Navigator.driveStraightRelative(0, 1);
+		
+		/*
 		robotMode = RobotModes.AUTONOMOUS;
 
 		//if any residual commands exist, cancel them
@@ -96,9 +108,9 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 		SensorManager.vision.turnOnLights();
-
+		
 		//initializing the Robot for motionprofile mode
-		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
 		//select the autonomous command for this run
 		selectAutonomousCommand();
@@ -106,8 +118,13 @@ public class Robot extends IterativeRobot {
 		//execute autonomous command
 		if (autonomousCommand != null) {
 			autonomousCommand.start();
+		}else{
+			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
 		}
+		*/
 	}
+	
+	
 
 	public void teleopInit() {
 		System.out.println("teleop init started.");
@@ -116,9 +133,10 @@ public class Robot extends IterativeRobot {
 		SensorManager.vision.turnOffLights();
 		
 		//initializing the Robot for joystick Velocity mode
-		navigatorSubsystem.getInstance().getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
-
-		if (autonomousCommand != null) {
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
+		
+		if (autonomousCommand != null){
+			
 			autonomousCommand.cancel();
 		}
 	}
@@ -139,8 +157,9 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		System.out.println("teleop periodic started.");
 
+		Navigator.getInstance();
 		//Move the MecanumDrive
-		Navigator.getInstance().getMecanumDrive().move();
+		Navigator.getMecanumDrive().move();
 		
 		dsio.checkSwitches();
 
@@ -265,6 +284,4 @@ public class Robot extends IterativeRobot {
 
 		autonomousCommand = new AutonomousCommandGroup(routeToGear, routeToDropOff);
 	}
-
-
 }

@@ -3,6 +3,8 @@ package org.usfirst.frc.team5422.robot.commands;
 import org.usfirst.frc.team5422.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 
@@ -16,6 +18,7 @@ public class AutonomousCommand extends Command {
 	}
 
 	public AutonomousCommand(ArrayList<Pose> routeToGear, ArrayList<Pose> routeToDropOff) {
+		
 		requires(Robot.navigatorSubsystem);
 
 		this.routeToGear = routeToGear;
@@ -32,8 +35,8 @@ public class AutonomousCommand extends Command {
 	@Override
 	protected void execute() {
 		System.out.println("Robot executing AutonomousCommand...");
-
-		Robot.navigatorSubsystem.getInstance().getMecanumDrive().autoMove();
+		
+		Navigator.getMecanumDrive().autoMove();
 		SensorManager.vision.alignToGear();
 	}
 

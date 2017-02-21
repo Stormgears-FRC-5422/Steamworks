@@ -33,14 +33,14 @@ public class Spline {
 	}
 	
 	//constructor
-	Spline(ArrayList<Pose> initial_poses){
+	public Spline(ArrayList<Pose> initial_poses){
 		
 		this.poses = initial_poses;
 		
 	}
 	
 	//constructor
-	Spline(Pose[] initial_poses){
+	public Spline(Pose[] initial_poses){
 		
 		for(int i = 0; i < initial_poses.length; i++){
 			
