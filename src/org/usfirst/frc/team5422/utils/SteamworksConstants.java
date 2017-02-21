@@ -9,7 +9,8 @@ public class SteamworksConstants
     // TALON IDS GO HERE
     public static final int SHOOTER_TALON_ID = 888;   //TODO: Change this to the real talon ID
     public static final int SHOOTER_RELAY_ID = 0;
-    public static final int CLIMBER_INTAKE_TALON_ID = 1;
+    public static final int CLIMBER_INTAKE_TALON_ID = 4;
+    public static final int SECONDARY_INTAKE_TALON_ID = 0;
 
 	// StormNet IDs
 	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 8;

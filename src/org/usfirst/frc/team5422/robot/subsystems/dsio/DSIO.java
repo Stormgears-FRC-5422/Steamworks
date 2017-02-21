@@ -39,23 +39,32 @@ public class DSIO {
 		redSwitch = new JoystickButton(buttonBoard, ButtonIds.RED_SWITCH_ID);
 
 		initializeChoosers();
-		
+
 		// Assign commands to pushable buttons
 
 		// Big Blue Button
-//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
+		//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
 
 	}
 
 	public void checkSwitches() {
+
+		//Error Check for both switches
+		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID) && buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
+			Robot.climberIntakeSubsystem.stop();
+
 		System.out.println("in check switches method...");
 		// RED SWITCH (Climb when in ON position)
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID))
 			//System.out.println("RED SWITCH Pressed...");
 			Robot.climberIntakeSubsystem.climb(getSliderValueClimber());
+
+		// ORANGE SWITCH
+		else if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
+			//System.out.println("ORANGE SWITCH Pressed...");
+			Robot.climberIntakeSubsystem.takeIn();
 		else
 			Robot.climberIntakeSubsystem.stop();
-
 
 		// GREEN SWITCH
 		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID))
@@ -63,19 +72,6 @@ public class DSIO {
 			robotShooterMode = shooterMode.AUTONOMOUS;
 		else
 			robotShooterMode = shooterMode.MANUAL;
-
-
-		// ORANGE SWITCH
-		if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
-			//System.out.println("ORANGE SWITCH Pressed...");
-			Robot.climberIntakeSubsystem.takeIn();
-		else
-			Robot.climberIntakeSubsystem.stop();
-
-
-		//Error Check for both switches
-		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID) && buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
-			Robot.climberIntakeSubsystem.stop();
 
 
 		SmartDashboard.putBoolean("BUTTON 7:", false);
@@ -98,7 +94,8 @@ public class DSIO {
 	}
 
 	public double getSliderValueClimber() {
-		double climberVelocity = (joystick.getThrottle() - 1) / 2;
+
+		double climberVelocity = (-1*(joystick.getThrottle() - 1) / 2);
 
 
 		return climberVelocity;
@@ -108,7 +105,7 @@ public class DSIO {
 		return joystick;
 	}
 	private void initializeChoosers() {
-		
+
 		allianceChooser = new SendableChooser<alliances>();
 		allianceChooser.addDefault("Red Alliance (Boiler to the right)", alliances.RED);
 		allianceChooser.addObject("Blue Alliance (Boiler to the left)", alliances.BLUE);
@@ -125,6 +122,6 @@ public class DSIO {
 		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
 		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
 		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);
-		
+
 	}
 }
