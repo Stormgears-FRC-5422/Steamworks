@@ -47,7 +47,9 @@ public class Robot extends IterativeRobot {
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
 
-		SensorManager.initiateSensorSystems();
+		if(!SensorManager.isInitiated()){
+			SensorManager.initiateSensorSystems();
+		}
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = new Navigator();
 		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
@@ -98,7 +100,7 @@ public class Robot extends IterativeRobot {
 		Spline spline = new Spline(poses);
 		Navigator.driveSpline(spline);*/
 		
-		Navigator.driveStraightRelative(0, 1);
+		Navigator.driveStraightRelativeInches(0, 12);
 		
 		/*
 		robotMode = RobotModes.AUTONOMOUS;
@@ -139,10 +141,13 @@ public class Robot extends IterativeRobot {
 			
 			autonomousCommand.cancel();
 		}
+		
 	}
 
 	public void disabledInit() {
-
+		if(SensorManager.isPublishing()){
+			SensorManager.stopPublishingToNetwork();
+		}
 	}
 
 	public void autoPeriodic() {
@@ -151,7 +156,11 @@ public class Robot extends IterativeRobot {
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
 		}
-
+		
+		if(!SensorManager.isPublishing()){
+			SensorManager.startPublishingToNetwork();
+		}
+		
 	}
 
 	public void teleopPeriodic() {
@@ -165,6 +174,10 @@ public class Robot extends IterativeRobot {
 
 		//Run WPILib commands
 		Scheduler.getInstance().run();
+		
+		if(!SensorManager.isPublishing()){
+			SensorManager.startPublishingToNetwork();
+		}
 
 	}
 

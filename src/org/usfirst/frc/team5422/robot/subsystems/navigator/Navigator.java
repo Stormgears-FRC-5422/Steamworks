@@ -29,27 +29,25 @@ public class Navigator extends Subsystem{
 	
 	private static MotionManager motionManager;
 	
+ 	
 	public static double inchesToMeters(double inches){
 		return inches*2.54/100.0;
 	}
-	
-	private static CANTalon [] talons = {new CANTalon(0), new CANTalon(1), new CANTalon(2), new CANTalon(3)};
 	
 	public Navigator() {
 		
 		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
 		
-		
-		motionManager = new MotionManager(talons);
-		
-		SplineFollowThread.setMotionManager(motionManager);
-		
 		//using Stormgears CloneBot Mecanum Drive
         mecanumDrive = new CloneBotMecanumDrive();
+		
+		motionManager = new MotionManager(mecanumDrive.talons);
+		
+		SplineFollowThread.setMotionManager(motionManager);
         
         //instantiates Navigator's instance
         if(instance==null){
-        	instance = new Navigator();
+        	instance = new  Navigator();
         }
 		
 		//using Stormgears CloneBot Mecanum Drive
@@ -86,24 +84,63 @@ public class Navigator extends Subsystem{
 		return instance;
 	}
 	
+	public static void driveSplineInches(Pose[] poses){
+		
+		double k = 2.54/100.0;
+		
+		for(int i = 0; i < poses.length; i++){
+			poses[i].x *= k;
+			poses[i].y *= k;
+			poses[i].v_x *= k;
+			poses[i].v_y *= k;
+		}
+		
+		driveSplineMeters(poses);
+	}
+	
+	public static void driveSplineInches(ArrayList<Pose> poses){
+		double k = 2.54/100.0;
+		
+		for(int i = 0; i < poses.size(); i++){
+			poses.get(i).x *= k;
+			poses.get(i).y *= k;
+			poses.get(i).v_x *= k;
+			poses.get(i).v_y *= k;
+		}
+		
+		driveSplineMeters(poses);
+	}
+	
+	public static void driveSplineInches(Spline spline){
+		double k = 2.54/100.0;
+		
+		for(int i = 0; i < spline.getNumPoses(); i++){
+			
+			Pose pose = spline.poses.get(i);
+			
+			spline.updatePose(i, new Pose(pose.x*k, pose.y*k, pose.v_x*k, pose.v_y*k));
+		}
+		
+		driveSplineMeters(spline);
+	}
+	
+	private synchronized static void driveSplineMeters(Pose[] poses){//meters
+		
+		Spline spline = new Spline(poses);
+		
+		driveSplineMeters(spline);
+	}
 	
 	//driveSpline takes arraylist or poses, array of poses, or spline
 	
-	public synchronized static void driveSpline(ArrayList<Pose> poses){
+	private synchronized static void driveSplineMeters(ArrayList<Pose> poses){//meters
 		
 		Spline spline = new Spline(poses);
 		
-		driveSpline(spline);
+		driveSplineMeters(spline);
 	}
 	
-	public synchronized static void driveSpline(Pose[] poses){
-		
-		Spline spline = new Spline(poses);
-		
-		driveSpline(spline);
-	}
-	
-	public synchronized static void driveSpline(Spline spline){
+	private synchronized static void driveSplineMeters(Spline spline){//meters
 		
 		try{
 			if(isMoving()){
@@ -125,15 +162,23 @@ public class Navigator extends Subsystem{
 	}
 	
 	//both trap wrappers will use this utility
-	private synchronized static void pushToMotionManagerTrap(double x, double y){//meters
+	private synchronized static void pushToMotionManagerTrapMeters(double x, double y){//meters
 		
 		//autogenerates trap profile
 		double[][] profile = TrapezoidalProfile.getTrapezoidZero(Math.sqrt(x*x  + y*y), 300, 0, 0);
 		motionManager.pushProfile(profile, false, true); //waits for previous profile and is last profile
 		motionManager.startProfile();
-	} 
+	}
 	
-	public synchronized static void driveStraightRelative(double x, double y){//meters
+	public static void driveStraightRelativeInches(double x, double y){
+		driveStraightRelativeMeters(x*2.54/100, y*2.54/100);
+	}
+	
+	public static void driveStraightAbsoluteInches(double x, double y){
+		driveStraightAbsoluteMeters(x*2.54/100, y*2.54/100);
+	}
+	
+	private synchronized static void driveStraightRelativeMeters(double x, double y){//meters
 		try{
 			if(isMoving()){
 				
@@ -144,7 +189,7 @@ public class Navigator extends Subsystem{
 				
 				_isMovingStraight = true;
 				
-				pushToMotionManagerTrap(x, y);
+				pushToMotionManagerTrapMeters(x, y);
 				
 				//TODO:: poll aditya's function to find out when trap ends
 				
@@ -155,7 +200,7 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	public synchronized static void driveStraightAbsolute(double field_x, double field_y){//meters
+	private synchronized static void driveStraightAbsoluteMeters(double field_x, double field_y){//meters
 		try{
 			if(isMoving()){
 				
@@ -170,7 +215,7 @@ public class Navigator extends Subsystem{
 				double rel_x = field_x - robot_x;
 				double rel_y = field_y - robot_y;
 				
-				pushToMotionManagerTrap(rel_x, rel_y);
+				pushToMotionManagerTrapMeters(rel_x, rel_y);
 				
 				//TODO:: poll aditya's function to find out when trap ends
 				
