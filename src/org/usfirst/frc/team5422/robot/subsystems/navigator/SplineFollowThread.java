@@ -36,8 +36,12 @@ public class SplineFollowThread implements Runnable{
 	
 	private SplineFollowThread(){
 		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
-		new MotionManager(Drive.talons);//TODO:: maybe should only have one instance (in navigator)
+		//motionManager = new MotionManager(Drive.talons);//TODO:: maybe should only have one instance (in navigator)
 		lastMotionProfilePushTime = Timer.getFPGATimestamp();
+	}
+	
+	public static void setMotionManager(MotionManager manager){
+		motionManager = manager;
 	}
 	
 	public void updateSpline(Pose argPose){//arguments are robot's pose

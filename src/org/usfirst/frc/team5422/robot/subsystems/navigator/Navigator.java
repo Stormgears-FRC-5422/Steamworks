@@ -6,6 +6,8 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionM
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 
+import com.ctre.CANTalon;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -27,6 +29,8 @@ public class Navigator extends Subsystem{
 	
 	private static MotionManager motionManager;
 	
+	private CANTalon [] talons = {new CANTalon(0), new CANTalon(1), new CANTalon(2), new CANTalon(3)};
+	
 	public static boolean isRotating(){
 		
 		return _isRotating;
@@ -45,7 +49,10 @@ public class Navigator extends Subsystem{
 		
 		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
 		
-		motionManager = new MotionManager(Drive.talons);
+		
+		motionManager = new MotionManager(talons);
+		
+		SplineFollowThread.setMotionManager(motionManager);
 		
 		//using Stormgears CloneBot Mecanum Drive
         mecanumDrive = new CloneBotMecanumDrive();

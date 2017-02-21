@@ -15,12 +15,12 @@ public class MotionControl {
 	
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() {  
-	    	SmartDashboard.putString("pushing to btm buffer: ", "");
-	    	SmartDashboard.putNumber("enc vel(in run): ", talon.getEncVelocity());
+	   // 	SmartDashboard.putString("pushing to btm buffer: ", "");
+	  //  	SmartDashboard.putNumber("enc vel(in run): ", talon.getEncVelocity());
 	    	clearUnderrun();
 	    	talon.processMotionProfileBuffer();
 	    	talon.getMotionProfileStatus(status);
-	    	i.process(status,talon);
+	  //  	i.process(status,talon);
 			SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
 			SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);
 		}	

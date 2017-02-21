@@ -1,4 +1,4 @@
-package org.usfirst.frc.team5422.robot;
+package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;

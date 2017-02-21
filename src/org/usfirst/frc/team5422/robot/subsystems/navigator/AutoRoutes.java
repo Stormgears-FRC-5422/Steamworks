@@ -8,17 +8,17 @@ import java.util.ArrayList;
  * Routes for robot in AUTONOMOUS ONLY!!!
  */
 public class AutoRoutes {
-	public static ArrayList<Pose> leftStartToGear;
-	public static ArrayList<Pose> leftGearToBaseline;
-	public static ArrayList<Pose> leftGearToGearPickup;
+	public static ArrayList<Pose> leftStartToGear = new ArrayList<Pose>();
+	public static ArrayList<Pose> leftGearToBaseline = new ArrayList<Pose>();
+	public static ArrayList<Pose> leftGearToGearPickup = new ArrayList<Pose>();
 
-	public static ArrayList<Pose> rightStartToGear;
-	public static ArrayList<Pose> rightGearToBaseline;
-	public static ArrayList<Pose> rightGearToGearPickup;
+	public static ArrayList<Pose> rightStartToGear = new ArrayList<Pose>();
+	public static ArrayList<Pose> rightGearToBaseline = new ArrayList<Pose>();
+	public static ArrayList<Pose> rightGearToGearPickup = new ArrayList<Pose>();
 
-	public static ArrayList<Pose> centerStartToGear;
-	public static ArrayList<Pose> centerGearToBaseline;
-	public static ArrayList<Pose> centerGearToGearPickup;
+	public static ArrayList<Pose> centerStartToGear = new ArrayList<Pose>();
+	public static ArrayList<Pose> centerGearToBaseline = new ArrayList<Pose>();
+	public static ArrayList<Pose> centerGearToGearPickup = new ArrayList<Pose>();
 
 	// Private constructor to prevent instantiation
 	private AutoRoutes() {

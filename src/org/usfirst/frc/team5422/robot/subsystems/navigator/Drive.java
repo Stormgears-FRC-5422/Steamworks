@@ -10,7 +10,6 @@ public abstract class Drive {
 
 	public Drive() {
 		for(int i = 0; i < talons.length; i ++) {
-			
 			talons[i] = new CANTalon(i);
 		}	
 	}
@@ -19,7 +18,6 @@ public abstract class Drive {
 	abstract public void move();
 	
 	abstract public void autoMove();
-	
 
 	abstract public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile);
 

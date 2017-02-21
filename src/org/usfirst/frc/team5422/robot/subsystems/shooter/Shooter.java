@@ -1,10 +1,12 @@
 package org.usfirst.frc.team5422.robot.subsystems.shooter;
 
+//import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
+
 import com.ctre.CANTalon;
+
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
 
 public class Shooter extends Subsystem {
 	CANTalon motor;
@@ -52,8 +54,8 @@ public class Shooter extends Subsystem {
 
 	public void shoot() {
 		motor.set(shootVelocity * 81.92 * 0.5);
-		Diagnostics.log("shootVelocity: " + shootVelocity);
-		Diagnostics.log("shootVoltage: " + motor.getBusVoltage());
+//		Diagnostics.log("shootVelocity: " + shootVelocity);
+//		Diagnostics.log("shootVoltage: " + motor.getBusVoltage());
 	}
 
 	public void stop()
