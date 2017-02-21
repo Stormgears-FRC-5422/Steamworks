@@ -1,5 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
+import java.util.ArrayList;
+
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
@@ -11,7 +13,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Navigator extends Subsystem{
 	
-	private NetworkTable networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
+	private NetworkTable networkTable;
 	
 	private Notifier splineFollowThreadNotifier;
 	
@@ -23,7 +25,7 @@ public class Navigator extends Subsystem{
 	
 	private static boolean _isMovingStraight;
 	
-	private static MotionManager motionManager = new MotionManager(Drive.talons);
+	private static MotionManager motionManager;
 	
 	public static boolean isRotating(){
 		
@@ -40,6 +42,11 @@ public class Navigator extends Subsystem{
 	}
 
 	public Navigator() {
+		
+		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
+		
+		motionManager = new MotionManager(Drive.talons);
+		
 		//using Stormgears CloneBot Mecanum Drive
         mecanumDrive = new CloneBotMecanumDrive();
 		
@@ -63,6 +70,23 @@ public class Navigator extends Subsystem{
 		return instance;
 	}
 	
+	
+	//driveSpline takes arraylist or poses, array of poses, or spline
+	
+	public void driveSpline(ArrayList<Pose> poses){
+		
+		Spline spline = new Spline(poses);
+		
+		driveSpline(spline);
+	}
+	
+	public void driveSpline(Pose[] poses){
+		
+		Spline spline = new Spline(poses);
+		
+		driveSpline(spline);
+	}
+	
 	public synchronized void driveSpline(Spline spline){
 		
 		try{
@@ -84,15 +108,16 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	private synchronized void pushToMotionManagerTrap(double x, double y, double theta){
-		motionManager.pushTurn(theta, false, true); //should work after profiling updates pushed
+	//both trap wrappers will use this utility
+	private synchronized void pushToMotionManagerTrap(double x, double y){//meters
+		
 		//autogenerates trap profile
 		double[][] profile = TrapezoidalProfile.getTrapezoidZero(Math.sqrt(x*x  + y*y), 300, 0, 0);
 		motionManager.pushProfile(profile, false, true); //waits for previous profile and is last profile
 		motionManager.startProfile();
 	} 
 	
-	public synchronized void driveStraightRelative(double x, double y, double theta){
+	public synchronized void driveStraightRelative(double x, double y){//meters
 		try{
 			if(isMoving()){
 				
@@ -103,7 +128,9 @@ public class Navigator extends Subsystem{
 				
 				_isMovingStraight = true;
 				
-				pushToMotionManagerTrap(x, y, theta);
+				pushToMotionManagerTrap(x, y);
+				
+				//TODO:: poll aditya's function to find out when trap ends
 				
 				_isMovingStraight = false;
 			}
@@ -112,7 +139,7 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	private synchronized void driveStraightAbsolute(double field_x, double field_y, double field_theta){
+	public synchronized void driveStraightAbsolute(double field_x, double field_y){//meters
 		try{
 			if(isMoving()){
 				
@@ -121,18 +148,15 @@ public class Navigator extends Subsystem{
 				
 				double robot_x = networkTable.getNumber(NetworkConstants.GP_X, -1);
 				double robot_y = networkTable.getNumber(NetworkConstants.GP_Y, -1);
-				double robot_theta = networkTable.getNumber(NetworkConstants.GP_THETA, -1);
 				
 				_isMovingStraight = true;
 				
 				double rel_x = field_x - robot_x;
 				double rel_y = field_y - robot_y;
-				double rel_theta = field_theta - robot_theta;
 				
-				pushToMotionManagerTrap(rel_x, rel_y, rel_theta);
+				pushToMotionManagerTrap(rel_x, rel_y);
 				
-				
-				
+				//TODO:: poll aditya's function to find out when trap ends
 				
 				_isMovingStraight = false;
 			}
@@ -141,7 +165,7 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	public synchronized void driveRotate(double fieldTheta){
+	public synchronized void rotateAbsolute(double fieldTheta){//radians
 		try{
 			if(isMoving()){
 				throw new Exception("cannot call two maneuvers at once!");
@@ -149,9 +173,20 @@ public class Navigator extends Subsystem{
 				
 				_isRotating = true;
 				
-				//TODO:: call aditya's rotate-in-place function, and block this thread
+				double robot_theta = networkTable.getNumber(NetworkConstants.GP_THETA, -1);
 				
+				double turnBy = fieldTheta - robot_theta;
 				
+				//normalize difference to -PI to +PI
+				
+				turnBy = (turnBy % 2*Math.PI);
+				if(turnBy > Math.PI){
+					turnBy -= 2*Math.PI;
+				}
+				
+				motionManager.pushTurn(turnBy, true, true);
+				
+				//TODO:: poll aditya's function to find out when turning ends
 				
 				_isRotating = false;
 			}
@@ -160,8 +195,32 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
+	public synchronized void rotateRelative(double theta){//radians
+		try{
+			if(isMoving()){
+				throw new Exception("cannot call two maneuvers at once!");
+			}else{
+				
+				_isRotating = true;
+				
+				//normalize difference to -PI to +PI
+				
+				theta = (theta % 2*Math.PI);
+				if(theta > Math.PI){
+					theta -= 2*Math.PI;
+				}
+				
+				motionManager.pushTurn(theta, true, true);
+				
+				//TODO:: poll aditya's function to find out when turning ends
+				
+				_isRotating = false;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	
-
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub

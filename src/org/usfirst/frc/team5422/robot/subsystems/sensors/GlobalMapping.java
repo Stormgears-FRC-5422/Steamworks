@@ -44,7 +44,7 @@ public class GlobalMapping extends RunnableNotifier{
 	static AHRS ahrs = new AHRS(Port.kMXP);
 	
 	public GlobalMapping(){
-		super("GlobalMapping", 0.001);
+		super(NetworkConstants.GLOBAL_MAPPING, 0.001);
 		
 		enc_fl = 0;
 		enc_fr = 0;

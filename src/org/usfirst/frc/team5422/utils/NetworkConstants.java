@@ -2,10 +2,16 @@ package org.usfirst.frc.team5422.utils;
 
 public class NetworkConstants {
 	
+	//string names of tables and numbers
 	public static final String GLOBAL_MAPPING = "GlobalMapping";
 	public static final String SHOOTING_SENSORS = "ShootingSensors";
 	public static final String STORM_NET = "StormNet";
 	public static final String VISION = "Vision";
+	
+	public static final String GRIP_MY_CONTOURS_REPORT = "GRIP/myContoursReport";
+	public static final String CENTER_Y = "centerY";
+	public static final String CENTER_X = "centerX";
+	public static final String WIDTH = "width";
 	
 	public static final String GP_X = "x";
 	public static final String GP_Y = "y";

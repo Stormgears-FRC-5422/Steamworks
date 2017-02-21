@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class SplineFollowThread implements Runnable{
 	
-	private static MotionManager motionManager = new MotionManager(Drive.talons);//TODO:: maybe should only have one instance (in navigator)
+	private static MotionManager motionManager;//is not only copy of motionManager
 	
 	private static NetworkTable networkTable;
 	
@@ -36,6 +36,7 @@ public class SplineFollowThread implements Runnable{
 	
 	private SplineFollowThread(){
 		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
+		new MotionManager(Drive.talons);//TODO:: maybe should only have one instance (in navigator)
 		lastMotionProfilePushTime = Timer.getFPGATimestamp();
 	}
 	

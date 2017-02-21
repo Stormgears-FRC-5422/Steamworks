@@ -3,6 +3,7 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 import java.util.Set;
 
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -12,12 +13,12 @@ public class Vision extends RunnableNotifier {
 
 	private LightSensor lightSensor;
 	//TODO: change this to the actual Grip contours report 
-	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
+	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	//TODO: change this to the actual Shooter contours report	
-	public static NetworkTable shooterTable = NetworkTable.getTable("GRIP/myContoursReport");
+	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	
 	public Vision() {
-		super("Vision", 0.001);
+		super(NetworkConstants.VISION, 0.001);
 		System.out.println("Vision system constructed");
 		lightSensor = new LightSensor(SteamworksConstants.STORMNET_LIGHTS_ARDUINO_ADDRESS);
 	}
@@ -63,14 +64,14 @@ public class Vision extends RunnableNotifier {
 		double [] defaultXArray = new double[0];
 		double [] defaultYArray = new double[0];
 		
-		double [] centerX = visionTable.getNumberArray("centerX", defaultXArray);
-		double [] centerY = visionTable.getNumberArray("centerY", defaultYArray);
+		double [] centerX = visionTable.getNumberArray(NetworkConstants.CENTER_X, defaultXArray);
+		double [] centerY = visionTable.getNumberArray(NetworkConstants.CENTER_Y, defaultYArray);
 		
 	}
 
 	private double getCenterX(int index) {
 	      double [] defaultArray = new double[0];
-	      double [] visionArray = visionTable.getNumberArray("centerX", defaultArray);
+	      double [] visionArray = visionTable.getNumberArray(NetworkConstants.CENTER_X, defaultArray);
 
 	      if(visionArray.length > 0)
 	        try {
@@ -85,7 +86,7 @@ public class Vision extends RunnableNotifier {
 
    private double getRectWidth(int index) {
       double [] defaultArray = new double[1];
-      double [] visionArray = visionTable.getNumberArray("width", defaultArray);
+      double [] visionArray = visionTable.getNumberArray(NetworkConstants.WIDTH, defaultArray);
 
       if(visionArray.length > 0) {
          try {
@@ -102,8 +103,8 @@ public class Vision extends RunnableNotifier {
 
    public void alignToGear() {
       // Angular displacement
-      double distLeft = NetworkTable.getTable("StormNet").getNumber("ULTRASONIC_1", 6.0);
-      double distRight = NetworkTable.getTable("StormNet").getNumber("ULTRASONIC_2", 6.0);
+      double distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
+      double distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
       double diffAng = Math.asin((distLeft - distRight) / SteamworksConstants.ROBOT_ULTRASONIC_SEPARATION_IN);
 
 //      System.out.println("DiffAngle:" + diffAng);
@@ -163,7 +164,7 @@ public class Vision extends RunnableNotifier {
     }
     
     public double getGoalCenterY() {
-   	 double [] visionArray = shooterTable.getNumberArray("centerY", new double[1]);
+   	 double [] visionArray = shooterTable.getNumberArray(NetworkConstants.CENTER_Y, new double[1]);
    	 try {
    		 return (visionArray[0] + visionArray[1])/2.0;
    	 }
@@ -173,7 +174,7 @@ public class Vision extends RunnableNotifier {
     }
     
     public double getGoalCenterX() {
-   	 double [] visionArray = shooterTable.getNumberArray("centerX", new double[1]);
+   	 double [] visionArray = shooterTable.getNumberArray(NetworkConstants.CENTER_X, new double[1]);
    	 try {
    		 return (visionArray[0] + visionArray[1])/2.0;
    	 }
@@ -181,5 +182,4 @@ public class Vision extends RunnableNotifier {
    		 return -1;
    	 }
     }   
-   
 }

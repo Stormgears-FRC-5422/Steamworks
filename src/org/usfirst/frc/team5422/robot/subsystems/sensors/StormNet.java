@@ -2,6 +2,7 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 import java.util.Arrays;
 
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,7 +12,7 @@ public class StormNet extends RunnableNotifier{
 	IRSensor irSensor;
 	
 	public StormNet(){
-		super("StormNet", 0.001);
+		super(NetworkConstants.STORM_NET, 0.001);
 		usSensor = new USSensor(SteamworksConstants.STORMNET_ULTRASONIC_ARDUINO_ADDRESS, SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS);
 		irSensor =  new IRSensor(SteamworksConstants.STORMNET_IR_ARDUINO_ADDRESS, SteamworksConstants.NUMBER_OF_STORMNET_IRSENSOR);
 	}
