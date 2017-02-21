@@ -6,33 +6,44 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimberIntake extends Subsystem {
 	public CANTalon climberIntakeTalon;
+	public CANTalon secondaryIntakeTalon;
 
 
 	public ClimberIntake(int climberIntakeTalonId){
 		climberIntakeTalon = new CANTalon(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
+		secondaryIntakeTalon = new CANTalon (SteamworksConstants.SECONDARY_INTAKE_TALON_ID);
+		
 	}
 
 	public void climb(double throttleValue) {
+		
 		if(climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus){
 			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
 		}
-
+	
+		climberIntakeTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		
 		climberIntakeTalon.set(throttleValue);	
+		
 	}
 	public void takeIn() {
 		if (climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus)			
 			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
 
-		climberIntakeTalon.set(0.3);
+		climberIntakeTalon.set(0.6);
+		secondaryIntakeTalon.set(0.6);
 
 	}
+	
 
 	public void stop()
 	{
 		climberIntakeTalon.set(0);
+		secondaryIntakeTalon.set(0);
 	}
 
 	@Override
