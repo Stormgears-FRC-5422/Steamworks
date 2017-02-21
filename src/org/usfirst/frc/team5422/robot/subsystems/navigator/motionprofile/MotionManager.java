@@ -5,13 +5,49 @@ import com.ctre.CANTalon.TrajectoryPoint;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.ArrayList;
+
 
 public class MotionManager {
 	
+	private ArrayList<double[][]> paths = new ArrayList<double[][]>();
+	private ArrayList<TurnDetails> turns = new ArrayList<TurnDetails>();
+//	private double[][] pathArray;
+	private boolean immediate, done, go = false, interrupt = false;
+	private int batchSize = 256;
+	private int currIndex = 0;
+	
 	class PeriodicRunnable implements java.lang.Runnable {
-		public void run() {  
-			
+		public void run() {
+			synchronized (this) {
+				System.out.println(currIndex);
+				if(immediate) {
+					currIndex = 0;
+					for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
+					//remove all other profiles from the list
+					while(paths.size() > 1) {
+						paths.remove(0);
+						turns.remove(0);
+					}
+					immediate = false;
+				}
+				if(go) {
+					if(turns.get(0) == null) pushLinear();
+					else pushTurn();
+					if(currIndex >= paths.get(0).length) {
+						currIndex = 0;
+						paths.remove(0);
+						turns.remove(0);
+						if(paths.size() == 0) go = false;
+					}
+				}
+			}
 		}	
+	}
+	
+	class TurnDetails {
+		double theta;
+		boolean direction;
 	}
 	
 	private Notifier notifier = new Notifier(new PeriodicRunnable());
@@ -61,6 +97,25 @@ public class MotionManager {
 		notifier.startPeriodic(0.005);
 	}
 	
+	public synchronized void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
+		go = true;
+		this.done = done;
+		this.immediate = immediate;
+		interrupt = immediate;
+		paths.add(pathArray);
+		turns.add(null);
+	}
+	public synchronized void pushTurn(double theta, boolean immediate, boolean done) {
+		go = true;
+		this.immediate =  immediate;
+		interrupt = immediate;
+		this.done = done;
+		TurnDetails d = new TurnDetails();
+		d.theta = theta;
+		turns.add(d);
+		paths.add(getTurnProfile(d));
+	}
+	
 	private double [][] generateTable() {
 		double [][] table = new double[4][1000];
 		table[0] = getFuncs1(true);
@@ -77,102 +132,75 @@ public class MotionManager {
 	 * done = whether profile is last part(if robot should stop after or not)
 	 */
 	
-	public void pushTurn(double theta, boolean immediate, boolean done) {
+	public double[][] getTurnProfile(TurnDetails d) {
 		double robotRadius = 15.00; //TODO: make constant, in inches (14.25 x 13.25)
 		double wheelRadius = 3; //TODO: make constant, in inches
 		double maxVel = 240; //RPM
-		boolean direc;
-		theta %= (2 * Math.PI);
-		double tTheta = theta - Math.PI;
-		if(tTheta > 0) {theta = Math.PI - tTheta; direc = true; }
-		else direc = false;
-		double dist = robotRadius * theta/(2.0 * Math.PI * wheelRadius);
-		SmartDashboard.putNumber("theta: ", theta);
-		SmartDashboard.putBoolean("direc", direc);
-		pushTurn(TrapezoidalProfile.getTrapezoidZero(dist, maxVel, theta, 0), false, true, direc);
+		d.theta %= (2 * Math.PI);
+		double tTheta = d.theta - Math.PI;
+		if(tTheta > 0) {d.theta = Math.PI - tTheta; d.direction = true; }
+		d.direction = false;
+		double dist = robotRadius * d.theta/(2.0 * Math.PI * wheelRadius);
+		return TrapezoidalProfile.getTrapezoidZero(dist, maxVel, d.theta, 0);
 	}
 
-	public void pushTurn(double [][] pathArray, boolean immediate, boolean done, boolean direc) {
+	public void pushTurn() {
 		SmartDashboard.putString("push profile started", "");
 		//clear existing profiles
 		if(immediate) for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
 	   
 		double [] positions = new double[4];
 		TrajectoryPoint pt = new TrajectoryPoint();
-		for(int i = 0; i < pathArray.length; i ++) {
+		double[][] pathArray = paths.get(0);
+		boolean direc = turns.get(0).direction;
+		for(int i = currIndex; i < currIndex + batchSize; i ++) {
 			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
 			for(int j = 0; j < controls.length; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
 				pt.velocityOnly = false;
-				pt.zeroPos = false; //needed for successive profiles, only first pt should be set to true
+				pt.zeroPos = (i == currIndex); //needed for successive profiles, only first pt should be set to true
 				pt.velocity = pathArray[i][0] * table[j][colIndex]; //TODO: change signs as appropriate for turning
 				if((j == 0 || j == 2) && direc) pt.velocity *= -1;
 				else if((j == 1 || j == 3) && !direc) pt.velocity *= -1;
 				positions[j] += pt.velocity * 0.01/60; //NEW LINE(conversion from RPM to 10ms)
  				pt.position = positions[j]; //NEW LINE
+				pt.isLastPoint = (i + 1 == pathArray.length && done);
 				//System.out.println("point vel: " + pt.velocity);
 				controls[j].pushMotionProfileTrajectory(pt);
 			}
-//			if(i == 128) startProfile();
 		}
-		if(done) {
-			pt.position = 0;
-			pt.timeDurMs = 10;
-			pt.velocityOnly = true;
-			pt.zeroPos = false; //needed for successive profiles
-			pt.velocity = 0;
-			pt.isLastPoint = true;
-			for(int j = 0; j < controls.length; j ++) {
-				pt.position = positions[j];
-				controls[j].pushMotionProfileTrajectory(pt);
-			}
-		}
+		startProfile();
+		currIndex += batchSize;
 	}
 	
-	public void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
+	public void pushLinear() {
+		double[][] pathArray = paths.get(0);
 		SmartDashboard.putString("push profile started", "");
-		//clear existing profiles
-		if(immediate) {
-			//endProfile();
-			for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
-		}
-	   
+		TrajectoryPoint pt = new TrajectoryPoint();
 		double [] positions = new double[4];
-		for(int i = 0; i < pathArray.length; i ++) {
+		for(int i = currIndex; i < currIndex + batchSize; i ++) {
+			if(i >= pathArray.length) break;
+			if(interrupt) {
+				interrupt = false;
+				return;
+			}
 			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
 			for(int j = 0; j < controls.length; j ++) {
-				TrajectoryPoint pt = new TrajectoryPoint();
 				pt.position = 0;
 				pt.timeDurMs = 10;
 				pt.velocityOnly = false;
-				pt.zeroPos = (i == 0); //needed for successive profiles, only first pt should be set to true
+				pt.zeroPos = (i == currIndex); //needed for successive profiles, only first pt should be set to true
 				pt.velocity = pathArray[i][0] * table[j][colIndex];
 				positions[j] += pt.velocity * 0.01/60; //NEW LINE(conversion from RPM to 10ms)
  				pt.position = positions[j]; //NEW LINE
-				pt.isLastPoint = (i == pathArray.length - 1 && done);
+				pt.isLastPoint = (i + 1 == pathArray.length && done);
  				//System.out.println("point vel: " + pt.velocity);
 				controls[j].pushMotionProfileTrajectory(pt);
 			}
-//			if(i == 128) startProfile();
 		}
-		
-		//push profile point with V = 0 so that when talon holds it stays as 0
-		if(done) {
-			TrajectoryPoint pt = new TrajectoryPoint();
-			pt.position = 0;
-			pt.timeDurMs = 10;
-			pt.velocityOnly = true;
-			pt.zeroPos = false; //needed for successive profiles
-			pt.velocity = 0;
-			pt.isLastPoint = true;
-			for(int j = 0; j < controls.length; j ++) {
-				pt.position = positions[j];
-				controls[j].pushMotionProfileTrajectory(pt);
-			}
-		}
-		
-		//SmartDashboard.putString("points pushed", "");
+		startProfile();
+		currIndex += batchSize;
 	}
 	
 	public void startProfile() {
