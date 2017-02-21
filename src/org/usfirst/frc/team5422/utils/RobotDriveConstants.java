@@ -32,14 +32,14 @@ public class RobotDriveConstants extends SteamworksConstants{
 	// CLONEBOT Velocity PID Values
 	public static double CLONEBOT_VELOCITY_F = 0.16; //1023.0/6700.0  //1.705;
 	public static double CLONEBOT_VELOCITY_P = 0.08;
-	public static double CLONEBOT_VELOCITY_I = 0.002;
+	public static double CLONEBOT_VELOCITY_I = 0.0002;
 	public static double CLONEBOT_VELOCITY_D = 10.24;
 	public static int CLONEBOT_VELOCITY_IZONE = 1500;
 
 	// REALBOT Velocity PID Values
 	public static double REALBOT_VELOCITY_F = 0.16; //1023.0/6700.0  //1.705;
 	public static double REALBOT_VELOCITY_P = 0.08;
-	public static double REALBOT_VELOCITY_I = 0.002;
+	public static double REALBOT_VELOCITY_I = 0.0002;
 	public static double REALBOT_VELOCITY_D = 10.24;
 	public static int REALBOT_VELOCITY_IZONE = 1500;
 

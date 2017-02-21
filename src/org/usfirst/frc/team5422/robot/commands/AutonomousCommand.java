@@ -36,7 +36,7 @@ public class AutonomousCommand extends Command {
 	protected void execute() {
 		System.out.println("Robot executing AutonomousCommand...");
 		
-		Navigator.getMecanumDrive().autoMove();
+		Navigator.driveStraightRelativeInches(0, 24);
 		SensorManager.vision.alignToGear();
 	}
 

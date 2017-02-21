@@ -41,6 +41,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 		this.routeToGear = routeToGear;
 		this.routeToDropOff = routeToDropOff;
 
+		System.out.println("creating autonomous command ");
 		autonomousCommand = new AutonomousCommand(this.routeToGear, this.routeToDropOff );
 		addSequential(autonomousCommand);
 	}

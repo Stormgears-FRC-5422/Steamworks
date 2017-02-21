@@ -3,6 +3,7 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 import java.util.Set;
 
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
@@ -109,24 +110,21 @@ public class Vision extends RunnableNotifier {
 
 //      System.out.println("DiffAngle:" + diffAng);
       // TODO: Turn in place by -diffAng
+
+      Navigator.rotateRelative(diffAng); /**MOVING ROBOT**/
+
       SmartDashboard.putNumber("Angular Displacement to Gear Hook", diffAng * 180 / Math.PI);
 
       // Distance
-      double distIn = (distLeft + distRight) / 2;
-      // TODO: Calculate this after the robot has straightened itself out
-      SmartDashboard.putNumber("Distance to Gear Hook", distIn);
-//      System.out.println("Distance in Inches from Gear:" + distIn);
-
-      // Horizontal Displacement
-//	    double pixelsPerIn = (Math.pow(83.328 * Math.E, -0.018 * distIn)) / 5;
+      
+      distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
+      distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
+      double distY = (distLeft + distRight) / 2;
+      
       double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
-//      System.out.println("Vision CenterX1: " + getCenterX(0) + " Vision CenterX2: " + getCenterX(1) );
-      double diffHorizIn = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
-      SmartDashboard.putNumber("Horizontal Displacement to Gear Hook", diffHorizIn);
-//      System.out.println("Horizontal Displacement :" + diffHorizIn);
-
-      //if displacement < 0, move left
-      //if displacement > 0, move right
+      double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
+      
+      Navigator.driveStraightRelativeInches(distX, distY);
    }
    
    public double returnGoalAngleDisplacement() {

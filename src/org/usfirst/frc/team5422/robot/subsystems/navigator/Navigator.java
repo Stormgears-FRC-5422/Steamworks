@@ -34,7 +34,7 @@ public class Navigator extends Subsystem{
 		return inches*2.54/100.0;
 	}
 	
-	public Navigator() {
+	private Navigator() {
 		
 		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
 		
@@ -43,13 +43,8 @@ public class Navigator extends Subsystem{
 		
 		motionManager = new MotionManager(mecanumDrive.talons);
 		
-		SplineFollowThread.setMotionManager(motionManager);
-        
-        //instantiates Navigator's instance
-        if(instance==null){
-        	instance = new  Navigator();
-        }
-		
+//		SplineFollowThread.setMotionManager(motionManager);
+        		
 		//using Stormgears CloneBot Mecanum Drive
         //mecanumDrive = new RealBotMecanumDrive();
 

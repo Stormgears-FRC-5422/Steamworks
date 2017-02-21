@@ -46,7 +46,7 @@ public class Robot extends IterativeRobot {
 		NetworkTable.initialize();
 
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
-		navigatorSubsystem = new Navigator();
+		navigatorSubsystem = Navigator.getInstance();
 		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
 		gearManipulatorSubsystem = new Manipulator();
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
@@ -112,7 +112,7 @@ public class Robot extends IterativeRobot {
 		//initializing the Robot for motionprofile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
-		//Navigator.driveStraightRelativeInches(0, 12);
+		//Navigator.driveStraightRelativeInches(0, 24);
 
 		//select the autonomous command for this run
 		selectAutonomousCommand();
@@ -137,8 +137,7 @@ public class Robot extends IterativeRobot {
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
 		
-		if (autonomousCommand != null){
-			
+		if (autonomousCommand != null){			
 			autonomousCommand.cancel();
 		}
 		
@@ -295,6 +294,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
 		}
 
+		System.out.println("creating autonomous command group");
 		autonomousCommand = new AutonomousCommandGroup(routeToGear, routeToDropOff);
 	}
 }
