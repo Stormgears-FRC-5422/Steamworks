@@ -11,7 +11,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Vision extends RunnableNotifier {
 
 	private LightSensor lightSensor;
+	//TODO: change this to the actual Grip contours report 
 	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
+	//TODO: change this to the actual Shooter contours report	
+	public static NetworkTable shooterTable = NetworkTable.getTable("GRIP/myContoursReport");
 	
 	public Vision() {
 		super("Vision", 0.001);
@@ -124,4 +127,59 @@ public class Vision extends RunnableNotifier {
       //if displacement < 0, move left
       //if displacement > 0, move right
    }
+   
+   public double returnGoalAngleDisplacement() {
+	   
+  		final double degreePerPixelHorizontal  = 67.5/320.0;
+  		final double radiansPerPixelHorizontal = Math.toRadians(degreePerPixelHorizontal );
+  	
+  		//assume the deviation/correction between the robot drive moving to angle accuracy to camera angle accuracy
+  		double centerX = getGoalCenterX(); //not a method right now
+  		double errorTheta = radiansPerPixelHorizontal * (centerX- 160);
+  		
+  		return errorTheta;
+  		//FINAL STEP, just turn errorTheta(no extra negation needed)
+  	}
+    
+    public double getDistanceToGoal() {
+   	 
+		double centerY = getGoalCenterY();
+		
+		System.out.println("Center Y: " + centerY);
+		//22.0/48.0
+		double viewAngle = Math.toDegrees(Math.atan(.4848) * 2);//convert to degrees | .4848 --> retake measurements of px height at different distances
+		
+		double difAngle = centerY * viewAngle/240;			// 240 --> 600 (vertical px)
+		double theta = viewAngle/2.0 + 30.0 - difAngle;			// 21.5 --> new camera angle
+		
+		double radialDistance = 84.5/Math.tan(Math.toRadians(theta));	// 65.5 --> 90" - camera height
+		double power = .3/14 * radialDistance - 3.4;
+		radialDistance = 0.97 * radialDistance + 11;
+		//there may be some other modifications that must be made here --> such as changing units of centerY.
+	//	double radialDistance = Math.atan(centerY);
+	
+		return radialDistance;
+   	
+    }
+    
+    public double getGoalCenterY() {
+   	 double [] visionArray = shooterTable.getNumberArray("centerY", new double[1]);
+   	 try {
+   		 return (visionArray[0] + visionArray[1])/2.0;
+   	 }
+   	 catch(Exception e) {
+   		 return -1;
+   	 }
+    }
+    
+    public double getGoalCenterX() {
+   	 double [] visionArray = shooterTable.getNumberArray("centerX", new double[1]);
+   	 try {
+   		 return (visionArray[0] + visionArray[1])/2.0;
+   	 }
+   	 catch(Exception e) {
+   		 return -1;
+   	 }
+    }   
+   
 }
