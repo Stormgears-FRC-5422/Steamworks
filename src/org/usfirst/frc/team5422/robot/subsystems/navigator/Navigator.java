@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 
 import com.ctre.CANTalon;
@@ -27,7 +28,7 @@ public class Navigator extends Subsystem{
 	
 	private static boolean _isMovingStraight;
 	
-	private static MotionManager motionManager;
+	public static MotionManager motionManager;
 	
  	
 	public static double inchesToMeters(double inches){
@@ -43,7 +44,7 @@ public class Navigator extends Subsystem{
 		
 		motionManager = new MotionManager(mecanumDrive.talons);
 		
-//		SplineFollowThread.setMotionManager(motionManager);
+		SplineFollowThread.setMotionManager(motionManager);
         		
 		//using Stormgears CloneBot Mecanum Drive
         //mecanumDrive = new RealBotMecanumDrive();
@@ -160,13 +161,19 @@ public class Navigator extends Subsystem{
 	private synchronized static void pushToMotionManagerTrapMeters(double x, double y){//meters
 		
 		//autogenerates trap profile
-		double[][] profile = TrapezoidalProfile.getTrapezoidZero(Math.sqrt(x*x  + y*y), 300, 0, 0);
+		double rotations = Math.sqrt(x*x + y*y)/(2*Math.PI*HardwareConstants.WHEEL_RADIUS);
+		double theta = Math.atan2(y, x);
+		
+		theta %= 2*Math.PI;
+		
+		double[][] profile = TrapezoidalProfile.getTrapezoidZero(rotations, 300, theta, 0);
 		motionManager.pushProfile(profile, false, true); //waits for previous profile and is last profile
 		motionManager.startProfile();
 	}
 	
 	public static void driveStraightRelativeInches(double x, double y){
-		driveStraightRelativeMeters(x*2.54/100, y*2.54/100);
+		System.out.println("In Drive Straight Relative inches");
+		driveStraightRelativeMeters(x*2.54/100.0, y*2.54/100.0);
 	}
 	
 	public static void driveStraightAbsoluteInches(double x, double y){

@@ -15,6 +15,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Spline;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
@@ -51,13 +52,6 @@ public class Robot extends IterativeRobot {
 		gearManipulatorSubsystem = new Manipulator();
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
-		//starts publishing all sensors here
-		if(!SensorManager.isInitiated()){
-			SensorManager.initiateSensorSystems();
-		}
-		if (!SensorManager.isPublishing()) {
-			SensorManager.startPublishingToNetwork();			
-		}
 	}
 
 	public static Shooter getShooterSubsystem() {
@@ -92,6 +86,16 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+
+		//starts publishing all sensors here
+		if(!SensorManager.isInitiated()){
+			SensorManager.initiateSensorSystems();
+		}
+		
+		if (!SensorManager.isPublishing()) {
+			SensorManager.startPublishingToNetwork();			
+		}
+
 		//Robot in Autonomous mode
 		
 		/*ArrayList<Pose> poses = new ArrayList<Pose>();
@@ -112,8 +116,9 @@ public class Robot extends IterativeRobot {
 		//initializing the Robot for motionprofile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 
-		//Navigator.driveStraightRelativeInches(0, 24);
-
+		Robot.navigatorSubsystem.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
+		SensorManager.vision.alignToGear();
+		
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
@@ -147,11 +152,13 @@ public class Robot extends IterativeRobot {
 		if(SensorManager.isPublishing()){
 			SensorManager.stopPublishingToNetwork();
 		}
+		
+		Robot.navigatorSubsystem.getInstance().motionManager.endProfile();
 	}
 
-	public void autoPeriodic() {
+	public void autonomousPeriodic() {
 		System.out.println("auto periodic started.");
-		
+
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
 		}
