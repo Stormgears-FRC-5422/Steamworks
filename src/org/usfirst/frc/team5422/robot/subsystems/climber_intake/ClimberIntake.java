@@ -6,7 +6,6 @@ import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ClimberIntake extends Subsystem {
 	public CANTalon climberIntakeTalon;
@@ -31,11 +30,12 @@ public class ClimberIntake extends Subsystem {
 		
 	}
 	public void takeIn() {
-		if (climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus)			
-			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
+		if (climberIntakeTalon.getControlMode() != TalonControlMode.Speed)			
+			climberIntakeTalon.changeControlMode(TalonControlMode.Speed);
 
-		climberIntakeTalon.set(0.6);
-		secondaryIntakeTalon.set(0.6);
+		climberIntakeTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+		climberIntakeTalon.set(5000);
+		secondaryIntakeTalon.set(5000);
 
 	}
 	

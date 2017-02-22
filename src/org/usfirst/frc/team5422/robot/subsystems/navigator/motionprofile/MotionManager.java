@@ -92,7 +92,7 @@ public class MotionManager {
 		return Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0;
 	}
 	
-	private int[] getEncVels() {
+	private synchronized int[] getEncVels() {
 		int[] vels = new int[controls.length];
 		for(int i = 0; i < controls.length; i ++) {
 			vels[i] = controls[i].getEncVel();

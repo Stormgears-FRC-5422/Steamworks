@@ -28,7 +28,7 @@ public class Navigator extends Subsystem{
 	
 	private static boolean _isMovingStraight;
 	
-	private static MotionManager motionManager;
+	public static MotionManager motionManager;
 	
  	
 	public static double inchesToMeters(double inches){
@@ -44,7 +44,7 @@ public class Navigator extends Subsystem{
 		
 		motionManager = new MotionManager(mecanumDrive.talons);
 		
-//		SplineFollowThread.setMotionManager(motionManager);
+		SplineFollowThread.setMotionManager(motionManager);
         		
 		//using Stormgears CloneBot Mecanum Drive
         //mecanumDrive = new RealBotMecanumDrive();
@@ -172,7 +172,8 @@ public class Navigator extends Subsystem{
 	}
 	
 	public static void driveStraightRelativeInches(double x, double y){
-		driveStraightRelativeMeters(x*2.54/100, y*2.54/100);
+		System.out.println("In Drive Straight Relative inches");
+		driveStraightRelativeMeters(x*2.54/100.0, y*2.54/100.0);
 	}
 	
 	public static void driveStraightAbsoluteInches(double x, double y){

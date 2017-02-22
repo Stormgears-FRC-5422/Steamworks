@@ -65,8 +65,9 @@ public class GlobalMapping extends RunnableNotifier{
 	
 	@Override
 	public void run(){
-		updatePose();
-		
+		synchronized(Navigator.getInstance().getMecanumDrive().talons[0]) {
+			updatePose();
+		}
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
 		networkPublish(NetworkConstants.GP_Y, y);
@@ -83,10 +84,9 @@ public class GlobalMapping extends RunnableNotifier{
 		ahrs.setAngleAdjustment(theta*180.0/PI-ahrs.getAngle());
 	}
 	
-	static void updatePose(){
+	public static void updatePose(){
 		
 		//TODO:: get encoder values
-		
 		enc_fl = Navigator.getMecanumDrive().talons[0].getEncPosition();
 		enc_fr = Navigator.getMecanumDrive().talons[1].getEncPosition();
 		enc_bl = Navigator.getMecanumDrive().talons[3].getEncPosition();

@@ -46,6 +46,8 @@ public class SensorManager {
 		vision.stop();
 //		shootingSensors.stop();
 		
+		System.out.println("Stopping threads...");
+		
 		_isPublishing = false;
 	}
 }

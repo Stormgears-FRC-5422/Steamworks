@@ -23,6 +23,7 @@ public class AutonomousCommand extends Command {
 
 		this.routeToGear = routeToGear;
 		this.routeToDropOff = routeToDropOff;
+		System.out.println("In Autonomous Command");
 	}
 	
 	// Called just before this Command runs the first time
@@ -36,8 +37,9 @@ public class AutonomousCommand extends Command {
 	protected void execute() {
 		System.out.println("Robot executing AutonomousCommand...");
 		
-		Navigator.driveStraightRelativeInches(0, 24);
-		SensorManager.vision.alignToGear();
+//		Navigator.getInstance().motionManager.pushTurn(Math.PI/6, true, true);
+//		//Navigator.getInstance().driveStraightRelativeInches(0, 24);
+//		SensorManager.vision.alignToGear();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

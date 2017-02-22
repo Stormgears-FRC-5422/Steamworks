@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
@@ -103,6 +104,7 @@ public class Vision extends RunnableNotifier {
    }
 
    public void alignToGear() {
+	   System.out.println("Vision...align to gear...");
       // Angular displacement
       double distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
       double distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
@@ -123,8 +125,10 @@ public class Vision extends RunnableNotifier {
       
       double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
       double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
-      
-      Navigator.driveStraightRelativeInches(distX, distY);
+      SmartDashboard.putNumber("Distance from Gear-X: ", distX);
+      SmartDashboard.putNumber("Distance from Gear-Y: ", distY);
+      Navigator.getInstance().driveStraightRelativeInches(distX, distY);
+//      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
    }
    
    public double returnGoalAngleDisplacement() {
