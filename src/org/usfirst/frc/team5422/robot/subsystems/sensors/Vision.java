@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision extends RunnableNotifier {
 
-	private LightSensor lightSensor;
+	private static LightSensor lightSensor;
 	//TODO: change this to the actual Grip contours report 
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	//TODO: change this to the actual Shooter contours report	
@@ -27,21 +27,10 @@ public class Vision extends RunnableNotifier {
 
 	@Override
 	public void run() {
-		super.run();
-				
+		super.run();	
 	}
 	
-	@Override
-	public void start() {
-		super.start();
-	}
-	
-	@Override
-	public void stop() {
-		super.stop();
-	}
-		
-	public void turnOffLights() {
+	public static void turnOffLights() {
 		//ID - NEOPIXEL_SEGMENTID
 		//MODE - BEHAVIOR - ONLY ONE BEHAVIOR = 1 (All on or off) instead of flickering different LEDs in the neopixel
 		//COLOR - 0-OFF, 1-RED, 2-GREEN, 3-BLUE,  ... (this depends on the mode, in our case Behavior =1)

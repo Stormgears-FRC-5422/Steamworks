@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
+
 
 public class MotionManager {
 	
@@ -34,7 +36,9 @@ public class MotionManager {
 //				System.out.println(currIndex);
 				if(immediate) {
 					currIndex = 0;
-					for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
+					synchronized (Navigator.talonLock) {
+						for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
+					}
 					//remove all other profiles from the list
 					while(paths.size() > 1) {
 						paths.remove(0);
@@ -94,16 +98,20 @@ public class MotionManager {
 	
 	private synchronized int[] getEncVels() {
 		int[] vels = new int[controls.length];
-		for(int i = 0; i < controls.length; i ++) {
-			vels[i] = controls[i].getEncVel();
+		synchronized (Navigator.talonLock) {
+			for(int i = 0; i < controls.length; i ++) {
+				vels[i] = controls[i].getEncVel();
+			}
 		}
 		return vels;
 	}
 	
 	public MotionManager(CANTalon [] talons) {
 		controls = new MotionControl[talons.length];
-		for(int i = 0; i < controls.length; i ++) controls[i] = new MotionControl(talons[i]);
-	}
+		synchronized (Navigator.talonLock) {
+			for(int i = 0; i < controls.length; i ++) controls[i] = new MotionControl(talons[i]);
+		}
+	}	
 	
 	public synchronized void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
 		this.done = done;
@@ -188,7 +196,9 @@ public class MotionManager {
  				pt.position = positions[j]; //NEW LINE
 				pt.isLastPoint = (i + 1 == pathArray.length && done);
 				//System.out.println("point vel: " + pt.velocity);
-				controls[j].pushMotionProfileTrajectory(pt);
+				synchronized (Navigator.talonLock) {
+					controls[j].pushMotionProfileTrajectory(pt);
+				}
 			}
 		}
 		startProfile();
@@ -217,7 +227,9 @@ public class MotionManager {
  				pt.position = positions[j]; //NEW LINE
 				pt.isLastPoint = (i + 1 == pathArray.length && done);
  				//System.out.println("point vel: " + pt.velocity);
-				controls[j].pushMotionProfileTrajectory(pt);
+				synchronized (Navigator.talonLock) {
+					controls[j].pushMotionProfileTrajectory(pt);
+				}
 			}
 		}
 		startProfile();
@@ -225,18 +237,24 @@ public class MotionManager {
 	}
 	
 	public void startProfile() {
-		for(int i = 0; i < controls.length; i ++) controls[i].enable();
+		synchronized (Navigator.talonLock) {
+			for (int i = 0; i < controls.length; i ++) controls[i].enable();
+		}
 	}
 	
 	public void endProfile() {
-		for(int i = 0; i < controls.length; i ++) controls[i].disable();
+		synchronized (Navigator.talonLock) {
+			for(int i = 0; i < controls.length; i ++) controls[i].disable();
+		}
 	}
 	
 	public void shutDownProfiling() {
-		for(int i = 0; i < controls.length; i ++) {
-			controls[i].clearMotionProfileTrajectories();
-			controls[i].clearUnderrun();
-			controls[i].changeControlMode(TalonControlMode.Speed); //may need to be vbus
+		synchronized (Navigator.talonLock) {
+			for(int i = 0; i < controls.length; i ++) {
+				controls[i].clearMotionProfileTrajectories();
+				controls[i].clearUnderrun();
+				controls[i].changeControlMode(TalonControlMode.Speed); //may need to be vbus
+			}
 		}
 	}
 

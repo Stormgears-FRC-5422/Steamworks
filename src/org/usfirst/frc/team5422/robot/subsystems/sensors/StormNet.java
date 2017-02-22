@@ -39,14 +39,4 @@ public class StormNet extends RunnableNotifier{
 		networkPublish("IR Sensor Details", Arrays.toString(irSensor.getAllDetails()));
 	}
 		
-	@Override
-	public void start() {
-		super.start();
-	}
-	
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		super.stop();
-	}
 }

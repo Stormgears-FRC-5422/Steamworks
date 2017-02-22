@@ -7,14 +7,14 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Trapezo
 import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 
-import com.ctre.CANTalon;
-
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Navigator extends Subsystem{
+	
+	public static Object talonLock = new Object();
 	
 	private static NetworkTable networkTable;
 	
@@ -120,7 +120,7 @@ public class Navigator extends Subsystem{
 		driveSplineMeters(spline);
 	}
 	
-	private synchronized static void driveSplineMeters(Pose[] poses){//meters
+	public synchronized static void driveSplineMeters(Pose[] poses){//meters
 		
 		Spline spline = new Spline(poses);
 		
@@ -129,14 +129,14 @@ public class Navigator extends Subsystem{
 	
 	//driveSpline takes arraylist or poses, array of poses, or spline
 	
-	private synchronized static void driveSplineMeters(ArrayList<Pose> poses){//meters
+	public synchronized static void driveSplineMeters(ArrayList<Pose> poses){//meters
 		
 		Spline spline = new Spline(poses);
 		
 		driveSplineMeters(spline);
 	}
 	
-	private synchronized static void driveSplineMeters(Spline spline){//meters
+	public synchronized static void driveSplineMeters(Spline spline){//meters
 		
 		try{
 			if(isMoving()){
@@ -147,8 +147,8 @@ public class Navigator extends Subsystem{
 				splineFollowThreadNotifier.startPeriodic(0.01);
 				
 				while(SplineFollowThread.isFollowingSpline()){
-					
-					Timer.delay(0.001);
+					System.out.println("waiting for spline to finish...");
+					Timer.delay(1);
 				}
 			}
 		}catch(Exception e){
@@ -158,13 +158,13 @@ public class Navigator extends Subsystem{
 	}
 	
 	//both trap wrappers will use this utility
-	private synchronized static void pushToMotionManagerTrapMeters(double x, double y){//meters
+	public synchronized static void pushToMotionManagerTrapMeters(double x, double y){//meters
 		
 		//autogenerates trap profile
 		double rotations = Math.sqrt(x*x  + y*y) / (2*Math.PI*HardwareConstants.WHEEL_RADIUS);
 		double theta = Math.atan2(y, x);
 		
-		theta += Math.PI;
+		theta %= 2*Math.PI;
 		
 		double[][] profile = TrapezoidalProfile.getTrapezoidZero(rotations, 300, theta, 0);
 		motionManager.pushProfile(profile, false, true); //waits for previous profile and is last profile
@@ -180,7 +180,7 @@ public class Navigator extends Subsystem{
 		driveStraightAbsoluteMeters(x*2.54/100, y*2.54/100);
 	}
 	
-	private synchronized static void driveStraightRelativeMeters(double x, double y){//meters
+	public synchronized static void driveStraightRelativeMeters(double x, double y){//meters
 		try{
 			if(isMoving()){
 				
@@ -202,7 +202,7 @@ public class Navigator extends Subsystem{
 		}
 	}
 	
-	private synchronized static void driveStraightAbsoluteMeters(double field_x, double field_y){//meters
+	public synchronized static void driveStraightAbsoluteMeters(double field_x, double field_y){//meters
 		try{
 			if(isMoving()){
 				

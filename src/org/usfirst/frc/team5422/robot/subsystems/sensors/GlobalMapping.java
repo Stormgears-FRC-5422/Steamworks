@@ -65,9 +65,11 @@ public class GlobalMapping extends RunnableNotifier{
 	
 	@Override
 	public void run(){
-		synchronized(Navigator.getInstance().getMecanumDrive().talons[0]) {
+		
+		synchronized(Navigator.talonLock) {
 			updatePose();
 		}
+		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
 		networkPublish(NetworkConstants.GP_Y, y);

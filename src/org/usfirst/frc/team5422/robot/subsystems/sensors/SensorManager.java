@@ -1,10 +1,17 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
+import edu.wpi.first.wpilibj.Notifier;
+
 public class SensorManager {
 	
+	private static Notifier globalMappingNotifier;
+	private static Notifier visionNotifier;
+	//private static Notifier shootingNotifier;
+	private static Notifier stormNetNotifier;
+	
 	private static GlobalMapping globalMapping;
-	public static Vision vision;
-	private static ShootingSensors shootingSensors;
+	private static Vision vision;
+	//private static ShootingSensors shootingSensors;
 	private static StormNet stormNet;
 	
 	private static boolean _isPublishing = false;
@@ -28,22 +35,27 @@ public class SensorManager {
 		vision = new Vision();
 //		shootingSensors = new ShootingSensors();
 		
+		globalMappingNotifier = new Notifier(globalMapping);
+		visionNotifier = new Notifier(vision);
+		stormNetNotifier = new Notifier(stormNet);
+		
+		
 		_isInitiated = true;
 	}
 	
 	public static void startPublishingToNetwork(){
-		globalMapping.start();
-		stormNet.start();
-		vision.start();
+		globalMappingNotifier.startPeriodic(0.01);
+		stormNetNotifier.startPeriodic(0.01);
+		visionNotifier.startPeriodic(0.01);
 //		shootingSensors.start();
 		
 		_isPublishing = true;
 	}
 	
 	public static void stopPublishingToNetwork(){
-		globalMapping.stop();
-		stormNet.stop();
-		vision.stop();
+		globalMappingNotifier.stop();
+		stormNetNotifier.stop();
+		visionNotifier.stop();
 //		shootingSensors.stop();
 		
 		System.out.println("Stopping threads...");

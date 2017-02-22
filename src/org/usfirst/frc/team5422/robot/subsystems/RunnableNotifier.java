@@ -1,17 +1,20 @@
 package org.usfirst.frc.team5422.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class RunnableNotifier implements Runnable{
 	
 	private RunnableNotifier instance;
 	
-	private Notifier thread;
-	
 	private double period;
 	
 	private NetworkTable networkTable;
+	
+	public RunnableNotifier(String networkKey, double periodS){
+		networkTable = NetworkTable.getTable(networkKey);
+		this.networkKey = networkKey;
+		period = periodS;
+	}
 	
 	protected void networkPublish(String string, double number){
 		networkTable.putNumber(string, number);
@@ -23,19 +26,8 @@ public class RunnableNotifier implements Runnable{
 	
 	private String networkKey;
 	
-	public RunnableNotifier(String networkKey, double periodS){
-		networkTable = NetworkTable.getTable(networkKey);
-		this.networkKey = networkKey;
-		thread = new Notifier(this);
-		period = periodS;
-	}
-
-	public void start(){
-		thread.startPeriodic(period);
-	}
-	
-	public void stop(){
-		thread.stop();
+	public String getNetworkKey(){
+		return this.networkKey;
 	}
 	
 	RunnableNotifier getInstance() throws Exception{

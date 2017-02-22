@@ -13,15 +13,5 @@ public class ShootingSensors extends RunnableNotifier{
 		super.run();
 	}
 	
-	@Override
-	public void start() {
-		// TODO Auto-generated method stub
-		super.start();
-	}
 	
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		super.stop();
-	}
 }

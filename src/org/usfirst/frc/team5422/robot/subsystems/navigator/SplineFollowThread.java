@@ -28,6 +28,7 @@ public class SplineFollowThread implements Runnable{
 	
 	public static void loadInitialSpline(Spline intialSpline){
 		spline = intialSpline;
+		_isFollowingSpline = true;
 	}
 
 	public static boolean isFollowingSpline(){
@@ -135,7 +136,7 @@ public class SplineFollowThread implements Runnable{
 	}
 	
 	private static void calculateVelocityBuffer(int points){
-		
+		System.out.println("Calculating Buffer");
 		if(!_isFollowingSpline){
 			for(int i = 0; i < points; i++){
 				motionProfileBuffer[0][i] = 0;
