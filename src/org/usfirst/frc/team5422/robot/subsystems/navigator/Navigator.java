@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 
 import com.ctre.CANTalon;
@@ -160,7 +161,12 @@ public class Navigator extends Subsystem{
 	private synchronized static void pushToMotionManagerTrapMeters(double x, double y){//meters
 		
 		//autogenerates trap profile
-		double[][] profile = TrapezoidalProfile.getTrapezoidZero(Math.sqrt(x*x  + y*y), 300, 0, 0);
+		double rotations = Math.sqrt(x*x  + y*y) / (2*Math.PI*HardwareConstants.WHEEL_RADIUS);
+		double theta = Math.atan2(y, x);
+		
+		theta += Math.PI;
+		
+		double[][] profile = TrapezoidalProfile.getTrapezoidZero(rotations, 300, theta, 0);
 		motionManager.pushProfile(profile, false, true); //waits for previous profile and is last profile
 		motionManager.startProfile();
 	}

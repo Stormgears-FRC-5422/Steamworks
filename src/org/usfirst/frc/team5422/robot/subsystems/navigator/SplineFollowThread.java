@@ -18,7 +18,7 @@ public class SplineFollowThread implements Runnable{
 
 	public static SplineFollowThread instance;
 	
-	private static Object[][] motionProfileBuffer;
+	private static double[][] motionProfileBuffer;
 	
 	private static boolean _isFollowingSpline = false;
 	
@@ -117,14 +117,14 @@ public class SplineFollowThread implements Runnable{
 			
 			if(!_isFollowingSpline){
 				
-				motionManager.pushProfile(null, true, true);
+				motionManager.pushProfile(motionProfileBuffer, true, true);
 				
 				
 			}else{
 				if(Timer.getFPGATimestamp() - lastMotionProfilePushTime > 0.2){//every fraction of a second, push a new profile
 					
 					
-					motionManager.pushProfile(null, true, false);
+					motionManager.pushProfile(motionProfileBuffer, true, false);
 					
 					
 					lastMotionProfilePushTime = Timer.getFPGATimestamp(); 
