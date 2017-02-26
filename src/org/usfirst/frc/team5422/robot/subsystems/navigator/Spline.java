@@ -32,6 +32,13 @@ public class Spline {
 		return this.poses.size() - 1;
 	}
 	
+	public void printSplinePos(String note){
+		System.out.print("Spline printout:" + note +"\n");
+		for(Pose pose: poses){
+			System.out.println("\t( " + pose.x + ", " + pose.y + ")");
+		}
+	}
+	
 	//constructor
 	public Spline(ArrayList<Pose> initial_poses){
 		
@@ -149,7 +156,7 @@ public class Spline {
     public void updatePose(int index, Pose argPose){
     	
     	poses.remove(index);
-    	poses.add(argPose);
+    	poses.add(index, argPose);
     }
     
     public void addPose(int index, Pose argPose){

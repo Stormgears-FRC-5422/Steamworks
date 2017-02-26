@@ -101,7 +101,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("autonomous init started.");
 
 		//starts publishing all sensors here
-		/*
+		
 		ArrayList<Pose> poses = new ArrayList<Pose>();
 		poses.add(new Pose(0,0,0,0));
 		poses.add(new Pose(0,0.5,0,2));
@@ -112,7 +112,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("started spline");
 		Navigator.driveSplineMeters(spline);
 		System.out.println("finished following spline");
-		*/
+
 		//Robot in Autonomous mode
 		
 		/*ArrayList<Pose> poses = new ArrayList<Pose>();
@@ -128,15 +128,14 @@ public class Robot extends IterativeRobot {
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
-		SensorManager.vision.turnOnLights();*/
+		SensorManager.vision.turnOnLights();
 		
 		//initializing the Robot for motionprofile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
-		
+
 		
 		Navigator.motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
-		
-		/*SensorManager.vision.alignToGear();
+		SensorManager.vision.alignToGear();
 		
 		//select the autonomous command for this run
 		selectAutonomousCommand();
@@ -148,7 +147,6 @@ public class Robot extends IterativeRobot {
 			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
 		}
 		*/
-		
 	}
 	
 	

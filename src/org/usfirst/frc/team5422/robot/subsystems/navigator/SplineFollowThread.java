@@ -26,9 +26,12 @@ public class SplineFollowThread implements Runnable{
 	
 	private static double lastMotionProfilePushTime;
 	
+	private static boolean lastMotionProfilePushed;
+	
 	public static void loadInitialSpline(Spline intialSpline){
 		spline = intialSpline;
 		_isFollowingSpline = true;
+		lastMotionProfilePushed = false;
 	}
 
 	public static boolean isFollowingSpline(){
@@ -47,11 +50,6 @@ public class SplineFollowThread implements Runnable{
 	
 	public void updateSpline(Pose argPose){//arguments are robot's pose
 		
-		if(spline.getNumSegments() < 1){
-			System.out.println("NUM SEGMENTS LESS THAN 1");
-			return;
-		}
-		
 		double x = argPose.x;
 		double y = argPose.y;
 		double vx = argPose.v_x;
@@ -62,12 +60,17 @@ public class SplineFollowThread implements Runnable{
 		double error_x = spline.x(1, 1.0) - x;
 		double error_y = spline.y(1, 1.0) - y;
 		
+		spline.printSplinePos("");
+		
 		double theta = Math.atan2(error_x, error_y);
 		
-		double spline_v_mag = Math.sqrt(vx*vx + vy*vy);
+		double spline_v_mag = Math.sqrt(vx * vx + vy * vy);
 		
 		double corrected_spline_vx = spline_v_mag*Math.cos(theta);
 		double corrected_spline_vy = spline_v_mag*Math.sin(theta);
+		
+		
+		
 		
 		double corrected_weight = 0.4;//this weight controls how much the robot is not under pure spline control
 		
@@ -76,12 +79,29 @@ public class SplineFollowThread implements Runnable{
 		double weighted_v_y = corrected_spline_vy * corrected_weight + vy*(1-corrected_weight);
 		
 		//if close to next waypoint, then remove the waypoint to continue to next waypoint
-		if(Math.sqrt(error_x*error_x + error_y*error_y) < DISTANCE_TOLERANCE){
+		
+		double err = Math.sqrt(error_x * error_x + error_y * error_y);
+		
+		if(err < DISTANCE_TOLERANCE){
+			
+			System.out.println("POSITION ERROR: " + err);
+			
 			spline.removePose(1);
+			spline.printSplinePos("after removing spline 1");
+			
+			if(spline.getNumSegments() < 1){
+				
+				System.out.println("NUM SEGMENTS LESS THAN 1");
+				
+				_isFollowingSpline = false;
+				
+				return;
+			}
 		}
 		
 		//update the current pose with robot's manipulated
 		spline.updatePose(0, new Pose(x, y, weighted_v_x, weighted_v_y));
+		spline.printSplinePos("after 0 update");
 		
 		System.out.println("number of segments: " + spline.getNumSegments());
 		//change direction of waypoint's velocity, so robot can follow easier
@@ -91,12 +111,7 @@ public class SplineFollowThread implements Runnable{
 		double v_mag = Math.sqrt(waypt_vx*waypt_vx + waypt_vy*waypt_vy);
 		
 		spline.updatePose(1, new Pose(spline.x(1, 1.0), spline.y(1, 1.0), v_mag*Math.sin(theta), v_mag*Math.sin(theta)) );
-		
-		if(spline.getNumSegments() < 1){
-			
-			_isFollowingSpline = false;
-			
-		}
+		spline.printSplinePos("after 1 update");
 	}
 	
 	@Override
@@ -111,6 +126,9 @@ public class SplineFollowThread implements Runnable{
 			}
 		}else{
 				
+			if(lastMotionProfilePushed){
+				return;
+			}
 			
 			//update spline
 			double x = networkTable.getNumber(NetworkConstants.GP_X, -1);
@@ -119,7 +137,14 @@ public class SplineFollowThread implements Runnable{
 			double vy = networkTable.getNumber(NetworkConstants.GP_VY, -1);
 			
 			System.out.println("Update spline will be called");
+			
+			System.out.println("X: " + x);
+			System.out.println("Y: " + y);
+			System.out.println("VX: " + vx);
+			System.out.println("VY: " + vy);
+			
 			updateSpline(new Pose(x, y, vx, vy));
+			
 			
 			
 			calculateVelocityBuffer(150);//recalculate
@@ -127,10 +152,11 @@ public class SplineFollowThread implements Runnable{
 			if(!_isFollowingSpline){
 				
 				motionManager.pushProfile(motionProfileBuffer, true, true);
+				lastMotionProfilePushed = true;
 				
 				
 			}else{
-				if(Timer.getFPGATimestamp() - lastMotionProfilePushTime > 0.2){//every fraction of a second, push a new profile
+				if(Timer.getFPGATimestamp() - lastMotionProfilePushTime > 1.0){//every fraction of a second, push a new profile
 					
 					
 					motionManager.pushProfile(motionProfileBuffer, true, false);
