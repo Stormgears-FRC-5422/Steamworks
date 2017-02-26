@@ -18,7 +18,7 @@ public class SplineFollowThread implements Runnable{
 
 	public static SplineFollowThread instance;
 	
-	private static double[][] motionProfileBuffer;
+	private static double[][] motionProfileBuffer = new double[150][2];
 	
 	private static boolean _isFollowingSpline = false;
 	
@@ -46,6 +46,11 @@ public class SplineFollowThread implements Runnable{
 	}
 	
 	public void updateSpline(Pose argPose){//arguments are robot's pose
+		
+		if(spline.getNumSegments() < 1){
+			System.out.println("NUM SEGMENTS LESS THAN 1");
+			return;
+		}
 		
 		double x = argPose.x;
 		double y = argPose.y;
@@ -78,6 +83,7 @@ public class SplineFollowThread implements Runnable{
 		//update the current pose with robot's manipulated
 		spline.updatePose(0, new Pose(x, y, weighted_v_x, weighted_v_y));
 		
+		System.out.println("number of segments: " + spline.getNumSegments());
 		//change direction of waypoint's velocity, so robot can follow easier
 		double waypt_vy = spline.vy(1, 1.0);
 		double waypt_vx = spline.vx(1, 1.0);
@@ -104,6 +110,7 @@ public class SplineFollowThread implements Runnable{
 				e.printStackTrace();
 			}
 		}else{
+				
 			
 			//update spline
 			double x = networkTable.getNumber(NetworkConstants.GP_X, -1);
@@ -111,6 +118,7 @@ public class SplineFollowThread implements Runnable{
 			double vx = networkTable.getNumber(NetworkConstants.GP_VX, -1);
 			double vy = networkTable.getNumber(NetworkConstants.GP_VY, -1);
 			
+			System.out.println("Update spline will be called");
 			updateSpline(new Pose(x, y, vx, vy));
 			
 			
@@ -139,8 +147,8 @@ public class SplineFollowThread implements Runnable{
 		System.out.println("Calculating Buffer");
 		if(!_isFollowingSpline){
 			for(int i = 0; i < points; i++){
-				motionProfileBuffer[0][i] = 0;
-				motionProfileBuffer[1][i] = 0;
+				motionProfileBuffer[i][0] = 0;
+				motionProfileBuffer[i][1] = 0;
 			}
 			
 			return;
@@ -157,7 +165,7 @@ public class SplineFollowThread implements Runnable{
 		//find next u, assuming constant acceleration
 		//TODO:: write safety for end of segment extrapolations
 		double theta = networkTable.getNumber(NetworkConstants.GP_THETA, -1);
-		for(int i=0; i < points; i++){
+		for(int i = 0; i < points; i++){
 			
 			while(dt_guess < dt_wanted){
 				
@@ -178,14 +186,14 @@ public class SplineFollowThread implements Runnable{
 			double vx = spline.vx(1, u1);
 			double vy = spline.vy(1, u1);
 			
-			motionProfileBuffer[0][i] = Math.pow(vx*vx + vy*vy, 0.5)/(2*Math.PI*HardwareConstants.WHEEL_RADIUS)*60;//rpm
-			motionProfileBuffer[1][i] = Math.atan2(vy, vx) - theta;//radians
+			motionProfileBuffer[i][0] = Math.pow(vx*vx + vy*vy, 0.5)/(2*Math.PI*HardwareConstants.WHEEL_RADIUS)*60;//rpm
+			motionProfileBuffer[i][1] = Math.atan2(vy, vx) - theta;//radians
 		}	
 	}
 	
 	public static Runnable getInstance() {
 		
-		if(instance!=null){
+		if(instance==null){
 			instance = new SplineFollowThread();
 		}
 		return instance;

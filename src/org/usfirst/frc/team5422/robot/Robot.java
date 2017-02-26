@@ -51,6 +51,12 @@ public class Robot extends IterativeRobot {
 		
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
+
+		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
+		navigatorSubsystem = Navigator.getInstance();
+		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
+		gearManipulatorSubsystem = new Manipulator();
+		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 		
 		if(!SensorManager.isInitiated()){
 			SensorManager.initiateSensorSystems();
@@ -58,12 +64,6 @@ public class Robot extends IterativeRobot {
 		if (!SensorManager.isPublishing()) {
 			SensorManager.startPublishingToNetwork();			
 		}
-
-		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
-		navigatorSubsystem = Navigator.getInstance();
-		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
-		gearManipulatorSubsystem = new Manipulator();
-		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
 	}
 
@@ -101,6 +101,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("autonomous init started.");
 
 		//starts publishing all sensors here
+		/*
 		ArrayList<Pose> poses = new ArrayList<Pose>();
 		poses.add(new Pose(0,0,0,0));
 		poses.add(new Pose(0,0.5,0,2));
@@ -109,9 +110,9 @@ public class Robot extends IterativeRobot {
 		Spline spline = new Spline(poses);
 		
 		System.out.println("started spline");
-		//Navigator.driveSplineMeters(spline);
+		Navigator.driveSplineMeters(spline);
 		System.out.println("finished following spline");
-
+		*/
 		//Robot in Autonomous mode
 		
 		/*ArrayList<Pose> poses = new ArrayList<Pose>();
@@ -127,14 +128,15 @@ public class Robot extends IterativeRobot {
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
 		}
-		SensorManager.vision.turnOnLights();
+		SensorManager.vision.turnOnLights();*/
 		
 		//initializing the Robot for motionprofile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
-
+		
 		
 		Navigator.motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
-		SensorManager.vision.alignToGear();
+		
+		/*SensorManager.vision.alignToGear();
 		
 		//select the autonomous command for this run
 		selectAutonomousCommand();
@@ -146,6 +148,7 @@ public class Robot extends IterativeRobot {
 			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
 		}
 		*/
+		
 	}
 	
 	
@@ -166,6 +169,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledInit() {
+		System.out.println("disabled init started.");
 		if(SensorManager.isPublishing()){
 			SensorManager.stopPublishingToNetwork();
 		}
@@ -175,25 +179,23 @@ public class Robot extends IterativeRobot {
 		// shut down all notifiers.  This is a bit aggressive
 		for (RegisteredNotifier r : notifierRegistry) {
 			r.stop();
-		}
+		}	
 	}
 
 	public void autonomousPeriodic() {
-		System.out.println("auto periodic started.");
+		
 		/*
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
 		}
-		
+		*/
 		if(!SensorManager.isPublishing()){
 			SensorManager.startPublishingToNetwork();
 		}
-		*/
-		
 	}
 
 	public void teleopPeriodic() {
-		System.out.println("teleop periodic started.");
+		
 
 		Navigator.getInstance();
 		//Move the MecanumDrive

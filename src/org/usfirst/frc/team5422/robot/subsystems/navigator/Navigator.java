@@ -143,12 +143,12 @@ public class Navigator extends Subsystem{
 				throw new Exception("cannot call two maneuvers at once!");
 			}else{
 				SplineFollowThread.loadInitialSpline(spline);
-				splineFollowThreadNotifier = new RegisteredNotifier(SplineFollowThread.getInstance());
+				splineFollowThreadNotifier = new RegisteredNotifier(SplineFollowThread.getInstance(), "SplineFollowThread");
 				splineFollowThreadNotifier.startPeriodic(0.01);
 				
 				while(SplineFollowThread.isFollowingSpline()){
 					System.out.println("waiting for spline to finish...");
-					Timer.delay(1);
+					Timer.delay(0.01);
 				}
 			}
 		}catch(Exception e){
