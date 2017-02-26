@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.shooter;
 
 //import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
-
+import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.Relay;
@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends Subsystem {
-	CANTalon motor;
+	SafeTalon motor;
 	Relay impeller;
 
 	double shootVelocity;
@@ -20,7 +20,7 @@ public class Shooter extends Subsystem {
 	public Shooter(int talonId, int relayId) {
 		SmartDashboard.putNumber("Relay ID: ", relayId);
 
-		motor = new CANTalon(talonId);
+		motor = new SafeTalon(talonId);
 		motor.changeControlMode(CANTalon.TalonControlMode.Speed);
 		motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		motor.configEncoderCodesPerRev(8192);

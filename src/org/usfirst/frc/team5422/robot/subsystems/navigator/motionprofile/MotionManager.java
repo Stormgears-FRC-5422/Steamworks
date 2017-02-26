@@ -1,26 +1,23 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
-import com.ctre.CANTalon;
+
+import org.usfirst.frc.team5422.utils.SafeTalon; 
+//import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 
-import edu.wpi.first.wpilibj.Notifier;
+import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 
-import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
-
-
 public class MotionManager {
-	
 	private ArrayList<double[][]> paths = new ArrayList<double[][]>();
 	private ArrayList<TurnDetails> turns = new ArrayList<TurnDetails>();
-//	private double[][] pathArray;
 	private boolean immediate, done, go = false, interrupt = false;
 	private int batchSize = 256;
 	private int currIndex = 0;
 	private MotionControl [] controls;
 	
-	private Notifier notifier = new Notifier(new PeriodicRunnable());
+	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable());
 	private final double [][] table = generateTable();
 	
 	class PeriodicRunnable implements java.lang.Runnable {
@@ -36,9 +33,7 @@ public class MotionManager {
 //				System.out.println(currIndex);
 				if(immediate) {
 					currIndex = 0;
-					synchronized (Navigator.talonLock) {
-						for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
-					}
+					for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
 					//remove all other profiles from the list
 					while(paths.size() > 1) {
 						paths.remove(0);
@@ -56,7 +51,7 @@ public class MotionManager {
 						if(paths.size() == 0) go = false;
 					}
 				}
-			}
+			} // end synchronized
 		}	
 	}
 	
@@ -98,19 +93,16 @@ public class MotionManager {
 	
 	private synchronized int[] getEncVels() {
 		int[] vels = new int[controls.length];
-		synchronized (Navigator.talonLock) {
-			for(int i = 0; i < controls.length; i ++) {
-				vels[i] = controls[i].getEncVel();
-			}
+		for(int i = 0; i < controls.length; i ++) {
+			vels[i] = controls[i].getEncVel();
 		}
 		return vels;
 	}
 	
-	public MotionManager(CANTalon [] talons) {
+	public MotionManager(SafeTalon [] talons) {
 		controls = new MotionControl[talons.length];
-		synchronized (Navigator.talonLock) {
-			for(int i = 0; i < controls.length; i ++) controls[i] = new MotionControl(talons[i]);
-		}
+		for(int i = 0; i < controls.length; i ++) 
+			controls[i] = new MotionControl(talons[i]);
 	}	
 	
 	public synchronized void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
@@ -196,9 +188,7 @@ public class MotionManager {
  				pt.position = positions[j]; //NEW LINE
 				pt.isLastPoint = (i + 1 == pathArray.length && done);
 				//System.out.println("point vel: " + pt.velocity);
-				synchronized (Navigator.talonLock) {
-					controls[j].pushMotionProfileTrajectory(pt);
-				}
+				controls[j].pushMotionProfileTrajectory(pt);
 			}
 		}
 		startProfile();
@@ -227,9 +217,7 @@ public class MotionManager {
  				pt.position = positions[j]; //NEW LINE
 				pt.isLastPoint = (i + 1 == pathArray.length && done);
  				//System.out.println("point vel: " + pt.velocity);
-				synchronized (Navigator.talonLock) {
-					controls[j].pushMotionProfileTrajectory(pt);
-				}
+				controls[j].pushMotionProfileTrajectory(pt);
 			}
 		}
 		startProfile();
@@ -237,24 +225,20 @@ public class MotionManager {
 	}
 	
 	public void startProfile() {
-		synchronized (Navigator.talonLock) {
-			for (int i = 0; i < controls.length; i ++) controls[i].enable();
-		}
+		for (int i = 0; i < controls.length; i ++) 
+			controls[i].enable();
 	}
 	
 	public void endProfile() {
-		synchronized (Navigator.talonLock) {
-			for(int i = 0; i < controls.length; i ++) controls[i].disable();
-		}
+		for(int i = 0; i < controls.length; i ++) 
+			controls[i].disable();
 	}
 	
 	public void shutDownProfiling() {
-		synchronized (Navigator.talonLock) {
-			for(int i = 0; i < controls.length; i ++) {
-				controls[i].clearMotionProfileTrajectories();
-				controls[i].clearUnderrun();
-				controls[i].changeControlMode(TalonControlMode.Speed); //may need to be vbus
-			}
+		for(int i = 0; i < controls.length; i ++) {
+			controls[i].clearMotionProfileTrajectories();
+			controls[i].clearUnderrun();
+			controls[i].changeControlMode(TalonControlMode.Speed); //may need to be vbus
 		}
 	}
 

@@ -23,6 +23,7 @@
  * 
  */
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
+import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
 
 public class Instrumentation {
@@ -52,7 +53,7 @@ public class Instrumentation {
 		long whole = (long)(toround * 1000000.0 + 0.5);
 		return ((double)whole) * 0.000001;
 	}
-	public static void process(CANTalon.MotionProfileStatus status1, CANTalon talon) {
+	public static void process(CANTalon.MotionProfileStatus status1, SafeTalon talon) {
 		double now = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
 		if((now-timeout) > 0.2){

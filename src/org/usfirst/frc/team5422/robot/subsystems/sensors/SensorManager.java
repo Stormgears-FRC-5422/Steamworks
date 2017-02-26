@@ -1,13 +1,13 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
-import edu.wpi.first.wpilibj.Notifier;
+import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 
 public class SensorManager {
 	
-	private static Notifier globalMappingNotifier;
-	private static Notifier visionNotifier;
+	private static RegisteredNotifier globalMappingNotifier;
+	private static RegisteredNotifier visionNotifier;
+	private static RegisteredNotifier stormNetNotifier;
 	//private static Notifier shootingNotifier;
-	private static Notifier stormNetNotifier;
 	
 	private static GlobalMapping globalMapping;
 	private static Vision vision;
@@ -35,9 +35,9 @@ public class SensorManager {
 		vision = new Vision();
 //		shootingSensors = new ShootingSensors();
 		
-		globalMappingNotifier = new Notifier(globalMapping);
-		visionNotifier = new Notifier(vision);
-		stormNetNotifier = new Notifier(stormNet);
+		globalMappingNotifier = new RegisteredNotifier(globalMapping);
+		visionNotifier = new RegisteredNotifier(vision);
+		stormNetNotifier = new RegisteredNotifier(stormNet);
 		
 		
 		_isInitiated = true;

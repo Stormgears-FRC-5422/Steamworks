@@ -7,6 +7,7 @@ import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
+import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
@@ -27,7 +28,7 @@ public class CloneBotMecanumDrive extends Drive {
 	public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile) {
 		if (robotRunMode == RobotModes.AUTONOMOUS) {
 			for(int i = 0; i < talons.length; i ++) {
-				CANTalon talon = talons[i];
+				SafeTalon talon = talons[i];
 				talon.reverseOutput(true); 
 				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 				talon.configEncoderCodesPerRev(2048);

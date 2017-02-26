@@ -4,14 +4,15 @@ import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
-import com.ctre.CANTalon;
+import org.usfirst.frc.team5422.utils.SafeTalon;
+//import com.ctre.CANTalon;
 
 public abstract class Drive {
-	public static CANTalon[] talons = new CANTalon[RobotDriveConstants.NUM_DRIVE_TALONS];
+	public static SafeTalon[] talons = new SafeTalon[RobotDriveConstants.NUM_DRIVE_TALONS];
 
 	public Drive() {
 		for(int i = 0; i < talons.length; i ++) {
-			talons[i] = new CANTalon(i);
+			talons[i] = new SafeTalon(i);
 		}	
 	}
 	

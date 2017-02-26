@@ -7,7 +7,8 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Trapezo
 import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 
-import edu.wpi.first.wpilibj.Notifier;
+import org.usfirst.frc.team5422.utils.RegisteredNotifier;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -18,7 +19,7 @@ public class Navigator extends Subsystem{
 	
 	private static NetworkTable networkTable;
 	
-	private static Notifier splineFollowThreadNotifier;
+	private static RegisteredNotifier splineFollowThreadNotifier;
 	
 	private static Navigator instance;
 	
@@ -42,7 +43,7 @@ public class Navigator extends Subsystem{
 		//using Stormgears CloneBot Mecanum Drive
         mecanumDrive = new CloneBotMecanumDrive();
 		
-		motionManager = new MotionManager(mecanumDrive.talons);
+		motionManager = new MotionManager(CloneBotMecanumDrive.talons);
 		
 		SplineFollowThread.setMotionManager(motionManager);
         		
@@ -143,7 +144,7 @@ public class Navigator extends Subsystem{
 				throw new Exception("cannot call two maneuvers at once!");
 			}else{
 				SplineFollowThread.loadInitialSpline(spline);
-				splineFollowThreadNotifier = new Notifier(SplineFollowThread.getInstance());
+				splineFollowThreadNotifier = new RegisteredNotifier(SplineFollowThread.getInstance());
 				splineFollowThreadNotifier.startPeriodic(0.01);
 				
 				while(SplineFollowThread.isFollowingSpline()){

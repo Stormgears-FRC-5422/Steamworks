@@ -1,21 +1,19 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
 
+import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 
-import edu.wpi.first.wpilibj.Notifier;
+import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotionControl {
-
-	private CANTalon talon;
+	private SafeTalon talon;
 	private CANTalon.MotionProfileStatus status = new CANTalon.MotionProfileStatus();
-	private Notifier notifier = new Notifier(new PeriodicRunnable());
-	private Instrumentation i = new Instrumentation();
+	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable());
 	public int j = 0;
-	private boolean stop = false;
-	
+	private boolean stop = false;	
 	
 	class PeriodicRunnable implements java.lang.Runnable {
 		public void run() {  
@@ -28,7 +26,7 @@ public class MotionControl {
 		    	clearUnderrun();
 		    	talon.processMotionProfileBuffer();
 		    	talon.getMotionProfileStatus(status);
-		    	i.process(status,talon);
+		    	Instrumentation.process(status,talon);
 				SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
 				SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);
 			} else {
@@ -37,7 +35,7 @@ public class MotionControl {
 		}	
 	}
 
-	public MotionControl(CANTalon talon) {
+	public MotionControl(SafeTalon talon) {
 		this.talon = talon;
 		this.talon.changeControlMode(TalonControlMode.MotionProfile);
 		this.talon.changeMotionControlFramePeriod(5);
