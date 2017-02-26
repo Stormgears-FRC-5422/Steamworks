@@ -8,7 +8,7 @@ public class RunnableNotifier implements Runnable{
 	
 	private NetworkTable networkTable;
 	
-	public RunnableNotifier(String networkKey, double periodS){
+	public RunnableNotifier(String networkKey, double period){
 		networkTable = NetworkTable.getTable(networkKey);
 		this.networkKey = networkKey;
 	}

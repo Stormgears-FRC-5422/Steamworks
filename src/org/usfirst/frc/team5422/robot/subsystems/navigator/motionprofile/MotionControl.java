@@ -9,30 +9,41 @@ import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotionControl {
+	private boolean stopNotifier = false;	
 	private SafeTalon talon;
 	private CANTalon.MotionProfileStatus status = new CANTalon.MotionProfileStatus();
 	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable());
-	public int j = 0;
-	private boolean stop = false;	
 	
 	class PeriodicRunnable implements java.lang.Runnable {
+		
+		// The purpose of this thread is just to push data into the firmware buffer
+		// other details of the control come through the motion manager thread.
 		public void run() {  
-			if(!stop) {
-				if(status.btmBufferCnt == 0 && status.topBufferCnt == 0) j ++;
-				else j = 0;
-				//System.out.println("Control ran");
-		    	SmartDashboard.putString("pushing to btm buffer: ", "");
-		    	SmartDashboard.putNumber("enc vel(in run): ", talon.getEncVelocity());
-		    	clearUnderrun();
-		    	talon.processMotionProfileBuffer();
-		    	talon.getMotionProfileStatus(status);
-		    	Instrumentation.process(status,talon);
-				SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
-				SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);
-			} else {
-				notifier.stop();
+			boolean stopNow;			
+			synchronized(this) {
+				stopNow = stopNotifier;
 			}
+
+			// We want to stop if the manager thread told us to or if we are out of work to do.
+			talon.getMotionProfileStatus(status);
+			stopNow |= (status.btmBufferCnt == 0 && status.topBufferCnt == 0);
+
+			if (stopNow) {
+				// This may be redundant, but can't hurt
+				stopControlThread();
+				return;
+			}
+			
+	    	SmartDashboard.putString("pushing to btm buffer: ", "");
+	    	SmartDashboard.putNumber("enc vel(in run): ", talon.getEncVelocity());
+	    	clearUnderrun();
+	    	talon.processMotionProfileBuffer();
+	    	talon.getMotionProfileStatus(status);
+	    	Instrumentation.process(status,talon);
+			SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
+			SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);				
 		}	
+
 	}
 
 	public MotionControl(SafeTalon talon) {
@@ -43,18 +54,20 @@ public class MotionControl {
 	}
 	
 	public void stopControlThread() {
-		stop = true;
+		synchronized(this) {
+			stopNotifier = true;
+			notifier.stop();
+		}
 	}
 	public void startControlThread() {
-		stop = false;
-		notifier.startPeriodic(0.005);
+		synchronized(this) {
+			stopNotifier = false;
+			notifier.startPeriodic(0.005);
+		}
 	}
 	
-	public void pushMotionProfileTrajectory(TrajectoryPoint pt) {
-		talon.pushMotionProfileTrajectory(pt);
-		talon.getMotionProfileStatus(status);
-//		SmartDashboard.putNumber("Btm Buffer Count: ", status.btmBufferCnt);
-//		SmartDashboard.putNumber("Top Buffer Count: ", status.topBufferCnt);
+	public boolean pushMotionProfileTrajectory(TrajectoryPoint pt) {
+		return talon.pushMotionProfileTrajectory(pt);
 	}
 	
 	public void clearMotionProfileTrajectories() {
@@ -75,8 +88,8 @@ public class MotionControl {
 	
 	//TODO: add in some edge case error checking
 	public void enable() {
-		SmartDashboard.putNumber("btm buffer cnt: ", status.btmBufferCnt);
 		talon.getMotionProfileStatus(status);
+		SmartDashboard.putNumber("btm buffer cnt: ", status.btmBufferCnt);
 		if(status.btmBufferCnt > 5) {
 			SmartDashboard.putString("talon enabled:", "");
 			talon.set(1);

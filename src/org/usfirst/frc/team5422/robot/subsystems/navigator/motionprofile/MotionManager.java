@@ -12,8 +12,8 @@ import java.util.List;
 
 public class MotionManager {
 	private List<double[][]> paths = new ArrayList<double[][]>();
-	private List<TurnDetails> turns = new ArrayList<TurnDetails>();
-	private boolean immediate, done, go = false, interrupt = false;
+	private List<ProfileDetails> turns = new ArrayList<ProfileDetails>();
+	private boolean immediate, go = false, interrupt = false;
 	private int batchSize = 256;
 	private int currIndex = 0;
 	private MotionControl [] controls;
@@ -22,16 +22,26 @@ public class MotionManager {
 	private final double [][] table = generateTable();
 	
 	class PeriodicRunnable implements java.lang.Runnable {
+		
+		// The job of this thread is to push data into the top api buffer.
+		// it pushes up to 'batchSize' points at a time (but never points 
+		// from more than one path in a single pass)
 		public void run() {
-			synchronized (this) {
+			// synchronize to avoid MT conflicts with the input of profiles
+			// called from synchronized methods - which effectively sync(this)
+			synchronized(this) {
+				// Are we done?
 				if(paths.isEmpty()) {
 					for(int i = 0; i < controls.length; i ++) {
 						controls[i].stopControlThread();
 					}
 					notifier.stop();
+					go = false;
 					System.out.println("Stopped");
+					// anything else? disable talons?
+					return;
 				}
-//				System.out.println(currIndex);
+
 				if(immediate) {
 					currIndex = 0;
 					for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
@@ -42,26 +52,38 @@ public class MotionManager {
 					}
 					immediate = false;
 				}
+				
 				if(go) {
-					if(turns.get(0) == null) pushLinear();
+					if(turns.get(0).turn == false) pushLinear();
 					else pushTurn();
+					// If we have pushed the entire path, remove it and let the next path run on the next time through
+					// this could lead to a short cycle, but that is probably OK since we push points more quickly 
+					// than they can run anyway.
 					if(currIndex >= paths.get(0).length) {
 						currIndex = 0;
 						paths.remove(0);
 						turns.remove(0);
-						if(paths.size() == 0) go = false;
-					}
+					}	
 				}
-			} // end synchronized
+			}
 		}	
+
 	}
 	
-	class TurnDetails {
+	// information that needs to be stored per profile path
+	class ProfileDetails {
+		boolean turn;
 		double theta;
 		boolean direction;
+		boolean done;
 	}
 	
-
+	public MotionManager(SafeTalon [] talons) {
+		controls = new MotionControl[talons.length];
+		for(int i = 0; i < controls.length; i ++) 
+			controls[i] = new MotionControl(talons[i]);
+	}	
+	
 	/*
 	 * Preconditions: All talons must be set to the following
 	 * 
@@ -92,7 +114,7 @@ public class MotionManager {
 		return Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0;
 	}
 	
-	private synchronized int[] getEncVels() {
+	private int[] getEncVels() {
 		int[] vels = new int[controls.length];
 		for(int i = 0; i < controls.length; i ++) {
 			vels[i] = controls[i].getEncVel();
@@ -100,18 +122,15 @@ public class MotionManager {
 		return vels;
 	}
 	
-	public MotionManager(SafeTalon [] talons) {
-		controls = new MotionControl[talons.length];
-		for(int i = 0; i < controls.length; i ++) 
-			controls[i] = new MotionControl(talons[i]);
-	}	
-	
 	public synchronized void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
-		this.done = done;
+		ProfileDetails d = new ProfileDetails();
+		d.done = done;
+		d.turn = false;
+		turns.add(d);
+
 		this.immediate = immediate;
 		interrupt = immediate;
 		paths.add(pathArray);
-		turns.add(null);
 		go = true;
 		notifier.startPeriodic(0.005);
 		for(int i = 0; i < controls.length; i ++) {
@@ -119,13 +138,17 @@ public class MotionManager {
 			System.out.println("Control started again turn");
 		}
 	}
+	
 	public synchronized void pushTurn(double theta, boolean immediate, boolean done) {
+		ProfileDetails d = new ProfileDetails();
+		d.done = done;
+		d.theta = theta;
+		d.turn = true;
+		
+		turns.add(d);
+
 		this.immediate =  immediate;
 		interrupt = immediate;
-		this.done = done;
-		TurnDetails d = new TurnDetails();
-		d.theta = theta;
-		turns.add(d);
 		paths.add(getTurnProfile(d));
 		go = true;
 		notifier.startPeriodic(0.005);
@@ -151,7 +174,7 @@ public class MotionManager {
 	 * done = whether profile is last part(if robot should stop after or not)
 	 */
 	
-	public double[][] getTurnProfile(TurnDetails d) {
+	public double[][] getTurnProfile(ProfileDetails d) {
 		double robotRadius = 15.00; //TODO: make constant, in inches (14.25 x 13.25)
 		double wheelRadius = 3; //TODO: make constant, in inches
 		double maxVel = 240; //RPM
@@ -170,13 +193,18 @@ public class MotionManager {
 		TrajectoryPoint pt = new TrajectoryPoint();
 		double[][] pathArray = paths.get(0);
 		boolean direc = turns.get(0).direction;
+		boolean done = turns.get(0).done;
+		
 		for(int i = currIndex; i < currIndex + batchSize; i ++) {
 			if(i >= pathArray.length) break;
+		
 			if(interrupt) {
 				interrupt = false;
 				return;
 			}
+			
 			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
+			
 			for(int j = 0; j < controls.length; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
@@ -201,13 +229,18 @@ public class MotionManager {
 		SmartDashboard.putString("push profile started", "");
 		TrajectoryPoint pt = new TrajectoryPoint();
 		double [] positions = new double[4];
+		boolean done = turns.get(0).done;
+
 		for(int i = currIndex; i < currIndex + batchSize; i ++) {
 			if(i >= pathArray.length) break;
+		
 			if(interrupt) {
 				interrupt = false;
 				return;
 			}
+			
 			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
+			
 			for(int j = 0; j < controls.length; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
