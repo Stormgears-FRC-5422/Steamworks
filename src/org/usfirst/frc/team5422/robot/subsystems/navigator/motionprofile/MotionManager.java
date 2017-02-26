@@ -8,10 +8,11 @@ import com.ctre.CANTalon.TrajectoryPoint;
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MotionManager {
-	private ArrayList<double[][]> paths = new ArrayList<double[][]>();
-	private ArrayList<TurnDetails> turns = new ArrayList<TurnDetails>();
+	private List<double[][]> paths = new ArrayList<double[][]>();
+	private List<TurnDetails> turns = new ArrayList<TurnDetails>();
 	private boolean immediate, done, go = false, interrupt = false;
 	private int batchSize = 256;
 	private int currIndex = 0;

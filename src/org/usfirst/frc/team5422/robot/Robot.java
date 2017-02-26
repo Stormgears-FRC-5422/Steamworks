@@ -29,6 +29,7 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacemen
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Robot extends IterativeRobot {
 	// Subsystems
@@ -38,7 +39,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 	public static RobotModes robotMode =  RobotModes.AUTONOMOUS;
-	public static ArrayList<RegisteredNotifier> NotifierRegistry = new ArrayList<RegisteredNotifier>();
+	public static List<RegisteredNotifier> NotifierRegistry = new ArrayList<RegisteredNotifier>();
 
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
