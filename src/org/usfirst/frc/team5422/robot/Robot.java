@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 	public static RobotModes robotMode =  RobotModes.AUTONOMOUS;
-	public static List<RegisteredNotifier> NotifierRegistry = new ArrayList<RegisteredNotifier>();
+	public static List<RegisteredNotifier> notifierRegistry = new ArrayList<RegisteredNotifier>();
 
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
@@ -171,6 +171,11 @@ public class Robot extends IterativeRobot {
 		}
 		
 		Navigator.motionManager.endProfile();
+		
+		// shut down all notifiers.  This is a bit aggressive
+		for (RegisteredNotifier r : notifierRegistry) {
+			r.stop();
+		}
 	}
 
 	public void autonomousPeriodic() {
