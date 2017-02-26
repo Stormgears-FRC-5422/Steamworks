@@ -8,8 +8,8 @@ public class RegisteredNotifier extends Notifier {
 
 	public RegisteredNotifier(Runnable run) {
 		super(run);
-		synchronized(Robot.NotifierRegistry) {
-			Robot.NotifierRegistry.add(this);
+		synchronized(Robot.notifierRegistry) {
+			Robot.notifierRegistry.add(this);
 		}
 	}
 }

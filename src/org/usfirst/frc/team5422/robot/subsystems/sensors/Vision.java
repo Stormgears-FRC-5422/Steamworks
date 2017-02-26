@@ -1,7 +1,5 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
-import java.util.Set;
-
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
@@ -116,7 +114,7 @@ public class Vision extends RunnableNotifier {
       double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
       SmartDashboard.putNumber("Distance from Gear-X: ", distX);
       SmartDashboard.putNumber("Distance from Gear-Y: ", distY);
-      Navigator.getInstance().driveStraightRelativeInches(distX, distY);
+      Navigator.driveStraightRelativeInches(distX, distY);
 //      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
    }
    

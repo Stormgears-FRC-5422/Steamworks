@@ -179,7 +179,8 @@ public class SafeTalon extends CANTalon {
 
     public synchronized void setProfile(int profile) { super.setProfile(profile); }
 
-    public synchronized void stopMotor() { super.stopMotor(); } // deprecated, but ok.
+    @SuppressWarnings( "deprecation" )
+    public synchronized void stopMotor() { super.stopMotor(); } 
 
     public synchronized void disable() { super.disable(); }
 

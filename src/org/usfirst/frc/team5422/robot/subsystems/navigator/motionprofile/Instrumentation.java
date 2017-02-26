@@ -39,6 +39,8 @@ public class Instrumentation {
 	public static void OnNoProgress() {
 		//System.out.format("%s\n", "NOPROGRESS");
 	}
+	
+	@SuppressWarnings("unused")
 	static private String StrOutputEnable(CANTalon.SetValueMotionProfile sv)
 	{
 		if(sv == null)
@@ -47,12 +49,15 @@ public class Instrumentation {
 			return "Inval";
 		return _table[sv.value];
 	}
+	
 	/** round to six decimal places */
+	@SuppressWarnings("unused")
 	static private double round(double toround)
 	{
 		long whole = (long)(toround * 1000000.0 + 0.5);
 		return ((double)whole) * 0.000001;
 	}
+	
 	public static void process(CANTalon.MotionProfileStatus status1, SafeTalon talon) {
 		double now = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 

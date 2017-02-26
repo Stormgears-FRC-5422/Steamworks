@@ -69,7 +69,6 @@ public class Navigator extends Subsystem{
 	}
 	
 	public static Drive getMecanumDrive(){
-		
 		return mecanumDrive;
 	}
 
