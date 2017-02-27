@@ -1,12 +1,12 @@
 package org.usfirst.frc.team5422.robot.subsystems.shooter;
 
 //import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
-import org.stormgears.StormUtils.SafeTalon;
-import com.ctre.CANTalon;
 
+import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.stormgears.StormUtils.SafeTalon;
 
 public class Shooter extends Subsystem {
 	SafeTalon motor;
@@ -28,8 +28,7 @@ public class Shooter extends Subsystem {
 		impeller = new Relay(relayId);
 	}
 
-	public void initDefaultCommand()
-	{
+	public void initDefaultCommand() {
 		motor.set(0);
 	}
 
@@ -37,18 +36,15 @@ public class Shooter extends Subsystem {
 		this.shootVelocity = shootVelocity;
 	}
 
-	public void startImpeller()
-	{
+	public void startImpeller() {
 		impeller.set(Relay.Value.kForward);
 	}
 
-	public void stopImpeller()
-	{
+	public void stopImpeller() {
 		impeller.set(Relay.Value.kOff);
 	}
 
-	public void runImpellerReversed()
-	{
+	public void runImpellerReversed() {
 		impeller.set(Relay.Value.kReverse);
 	}
 
@@ -58,8 +54,7 @@ public class Shooter extends Subsystem {
 //		Diagnostics.log("shootVoltage: " + motor.getBusVoltage());
 	}
 
-	public void stop()
-	{
+	public void stop() {
 		motor.set(0);
 		stopImpeller();
 	}

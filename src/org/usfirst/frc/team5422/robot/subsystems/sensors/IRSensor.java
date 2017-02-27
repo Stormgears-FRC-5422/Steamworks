@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
-import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 import edu.wpi.first.wpilibj.I2C;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 public class IRSensor extends StormgearsI2CSensor {
 	private float[] sensorValues;
@@ -15,49 +15,49 @@ public class IRSensor extends StormgearsI2CSensor {
 	GEAR_EXITING, // Gear is breaking beam on the way out 
 	UNKNOWN_STATE // Undefined states (Need more sensor data)  
 */
-		
+
 	IRSensor(int deviceAddress, int numSensors) {
 		super(I2C.Port.kOnboard, deviceAddress);
-		super.setSensorCount(numSensors);	
-		sensorValues = new float[numSensors];		
+		super.setSensorCount(numSensors);
+		sensorValues = new float[numSensors];
 		gearState = new short[1];
-		
+
 		// first byte here is beamBroke, rest are proximity detectors
 		irDetails = new byte[1 + numLinePins];
 	}
 
 	public void pollDistance() {
-		fetchFloats("I", "Infrared", sensorValues);	
+		fetchFloats("I", "Infrared", sensorValues);
 	}
-	
+
 	public void pollGearState() {
 		fetchShorts("G", "GearState", gearState);
 	}
-	
+
 	public void pollSensorStatus() {
 		fetchBytes("D", "Details", irDetails);
 	}
-	
+
 	public float getDistance(int sensorNumber) {
 		return sensorValues[sensorNumber];
 	}
 
 	public SteamworksConstants.gearState getState() {
 		switch (gearState[0]) {
-		case 0:
-			return SteamworksConstants.gearState.EMPTY;
-		case 1: 
-			return SteamworksConstants.gearState.LIFTING;
-		case 2:
-			return SteamworksConstants.gearState.FULL;
-		case 3:
-			return SteamworksConstants.gearState.EXITING;
-		case 4:
-		default:
-			return SteamworksConstants.gearState.UNKNOWN;
+			case 0:
+				return SteamworksConstants.gearState.EMPTY;
+			case 1:
+				return SteamworksConstants.gearState.LIFTING;
+			case 2:
+				return SteamworksConstants.gearState.FULL;
+			case 3:
+				return SteamworksConstants.gearState.EXITING;
+			case 4:
+			default:
+				return SteamworksConstants.gearState.UNKNOWN;
 		}
 	}
-	
+
 	// Negative means robot needs to move to the left
 	public float getAlignmentOffset() {
 		/*	1-?-0-?-1 --> 0" (i.e. center robot on lift peg)
@@ -68,26 +68,26 @@ public class IRSensor extends StormgearsI2CSensor {
 		// note that these sensors start at index 1, not 0 (0 is the beam...)
 		boolean[] on = new boolean[numLinePins];
 		for (int i = 0; i < numLinePins; i++) {
-			on[i] = (irDetails[i+1] == 1);
+			on[i] = (irDetails[i + 1] == 1);
 		}
-		
+
 		if (on[0] && on[1] && on[2] && !on[3] && !on[4])
 			return 1.75f; // robot need to move to the right
-		
+
 		if (!on[0] && on[1] && on[2] && on[3] && !on[4])
 			return 1.25f; // pick one
-		
+
 		if (!on[0] && !on[1] && on[2] && on[3] && on[4])
 			return -1.75f; // robot needs to move to the left
 
 		return 0;
 	}
-	
+
 	// probably don't want to call this method at all
 	public boolean getBeamBroken() {
 		return (irDetails[0] == 1);
 	}
-	
+
 	// probably don't want to call this method at all
 	public byte[] getAllDetails() {
 		return irDetails;

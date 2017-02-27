@@ -2,12 +2,12 @@ package org.usfirst.frc.team5422.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class PickUpGearCommand extends Command{
-	
+public class PickUpGearCommand extends Command {
+
 	public PickUpGearCommand() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {

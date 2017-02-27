@@ -2,11 +2,11 @@ package org.usfirst.frc.team5422.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ClimbCommand extends Command{
+public class ClimbCommand extends Command {
 	public ClimbCommand() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {

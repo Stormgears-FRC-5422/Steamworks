@@ -95,6 +95,6 @@ public class AutoRoutes {
 			centerGearToGearPickup.add(2, new Pose(FieldPositions.centerIntermediate2Continue));
 			centerGearToGearPickup.add(3, new Pose(FieldPositions.left_CenterDropOff));
 		}
-		
+
 	}
 }
