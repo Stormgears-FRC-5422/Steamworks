@@ -154,7 +154,7 @@ public class MotionManager {
 		notifier.startPeriodic(0.005);
 		for(int i = 0; i < controls.length; i ++) {
 			controls[i].startControlThread();
-			System.out.println("Control started again in pushTurn");
+			System.out.println("Control started again profile");
 		}
 	}
 	
