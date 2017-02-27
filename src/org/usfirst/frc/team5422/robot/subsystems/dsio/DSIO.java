@@ -95,11 +95,7 @@ public class DSIO {
 	}
 
 	public double getSliderValueClimber() {
-
-		double climberVelocity = (-1*(joystick.getThrottle() - 1) / 2);
-
-
-		return climberVelocity;
+		return (-1*(joystick.getThrottle() - 1) / 2);
 	}
 
 	public Joystick getJoystick() {
@@ -107,19 +103,19 @@ public class DSIO {
 	}
 	private void initializeChoosers() {
 
-		allianceChooser = new SendableChooser<alliances>();
+		allianceChooser = new SendableChooser<>();
 		allianceChooser.addDefault("Red Alliance (Boiler to the right)", alliances.RED);
 		allianceChooser.addObject("Blue Alliance (Boiler to the left)", alliances.BLUE);
 		SmartDashboard.putData("Alliance Chooser", allianceChooser);
 
-		autonomousGearPlacementOptionsChooser = new SendableChooser<autonomousGearPlacementOptions>();
+		autonomousGearPlacementOptionsChooser = new SendableChooser<>();
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Left", autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
 		SmartDashboard.putData("Autonomous Gear Placement Chooser", autonomousGearPlacementOptionsChooser);
 
-		autonomousDropOffLocationOptionsChooser = new SendableChooser<autonomousDropOffLocationOptions>();
+		autonomousDropOffLocationOptionsChooser = new SendableChooser<>();
 		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
 		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
 		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);

@@ -117,7 +117,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @see	   log
 	 */	
 	public void debug(String message) {
-		if (m_debug == true)
+		if (m_debug)
 			log(message);		
 	}
 
