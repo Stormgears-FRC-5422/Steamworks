@@ -1,15 +1,14 @@
 package org.usfirst.frc.team5422.robot.commands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team5422.robot.Robot;
 
-import edu.wpi.first.wpilibj.command.Command;
-
-public class PlaceGearCommand extends Command{
+public class PlaceGearCommand extends Command {
 	public PlaceGearCommand() {
-    	requires(Robot.navigatorSubsystem);
-    	requires(Robot.gearManipulatorSubsystem);    	
+		requires(Robot.navigatorSubsystem);
+		requires(Robot.gearManipulatorSubsystem);
 	}
-	
+
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {

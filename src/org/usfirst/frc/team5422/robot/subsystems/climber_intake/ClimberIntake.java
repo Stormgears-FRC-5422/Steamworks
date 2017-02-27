@@ -1,36 +1,36 @@
 package org.usfirst.frc.team5422.robot.subsystems.climber_intake;
 
-import org.usfirst.frc.team5422.utils.SteamworksConstants;
-import org.stormgears.StormUtils.SafeTalon;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
-
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.stormgears.StormUtils.SafeTalon;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 public class ClimberIntake extends Subsystem {
 	public SafeTalon climberIntakeTalon;
 	public SafeTalon secondaryIntakeTalon;
 
 
-	public ClimberIntake(int climberIntakeTalonId){
+	public ClimberIntake(int climberIntakeTalonId) {
 		climberIntakeTalon = new SafeTalon(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
-		secondaryIntakeTalon = new SafeTalon (SteamworksConstants.SECONDARY_INTAKE_TALON_ID);
-		
+		secondaryIntakeTalon = new SafeTalon(SteamworksConstants.SECONDARY_INTAKE_TALON_ID);
+
 	}
 
 	public void climb(double throttleValue) {
-		
-		if(climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus){
+
+		if (climberIntakeTalon.getControlMode() != TalonControlMode.PercentVbus) {
 			climberIntakeTalon.changeControlMode(TalonControlMode.PercentVbus);
 		}
-	
+
 		climberIntakeTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-		
-		climberIntakeTalon.set(throttleValue);	
-		
+
+		climberIntakeTalon.set(throttleValue);
+
 	}
+
 	public void takeIn() {
-		if (climberIntakeTalon.getControlMode() != TalonControlMode.Speed)			
+		if (climberIntakeTalon.getControlMode() != TalonControlMode.Speed)
 			climberIntakeTalon.changeControlMode(TalonControlMode.Speed);
 
 		climberIntakeTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
@@ -38,10 +38,9 @@ public class ClimberIntake extends Subsystem {
 		secondaryIntakeTalon.set(5000);
 
 	}
-	
 
-	public void stop()
-	{
+
+	public void stop() {
 		climberIntakeTalon.set(0);
 		secondaryIntakeTalon.set(0);
 	}

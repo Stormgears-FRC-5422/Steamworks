@@ -1,9 +1,7 @@
 package org.usfirst.frc.team5422.robot.commands;
 
-import org.usfirst.frc.team5422.robot.Robot;
-
 import edu.wpi.first.wpilibj.command.Command;
-
+import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 
 import java.util.ArrayList;
@@ -16,14 +14,14 @@ public class AutonomousCommand extends Command {
 	}
 
 	public AutonomousCommand(ArrayList<Pose> routeToGear, ArrayList<Pose> routeToDropOff) {
-		
+
 		requires(Robot.navigatorSubsystem);
 
 		this.routeToGear = routeToGear;
 		this.routeToDropOff = routeToDropOff;
 		System.out.println("In Autonomous Command");
 	}
-	
+
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
@@ -34,7 +32,7 @@ public class AutonomousCommand extends Command {
 	@Override
 	protected void execute() {
 		System.out.println("Robot executing AutonomousCommand...");
-		
+
 //		Navigator.getInstance().motionManager.pushTurn(Math.PI/6, true, true);
 //		//Navigator.getInstance().driveStraightRelativeInches(0, 24);
 //		SensorManager.vision.alignToGear();
@@ -50,7 +48,7 @@ public class AutonomousCommand extends Command {
 	@Override
 	protected void end() {
 		System.out.println("Autonomous Command ended...");
-		
+
 	}
 
 	// Called when another command which requires one or more of the same

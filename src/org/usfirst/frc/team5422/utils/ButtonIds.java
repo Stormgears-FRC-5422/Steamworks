@@ -7,7 +7,7 @@ package org.usfirst.frc.team5422.utils;
  * Just add them if needed
  */
 public class ButtonIds {
-    // TODO: Change button IDs to real ones
+	// TODO: Change button IDs to real ones
 	public static int BIG_BLUE_BUTTON_ID = 10;
 	public static int RED_BUTTON_ID = 15;
 	public static int YELLOW_BUTTON_ID = 14;
@@ -18,6 +18,6 @@ public class ButtonIds {
 	public static int GREEN_SWITCH_ID = 5;
 	public static int ORANGE_SWITCH_ID = 4;
 	public static int RED_SWITCH_ID = 3;
-	
+
 
 }

@@ -59,7 +59,7 @@ public class DSIO {
 			//System.out.println("RED SWITCH Pressed...");
 			Robot.climberIntakeSubsystem.climb(getSliderValueClimber());
 
-		// ORANGE SWITCH
+			// ORANGE SWITCH
 		else if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
 			//System.out.println("ORANGE SWITCH Pressed...");
 			Robot.climberIntakeSubsystem.takeIn();
@@ -94,12 +94,13 @@ public class DSIO {
 	}
 
 	public double getSliderValueClimber() {
-		return (-1*(joystick.getThrottle() - 1) / 2);
+		return (-1 * (joystick.getThrottle() - 1) / 2);
 	}
 
 	public Joystick getJoystick() {
 		return joystick;
 	}
+
 	private void initializeChoosers() {
 
 		allianceChooser = new SendableChooser<>();
