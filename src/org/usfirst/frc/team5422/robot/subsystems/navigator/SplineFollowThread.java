@@ -28,6 +28,8 @@ public class SplineFollowThread implements Runnable{
 	
 	private static boolean lastMotionProfilePushed;
 	
+	private static boolean once = false;
+	
 	public static void loadInitialSpline(Spline intialSpline){
 		spline = intialSpline;
 		_isFollowingSpline = true;
@@ -60,8 +62,6 @@ public class SplineFollowThread implements Runnable{
 		double error_x = spline.x(1, 1.0) - x;
 		double error_y = spline.y(1, 1.0) - y;
 		
-		spline.printSplinePos("");
-		
 		double theta = Math.atan2(error_x, error_y);
 		
 		double spline_v_mag = Math.sqrt(vx * vx + vy * vy);
@@ -84,14 +84,14 @@ public class SplineFollowThread implements Runnable{
 		
 		if(err < DISTANCE_TOLERANCE){
 			
-			System.out.println("POSITION ERROR: " + err);
+			//System.out.println("POSITION ERROR: " + err);
 			
 			spline.removePose(1);
-			spline.printSplinePos("after removing spline 1");
+			//spline.printSplinePos("after removing spline 1");
 			
 			if(spline.getNumSegments() < 1){
 				
-				System.out.println("NUM SEGMENTS LESS THAN 1");
+				//System.out.println("NUM SEGMENTS LESS THAN 1");
 				
 				_isFollowingSpline = false;
 				
@@ -101,9 +101,9 @@ public class SplineFollowThread implements Runnable{
 		
 		//update the current pose with robot's manipulated
 		spline.updatePose(0, new Pose(x, y, weighted_v_x, weighted_v_y));
-		spline.printSplinePos("after 0 update");
+		//spline.printSplinePos("after 0 update");
 		
-		System.out.println("number of segments: " + spline.getNumSegments());
+		//System.out.println("number of segments: " + spline.getNumSegments());
 		//change direction of waypoint's velocity, so robot can follow easier
 		double waypt_vy = spline.vy(1, 1.0);
 		double waypt_vx = spline.vx(1, 1.0);
@@ -111,7 +111,7 @@ public class SplineFollowThread implements Runnable{
 		double v_mag = Math.sqrt(waypt_vx*waypt_vx + waypt_vy*waypt_vy);
 		
 		spline.updatePose(1, new Pose(spline.x(1, 1.0), spline.y(1, 1.0), v_mag*Math.sin(theta), v_mag*Math.sin(theta)) );
-		spline.printSplinePos("after 1 update");
+		//spline.printSplinePos("after 1 update");
 	}
 	
 	@Override
@@ -136,12 +136,12 @@ public class SplineFollowThread implements Runnable{
 			double vx = networkTable.getNumber(NetworkConstants.GP_VX, -1);
 			double vy = networkTable.getNumber(NetworkConstants.GP_VY, -1);
 			
-			System.out.println("Update spline will be called");
+			//System.out.println("Update spline will be called");
 			
-			System.out.println("X: " + x);
-			System.out.println("Y: " + y);
-			System.out.println("VX: " + vx);
-			System.out.println("VY: " + vy);
+			//System.out.println("X: " + x);
+			//System.out.println("Y: " + y);
+			//System.out.println("VX: " + vx);
+			//System.out.println("VY: " + vy);
 			
 			updateSpline(new Pose(x, y, vx, vy));
 			
@@ -156,11 +156,12 @@ public class SplineFollowThread implements Runnable{
 				
 				
 			}else{
-				if(Timer.getFPGATimestamp() - lastMotionProfilePushTime > 1.0){//every fraction of a second, push a new profile
+				if(!once/*Timer.getFPGATimestamp() - lastMotionProfilePushTime > 1000.0*/){//every fraction of a second, push a new profile
 					
 					
 					motionManager.pushProfile(motionProfileBuffer, true, false);
 					
+					once = true;
 					
 					lastMotionProfilePushTime = Timer.getFPGATimestamp(); 
 					
@@ -170,7 +171,7 @@ public class SplineFollowThread implements Runnable{
 	}
 	
 	private static void calculateVelocityBuffer(int points){
-		System.out.println("Calculating Buffer");
+		//System.out.println("Calculating Buffer");
 		if(!_isFollowingSpline){
 			for(int i = 0; i < points; i++){
 				motionProfileBuffer[i][0] = 0;

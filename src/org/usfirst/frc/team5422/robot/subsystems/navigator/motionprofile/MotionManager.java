@@ -32,12 +32,12 @@ public class MotionManager {
 			synchronized(this) {
 				// Are we done?
 				if(paths.isEmpty()) {
-					for(int i = 0; i < controls.length; i ++) {
-						controls[i].stopControlThread();
-					}
+//					for(int i = 0; i < controls.length; i ++) {
+//						controls[i].stopControlThread();
+//					}
 					notifier.stop();
 					go = false;
-					System.out.println("Stopped");
+					System.out.println("Stopped pushing points because paths are done.");
 					// anything else? disable talons?
 					return;
 				}
@@ -226,7 +226,7 @@ public class MotionManager {
 	
 	public void pushLinear() {
 		double[][] pathArray = paths.get(0);
-		SmartDashboard.putString("push profile started", "");
+		SmartDashboard.putString("pushLinear started", "");
 		TrajectoryPoint pt = new TrajectoryPoint();
 		double [] positions = new double[4];
 		boolean done = turns.get(0).done;
@@ -239,8 +239,11 @@ public class MotionManager {
 				return;
 			}
 			
-			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
+			int colIndex = (int)(((pathArray[i][1] + 2*Math.PI) % (2*Math.PI)) * 500/Math.PI);
 			
+			
+			//System.out.println("i is " + i + ", pathArray[i][1] is " + pathArray[i][1] + ", colIndex is " + colIndex);
+
 			for(int j = 0; j < controls.length; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
@@ -284,6 +287,7 @@ public class MotionManager {
 			else temp[i] = Math.sqrt(2) * (Math.sin(2 * Math.PI * i / 1000.0 + Math.PI / 2.0) - Math.cos(2 * Math.PI * i / 1000.0 + Math.PI / 2.0));
 		}
 		return temp;
+		
 	}
 	
 	private double[] getFuncs2(boolean neg) {

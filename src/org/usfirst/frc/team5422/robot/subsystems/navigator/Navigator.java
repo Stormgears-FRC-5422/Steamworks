@@ -147,7 +147,7 @@ public class Navigator extends Subsystem{
 				splineFollowThreadNotifier.startPeriodic(0.01);
 				
 				while(SplineFollowThread.isFollowingSpline()){
-					System.out.println("waiting for spline to finish...");
+					//System.out.println("waiting for spline to finish...");
 					Timer.delay(0.01);
 				}
 			}

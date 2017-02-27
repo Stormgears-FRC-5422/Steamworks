@@ -69,37 +69,37 @@ public class Instrumentation {
 				count = 8;
 				/* every 8 loops, print our columns */
 				
-//				System.out.format("%-9s\t", "topCnt");
-//				System.out.format("%-9s\t", "btmCnt");
-//				System.out.format("%-9s\t", "set val");
-//				System.out.format("%-9s\t", "HasUnder");
-//				System.out.format("%-9s\t", "IsUnder");
-//				System.out.format("%-9s\t", "IsValid");
-//				System.out.format("%-9s\t", "IsLast");
-//				System.out.format("%-9s\t", "VelOnly");
-//				System.out.format("%-9s\t", "Pos");
-//				System.out.format("%-9s\t", "Vel");
-//				System.out.format("%-9s\t", "Control Mode");
-//				//System.out.format("%-9s\t", "Encoder Codes Per Rev");
-//				System.out.format("%-9s\t", "F");
-//				
-//				System.out.format("\n");
+				System.out.format("%-9s\t", "topCnt");
+				System.out.format("%-9s\t", "btmCnt");
+				System.out.format("%-9s\t", "set val");
+				System.out.format("%-9s\t", "HasUnder");
+				System.out.format("%-9s\t", "IsUnder");
+				System.out.format("%-9s\t", "IsValid");
+				System.out.format("%-9s\t", "IsLast");
+				System.out.format("%-9s\t", "VelOnly");
+				System.out.format("%-9s\t", "Pos");
+				System.out.format("%-9s\t", "Vel");
+				System.out.format("%-9s\t", "Control Mode");
+				//System.out.format("%-9s\t", "Encoder Codes Per Rev");
+				System.out.format("%-9s\t", "F");
+				
+				System.out.format("\n");
 			}
 			/* every loop, print our values */
-//			System.out.format("%-9s\t", status1.topBufferCnt);
-//			System.out.format("%-9s\t", status1.btmBufferCnt);
-//			System.out.format("%-9s\t", StrOutputEnable(status1.outputEnable));
-//			System.out.format("%-9s\t", (status1.hasUnderrun ? "1" : ""));
-//			System.out.format("%-9s\t", (status1.isUnderrun ? "1" : ""));
-//			System.out.format("%-9s\t", (status1.activePointValid ? "1" : ""));
-//			System.out.format("%-9s\t", (status1.activePoint.isLastPoint ? "1" : ""));
-//			System.out.format("%-9s\t", (status1.activePoint.velocityOnly ? "1" : ""));
-//			System.out.format("%-9s\t", round(status1.activePoint.position));
-//			System.out.format("%-9s\t", round(status1.activePoint.velocity));
-//			System.out.format("%-9s\t", talon.getControlMode());
-//			System.out.format("%-9s\t", talon.getF());
-//
-//			System.out.format("\n");
+			System.out.format("%-9s\t", status1.topBufferCnt);
+			System.out.format("%-9s\t", status1.btmBufferCnt);
+			System.out.format("%-9s\t", StrOutputEnable(status1.outputEnable));
+			System.out.format("%-9s\t", (status1.hasUnderrun ? "1" : ""));
+			System.out.format("%-9s\t", (status1.isUnderrun ? "1" : ""));
+			System.out.format("%-9s\t", (status1.activePointValid ? "1" : ""));
+			System.out.format("%-9s\t", (status1.activePoint.isLastPoint ? "1" : ""));
+			System.out.format("%-9s\t", (status1.activePoint.velocityOnly ? "1" : ""));
+			System.out.format("%-9s\t", round(status1.activePoint.position));
+			System.out.format("%-9s\t", round(status1.activePoint.velocity));
+			System.out.format("%-9s\t", talon.getControlMode());
+			System.out.format("%-9s\t", talon.getF());
+
+			System.out.format("\n");
 		}
 	}
 }

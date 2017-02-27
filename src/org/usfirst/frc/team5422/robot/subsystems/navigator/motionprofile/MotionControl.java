@@ -26,10 +26,13 @@ public class MotionControl {
 
 			// We want to stop if the manager thread told us to or if we are out of work to do.
 			talon.getMotionProfileStatus(status);
-			stopNow |= (status.btmBufferCnt == 0 && status.topBufferCnt == 0);
+			//stopNow |= (status.btmBufferCnt == 0 && status.topBufferCnt == 0);
 
+			
+			
 			if (stopNow) {
 				// This may be redundant, but can't hurt
+				System.out.println("++STOPPING FROM RUN++");
 				stopControlThread();
 				return;
 			}
@@ -57,12 +60,14 @@ public class MotionControl {
 		synchronized(this) {
 			stopNotifier = true;
 			notifier.stop();
+			System.out.println("In stopControlThread");
 		}
 	}
 	public void startControlThread() {
 		synchronized(this) {
 			stopNotifier = false;
 			notifier.startPeriodic(0.005);
+			System.out.println("In startControlThread");
 		}
 	}
 	
@@ -90,10 +95,12 @@ public class MotionControl {
 	public void enable() {
 		talon.getMotionProfileStatus(status);
 		SmartDashboard.putNumber("btm buffer cnt: ", status.btmBufferCnt);
-		if(status.btmBufferCnt > 5) {
+		/*if(status.btmBufferCnt > 5) {
 			SmartDashboard.putString("talon enabled:", "");
 			talon.set(1);
-		}
+		}*/
+		
+		talon.set(1);
 	}
 	
 	public void disable() {
