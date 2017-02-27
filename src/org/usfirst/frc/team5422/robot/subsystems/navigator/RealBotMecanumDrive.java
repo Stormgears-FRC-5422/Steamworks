@@ -21,17 +21,17 @@ public class RealBotMecanumDrive extends Drive {
 
 	public RealBotMecanumDrive() {		
 		super();
-		
-		for(int i = 0; i < talons.length; i ++) {			
-			talons[i].reverseOutput(true);
-			talons[i].changeControlMode(TalonControlMode.Speed);
+
+		for (SafeTalon talon : talons) {
+			talon.reverseOutput(true);
+			talon.changeControlMode(TalonControlMode.Speed);
 			//Velocity PID Values
-			talons[i].setPID(RobotDriveConstants.REALBOT_VELOCITY_P, 
-							 RobotDriveConstants.REALBOT_VELOCITY_I, 
-							 RobotDriveConstants.REALBOT_VELOCITY_D);
-			talons[i].setF(RobotDriveConstants.REALBOT_VELOCITY_F);
-			talons[i].setIZone(RobotDriveConstants.REALBOT_VELOCITY_IZONE);	
-			
+			talon.setPID(RobotDriveConstants.REALBOT_VELOCITY_P,
+					RobotDriveConstants.REALBOT_VELOCITY_I,
+					RobotDriveConstants.REALBOT_VELOCITY_D);
+			talon.setF(RobotDriveConstants.REALBOT_VELOCITY_F);
+			talon.setIZone(RobotDriveConstants.REALBOT_VELOCITY_IZONE);
+
 			//Position PID Values
 //			talons[i].setPID(SteamworksConstants.REALBOT_POSITION_P, 
 //							 SteamworksConstants.REALBOT_POSITION_I, 
@@ -43,13 +43,12 @@ public class RealBotMecanumDrive extends Drive {
 	
 	public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile) {
 		if (robotRunMode == RobotModes.AUTONOMOUS) {
-			for(int i = 0; i < talons.length; i ++) {
-				SafeTalon talon = talons[i];
-				talon.reverseOutput(true); 
+			for (SafeTalon talon : talons) {
+				talon.reverseOutput(true);
 				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 				talon.configEncoderCodesPerRev(2048);
 				talon.changeControlMode(TalonControlMode.MotionProfile);
-				
+
 				//MOTION PROFILE PID for talons 0, 1, 3
 				talon.setP(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_P);
 				talon.setI(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_I); //0.0002
@@ -59,16 +58,16 @@ public class RealBotMecanumDrive extends Drive {
 			}
 						
 		} else { //RobotModes.TELEOP
-			for(int i = 0; i < talons.length; i ++) {			
-				talons[i].reverseOutput(true);
-				talons[i].changeControlMode(TalonControlMode.Speed);
+			for (SafeTalon talon : talons) {
+				talon.reverseOutput(true);
+				talon.changeControlMode(TalonControlMode.Speed);
 				//Velocity PID Values
-				talons[i].setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
-						RobotDriveConstants.CLONEBOT_VELOCITY_I, 
+				talon.setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P,
+						RobotDriveConstants.CLONEBOT_VELOCITY_I,
 						RobotDriveConstants.CLONEBOT_VELOCITY_D);
-				talons[i].setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
-				talons[i].setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);	
-				
+				talon.setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
+				talon.setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);
+
 				//Position PID Values
 //				talons[i].setPID(SteamworksConstants.CLONEBOT_POSITION_P, 
 //								 SteamworksConstants.CLONEBOT_POSITION_I, 

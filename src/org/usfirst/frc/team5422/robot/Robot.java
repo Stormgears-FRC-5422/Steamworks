@@ -14,7 +14,6 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Spline;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 //import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager.TurnDetails;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
@@ -39,7 +38,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 	public static RobotModes robotMode =  RobotModes.AUTONOMOUS;
-	public static List<RegisteredNotifier> notifierRegistry = new ArrayList<RegisteredNotifier>();
+	public static List<RegisteredNotifier> notifierRegistry = new ArrayList<>();
 
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
@@ -102,7 +101,7 @@ public class Robot extends IterativeRobot {
 
 		//starts publishing all sensors here
 		
-		ArrayList<Pose> poses = new ArrayList<Pose>();
+		ArrayList<Pose> poses = new ArrayList<>();
 		poses.add(new Pose(0,0,0,0));
 		poses.add(new Pose(0,0.5,0,2));
 		poses.add(new Pose(0,1,0,0));//in meters
@@ -219,7 +218,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAlliance() {
-		allianceSelected = (alliances) dsio.allianceChooser.getSelected();
+		allianceSelected = dsio.allianceChooser.getSelected();
 
 		switch (allianceSelected) {
 			case RED:
@@ -232,11 +231,11 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAutonomousDropOffLocation() {
-		autonomousDropOffLocationSelected = (autonomousDropOffLocationOptions) dsio.autonomousDropOffLocationOptionsChooser.getSelected();
+		autonomousDropOffLocationSelected = dsio.autonomousDropOffLocationOptionsChooser.getSelected();
 	}
 
 	private void selectAutonomousGearPlacement() {
-		autonomousGearPlacementSelected = (autonomousGearPlacementOptions) dsio.autonomousGearPlacementOptionsChooser.getSelected();
+		autonomousGearPlacementSelected = dsio.autonomousGearPlacementOptionsChooser.getSelected();
 	}
 
 	private void selectAutonomousCommand() {
@@ -317,11 +316,11 @@ public class Robot extends IterativeRobot {
 				break;
 		}
 
-		for (int i = 0; i < routeToGear.size(); i++) {
-			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
+		for (Pose aRouteToGear : routeToGear) {
+			System.out.println("X: " + aRouteToGear.x + " Y: " + aRouteToGear.y);
 		}
-		for (int i = 0; i < routeToDropOff.size(); i++) {
-			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
+		for (Pose aRouteToDropOff : routeToDropOff) {
+			System.out.println("X: " + aRouteToDropOff.x + " Y: " + aRouteToDropOff.y);
 		}
 
 		System.out.println("creating autonomous command group");

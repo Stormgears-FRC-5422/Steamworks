@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MotionManager {
-	private List<double[][]> paths = new ArrayList<double[][]>();
-	private List<ProfileDetails> turns = new ArrayList<ProfileDetails>();
+	private List<double[][]> paths = new ArrayList<>();
+	private List<ProfileDetails> turns = new ArrayList<>();
 	private boolean immediate, go = false, interrupt = false;
 	private int batchSize = 256;
 	private int currIndex = 0;
@@ -44,7 +44,7 @@ public class MotionManager {
 
 				if(immediate) {
 					currIndex = 0;
-					for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
+					for (MotionControl control : controls) control.clearMotionProfileTrajectories();
 					//remove all other profiles from the list
 					while(paths.size() > 1) {
 						paths.remove(0);
@@ -54,7 +54,7 @@ public class MotionManager {
 				}
 				
 				if(go) {
-					if(turns.get(0).turn == false) pushLinear();
+					if(!turns.get(0).turn) pushLinear();
 					else pushTurn();
 					// If we have pushed the entire path, remove it and let the next path run on the next time through
 					// this could lead to a short cycle, but that is probably OK since we push points more quickly 
@@ -133,8 +133,8 @@ public class MotionManager {
 		paths.add(pathArray);
 		go = true;
 		notifier.startPeriodic(0.005);
-		for(int i = 0; i < controls.length; i ++) {
-			controls[i].startControlThread();
+		for (MotionControl control : controls) {
+			control.startControlThread();
 			System.out.println("Control started again in pushProfile");
 		}
 	}
@@ -152,8 +152,8 @@ public class MotionManager {
 		paths.add(getTurnProfile(d));
 		go = true;
 		notifier.startPeriodic(0.005);
-		for(int i = 0; i < controls.length; i ++) {
-			controls[i].startControlThread();
+		for (MotionControl control : controls) {
+			control.startControlThread();
 			System.out.println("Control started again profile");
 		}
 	}
@@ -262,20 +262,18 @@ public class MotionManager {
 	}
 	
 	public void startProfile() {
-		for (int i = 0; i < controls.length; i ++) 
-			controls[i].enable();
+		for (MotionControl control : controls) control.enable();
 	}
 	
 	public void endProfile() {
-		for(int i = 0; i < controls.length; i ++) 
-			controls[i].disable();
+		for (MotionControl control : controls) control.disable();
 	}
 	
 	public void shutDownProfiling() {
-		for(int i = 0; i < controls.length; i ++) {
-			controls[i].clearMotionProfileTrajectories();
-			controls[i].clearUnderrun();
-			controls[i].changeControlMode(TalonControlMode.Speed); //may need to be vbus
+		for (MotionControl control : controls) {
+			control.clearMotionProfileTrajectories();
+			control.clearUnderrun();
+			control.changeControlMode(TalonControlMode.Speed); //may need to be vbus
 		}
 	}
 

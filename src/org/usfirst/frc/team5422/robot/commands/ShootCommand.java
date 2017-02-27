@@ -29,8 +29,6 @@ public class ShootCommand extends Command
     {
         if (shooterMode == SteamworksConstants.shooterMode.MANUAL)
             Robot.shooterSubsystem.setShootVelocity(Robot.dsio.getManualShooterVelocity());
-        else
-            ;
 
         Diagnostics.log("shootCommand initializing...");
         shooterThread = new Thread(shooterRunnable);

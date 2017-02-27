@@ -4,9 +4,7 @@ import org.usfirst.frc.team5422.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
-import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 
 import java.util.ArrayList;
 

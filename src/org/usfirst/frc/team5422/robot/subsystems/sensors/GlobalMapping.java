@@ -66,18 +66,15 @@ public class GlobalMapping extends RunnableNotifier{
 	
 	@Override
 	public void run(){
-		
-		synchronized(Navigator.talonLock) {
-			updatePose();
-		}
+		updatePose();
 		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
 		networkPublish(NetworkConstants.GP_Y, y);
 		networkPublish(NetworkConstants.GP_VX, vx);
 		networkPublish(NetworkConstants.GP_VY, vy);
-	};
-	
+	}
+
 	static void resetPose(double X, double Y, double theta){//meters, meters, radians
 		x = X;
 		y = Y;

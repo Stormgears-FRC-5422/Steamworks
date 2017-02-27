@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Spline {
 	
@@ -48,11 +49,7 @@ public class Spline {
 	
 	//constructor
 	public Spline(Pose[] initial_poses){
-		
-		for(int i = 0; i < initial_poses.length; i++){
-			
-			poses.add(initial_poses[i]);
-		}
+		Collections.addAll(poses, initial_poses);
 	}
 	
     //these are the coefficients (a,b,c,d) of the cubic polynomials
