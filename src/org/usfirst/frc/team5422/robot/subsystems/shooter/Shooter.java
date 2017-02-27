@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.shooter;
 
 //import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
-import org.usfirst.frc.team5422.utils.SafeTalon;
+import org.stormgears.StormUtils.SafeTalon;
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.Relay;
