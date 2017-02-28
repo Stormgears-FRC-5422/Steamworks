@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5422.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -16,7 +15,6 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Spline;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
-//import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager.TurnDetails;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
@@ -29,15 +27,10 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacemen
 
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.FRCSampleProfile;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionProfileExample;
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.usfirst.frc.team5422.utils.SafeTalon; 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.*;
 
 public class Robot extends IterativeRobot {
 	// Subsystems
@@ -196,7 +189,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-//		dummyExample();
 		/*
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
@@ -207,76 +199,6 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
-// CLIP HERE---vvv
-// THIS STUFF NEEDS TO GO	
-//	/** The Talon we want to motion profile. */
-//	SafeTalon _talon = Navigator.getInstance().getMecanumDrive().talons[0];
-//
-//	/** some example logic on how one can manage an MP */
-//	MotionProfileExample _example = new MotionProfileExample(_talon);
-//	
-//	/** joystick for testing */
-//	Joystick _joy;//= new Joystick(0);
-//
-//	/** cache last buttons so we can detect press events.  In a command-based project you can leverage the on-press event
-//	 * but for this simple example, lets just do quick compares to prev-btn-states */
-//	boolean [] _btnsLast = {false,false,false,false,false,false,false,false,false,false};
-//
-//	boolean [] btns= new boolean [_btnsLast.length];
-//	
-//	/**  function is called periodically during operator control */
-//    public void dummyExample() {
-//		/* get buttons */
-//    	
-//		for(int i=1;i<_btnsLast.length;++i)
-//			btns[i] = _joy.getRawButton(i);
-//
-//		/* get the left joystick axis on Logitech Gampead */
-//		double leftYjoystick = -1 * _joy.getY(); /* multiple by -1 so joystick forward is positive */
-//
-//		/* call this periodically, and catch the output.  Only apply it if user wants to run MP. */
-//		_example.control();
-//		btns[5] = true;
-//		btns[6] = true;
-//		
-//		if (btns[5] == false) { /* Check button 5 (top left shoulder on the logitech gamead). */
-//			/*
-//			 * If it's not being pressed, just do a simple drive.  This
-//			 * could be a RobotDrive class or custom drivetrain logic.
-//			 * The point is we want the switch in and out of MP Control mode.*/
-//		
-//			/* button5 is off so straight drive */
-//			_talon.changeControlMode(TalonControlMode.Voltage);
-//			_talon.set(12.0 * leftYjoystick);
-//
-//			_example.reset();
-//		} else {
-//			/* Button5 is held down so switch to motion profile control mode => This is done in MotionProfileControl.
-//			 * When we transition from no-press to press,
-//			 * pass a "true" once to MotionProfileControl.
-//			 */
-//			_talon.changeControlMode(TalonControlMode.MotionProfile);
-//			
-//			CANTalon.SetValueMotionProfile setOutput = _example.getSetValue();
-//					
-//			_talon.set(setOutput.value);
-//
-//			/* if btn is pressed and was not pressed last time,
-//			 * In other words we just detected the on-press event.
-//			 * This will signal the robot to start a MP */
-//			if( (btns[6] == true) && (_btnsLast[6] == false) ) {
-//				/* user just tapped button 6 */
-//				_example.startMotionProfile();
-//			}
-//		}
-//
-//		/* save buttons states for on-press detection */
-//		for(int i=1;i<10;++i)
-//			_btnsLast[i] = btns[i];
-//
-//	}
-//// THIS STUFF NEEDS TO GO	
-//// CLIP HERE---^^^
 	
 	
 	public void teleopPeriodic() {
