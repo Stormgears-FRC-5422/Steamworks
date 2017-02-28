@@ -35,10 +35,9 @@ public class SensorManager {
 		vision = new Vision();
 //		shootingSensors = new ShootingSensors();
 		
-		globalMappingNotifier = new RegisteredNotifier(globalMapping);
-		visionNotifier = new RegisteredNotifier(vision);
-		stormNetNotifier = new RegisteredNotifier(stormNet);
-		
+		globalMappingNotifier = new RegisteredNotifier(globalMapping, "GlobalMapping");
+		visionNotifier = new RegisteredNotifier(vision, "Vision");
+		stormNetNotifier = new RegisteredNotifier(stormNet, "StormNet");
 		
 		_isInitiated = true;
 	}

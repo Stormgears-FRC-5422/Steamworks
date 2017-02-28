@@ -61,7 +61,7 @@ public class Instrumentation {
 	public static void process(CANTalon.MotionProfileStatus status1, SafeTalon talon) {
 		double now = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
-		if((now-timeout) > 0.2){
+		if((now-timeout) > 0.1){
 			timeout = now;
 			/* fire a loop every 200ms */
 
