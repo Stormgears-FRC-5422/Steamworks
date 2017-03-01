@@ -18,13 +18,14 @@ public class MotionManager {
 	private boolean loading = false, interrupt = false;
 	private int batchSize = 256;
 	private int currIndex = 0;
-	private MotionControl [] controls;
+	private MotionControl control;
+	private int numTalons;
 	private static Instrumentation instrumentation;
 	
 	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable(), "MotionManager");
 	private final double [][] table = generateTable();
 	private static final double deltaT = 0.01/60;
-	private static final double scale = 500f/Math.PI;
+	private static final double scale = 500d/Math.PI;
 	// TODO - make 1000 and 500 not magic numbers
 	
 	private boolean isLoaded = false;
@@ -43,16 +44,14 @@ public class MotionManager {
 //				System.out.println("there are " + paths.size() + " paths");
 //				System.out.println("currIndex = " + currIndex);
 				
-				for (MotionControl c : controls) {
-					instrumentation.process(c.status, c.talon);
+				for (int i = 0; i < control.talons.length; i++) {
+					Instrumentation.process(control.statuses[i], control.talons[i]);
 				}	
 
 				
 				if (isLoaded) {
 //					System.out.println("Ready to react to loaded buffers");
-					for (MotionControl c : controls) {
-						c.enable();
-					}	
+					control.enable();
 				}
 				
 				if (loading == false) return;
@@ -73,7 +72,7 @@ public class MotionManager {
 				// If the last profile was marked "immediate" we need to abandon the current path and clean up
 				if(interrupt) {
 					currIndex = 0;
-					for(int i = 0; i < controls.length; i ++) controls[i].clearMotionProfileTrajectories();
+					control.clearMotionProfileTrajectories();
 					//remove all other profiles from the list except the most recent one
 					while(paths.size() > 1) {
 						paths.remove(0);
@@ -108,9 +107,8 @@ public class MotionManager {
 	}
 	
 	public MotionManager(SafeTalon [] talons) {
-		controls = new MotionControl[talons.length];
-		for(int i = 0; i < controls.length; i ++) 
-			controls[i] = new MotionControl(talons[i]);
+		control = new MotionControl(talons);
+		numTalons = talons.length;
 	}	
 	
 	/*
@@ -140,9 +138,7 @@ public class MotionManager {
 
 //		System.out.println("Starting controlThreads in pushProfile");
 		notifier.startPeriodic(0.05);  // pushing batchsize points at a time
-		for (MotionControl c : controls) {
-			c.startControlThread();
-		}	
+		control.startControlThread();
 	}
 	
 	public synchronized void pushTurn(double theta, boolean immediate, boolean done) {
@@ -157,10 +153,8 @@ public class MotionManager {
 		loading = true;
 
 //		System.out.println("Starting controlThreads in pushTurn");
-		notifier.startPeriodic(0.1);
-		for (MotionControl c : controls) {
-			c.startControlThread();;
-		}	
+		notifier.startPeriodic(0.05);
+		control.startControlThread();
 	}
 	
 	/*
@@ -201,7 +195,7 @@ public class MotionManager {
 			
 			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
 			
-			for(int j = 0; j < controls.length; j ++) {
+			for(int j = 0; j < numTalons; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
 				pt.velocityOnly = false;
@@ -211,8 +205,8 @@ public class MotionManager {
 				else if((j == 1 || j == 3) && !direc) pt.velocity = -pt.velocity;
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j];
-				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));
-				controls[j].pushMotionProfileTrajectory(pt);
+				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
+				control.pushMotionProfileTrajectory(j, pt);
 			}
 		}
 		
@@ -241,7 +235,7 @@ public class MotionManager {
 			
 			//System.out.println("i is " + i + ", pathArray[i][1] is " + pathArray[i][1] + ", colIndex is " + colIndex);
 
-			for(int j = 0; j < controls.length; j ++) {
+			for(int j = 0; j < numTalons; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
 				pt.velocityOnly = false;
@@ -250,8 +244,8 @@ public class MotionManager {
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j]; 
 				// TODO - probably want the commented setting, but need to test it.
- 				pt.isLastPoint = false; //(done && ( (i + 1) == pathArray.length));
-				controls[j].pushMotionProfileTrajectory(pt);
+ 				pt.isLastPoint = false; //(done && ( (i + 1) == pathArray.length));  //TODO
+				control.pushMotionProfileTrajectory(j, pt);
 			}
 		}
 
@@ -264,21 +258,15 @@ public class MotionManager {
 	}
 	
 	public void startProfile() {
-		for (int i = 0; i < controls.length; i ++) 
-			controls[i].enable();
+		control.enable();
 	}
 	
 	public void endProfile() {
-		for(int i = 0; i < controls.length; i ++) 
-			controls[i].disable();
+		control.disable();
 	}
 	
 	public void shutDownProfiling() {
-		for(int i = 0; i < controls.length; i ++) {
-			controls[i].clearMotionProfileTrajectories();
-			controls[i].clearUnderrun();
-			controls[i].changeControlMode(TalonControlMode.Speed); //may need to be vbus
-		}
+		control.shutDownProfiling();
 	}
 
 	public double getRobotRPM() {
@@ -298,9 +286,9 @@ public class MotionManager {
 	}
 	
 	private int[] getEncVels() {
-		int[] vels = new int[controls.length];
-		for(int i = 0; i < controls.length; i ++) {
-			vels[i] = controls[i].getEncVel();
+		int[] vels = new int[numTalons];
+		for(int i = 0; i < numTalons ; i ++) {
+			vels[i] = control.getEncVel(i);
 		}
 		return vels;
 	}
