@@ -14,7 +14,7 @@ public class SteamworksConstants
 
 	// StormNet IDs
 	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 8;
-	public static int NUMBER_OF_STORMNET_ULTRASONIC_SENSORS = 4; // most are currently ignored
+	public static int NUMBER_OF_STORMNET_ULTRASONIC_SENSORS = 2; // most are currently ignored
 
 	public static int STORMNET_IR_ARDUINO_ADDRESS = 11;
 	public static int NUMBER_OF_STORMNET_IRSENSOR = 1;
