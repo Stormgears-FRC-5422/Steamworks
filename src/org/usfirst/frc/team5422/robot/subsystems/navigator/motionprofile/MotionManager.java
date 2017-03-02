@@ -205,7 +205,7 @@ public class MotionManager {
 				else if((j == 1 || j == 3) && !direc) pt.velocity = -pt.velocity;
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j];
-				pt.isLastPoint = (done && (i + 1 == pathArray.length));
+				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
 				control.pushMotionProfileTrajectory(j, pt);
 			}
 		}
@@ -243,7 +243,8 @@ public class MotionManager {
 				pt.velocity = pathArray[i][0] * table[j][colIndex];
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j]; 
- 				pt.isLastPoint = (done && ( (i + 1) == pathArray.length));
+				// TODO - probably want the commented setting, but need to test it.
+ 				pt.isLastPoint = false; //(done && ( (i + 1) == pathArray.length));  //TODO
 				control.pushMotionProfileTrajectory(j, pt);
 			}
 		}
