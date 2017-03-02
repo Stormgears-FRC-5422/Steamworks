@@ -14,6 +14,10 @@ public class MotionControl {
 	private boolean stopNotifier = false;	
 	public SafeTalon[] talons;
 	public CANTalon.MotionProfileStatus[] statuses = new CANTalon.MotionProfileStatus[4];
+	private int pointCount = 0;
+	private boolean isLastPoint = false;
+	
+	
 	
 	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable(), "MotionControl");
 	
@@ -25,16 +29,18 @@ public class MotionControl {
 //			talon.getMotionProfileStatus(status);
 //			System.out.println(talon.getDeviceID() + ": Before - top: " + status.topBufferCnt + " , bottom: " + status.btmBufferCnt);
 
-// DARREN THINKS WE NEED THIS, but let's not add it until this are working 
-//			synchronized(this) { 
-//				if (stopNotifier) return; 
-//			}			
+			synchronized(this) { 
+				if (stopNotifier) return; 
 
-			for (SafeTalon t : talons) {
-				t.clearMotionProfileHasUnderrun();
-				t.processMotionProfileBuffer();
-	    	}
-			
+				if (pointCount > 0) {
+					for (SafeTalon t : talons) {
+						t.clearMotionProfileHasUnderrun();
+						t.processMotionProfileBuffer();
+					}
+				}
+				// out of points.  Nothing to do now
+				if (pointCount-- == 0 && isLastPoint) stopNotifier = true;
+			}
 		}
 	}
 	    
@@ -87,7 +93,18 @@ public class MotionControl {
 	}
 	
 	// wrapper functions for talon
-	public boolean pushMotionProfileTrajectory(int talonIndex, TrajectoryPoint pt) { return talons[talonIndex].pushMotionProfileTrajectory(pt); }
+	public boolean pushMotionProfileTrajectory(int talonIndex, TrajectoryPoint pt) { 
+		// We are assuming that we are always getting all talons at the same time.  
+		// As long as we aren't ever more than one point behind on any talon this works fine 
+		synchronized(this) { 
+			isLastPoint = false;  // most points
+			if (talonIndex == talons.length) {
+				pointCount++;
+				isLastPoint = pt.isLastPoint;
+			}
+		}
+		return talons[talonIndex].pushMotionProfileTrajectory(pt); 
+	}
 	
 	public void clearMotionProfileTrajectories(int talonIndex) { talons[talonIndex].clearMotionProfileTrajectories(); }
 

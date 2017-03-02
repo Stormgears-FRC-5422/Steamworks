@@ -14,6 +14,12 @@ public class LightSensor extends StormgearsI2CSensor {
 	}
 	
 	// generic command 
+	// e.g. turn ring light off
+	//ID - NEOPIXEL_SEGMENTID
+	//MODE - BEHAVIOR - ONLY ONE BEHAVIOR = 1 (All on or off) instead of flickering different LEDs in the neopixel
+	//COLOR - 0-OFF, 1-RED, 2-GREEN, 3-BLUE,  ... (this depends on the mode, in our case Behavior =1)
+	//BRIGHTNESS - 0(darkest) - 255 (brightest)
+
 	void pushCommand(int id, int mode, int arg1, int arg2) {
 		// L[id, mode, arg1, arg2]
 		lightCommand[1] = (byte)id;
