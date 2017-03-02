@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision extends RunnableNotifier {
 
-	private static LightSensor lightSensor;
+	//private static LightSensor lightSensor;
+	private static USSensor usSensor;
+	
 	//TODO: change this to the actual Grip contours report 
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	//TODO: change this to the actual Shooter contours report	
@@ -20,7 +22,8 @@ public class Vision extends RunnableNotifier {
 	public Vision() {
 		super(NetworkConstants.VISION, 0.001);
 		System.out.println("Vision system constructed");
-		lightSensor = new LightSensor(SteamworksConstants.STORMNET_LIGHTS_ARDUINO_ADDRESS);
+		//lightSensor = new LightSensor(SteamworksConstants.STORMNET_LIGHTS_ARDUINO_ADDRESS);
+		usSensor = new USSensor(SteamworksConstants.STORMNET_ULTRASONIC_ARDUINO_ADDRESS, SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS);
 	}
 
 	@Override
@@ -29,24 +32,13 @@ public class Vision extends RunnableNotifier {
 	}
 	
 	public static void turnOffLights() {
-		//ID - NEOPIXEL_SEGMENTID
-		//MODE - BEHAVIOR - ONLY ONE BEHAVIOR = 1 (All on or off) instead of flickering different LEDs in the neopixel
-		//COLOR - 0-OFF, 1-RED, 2-GREEN, 3-BLUE,  ... (this depends on the mode, in our case Behavior =1)
-		//BRIGHTNESS - 0(darkest) - 255 (brightest)
-
-		// Turn ring light off
-		lightSensor.pushCommand(1, 1, 0, 0);
+		usSensor.lightGearRing(false);
+		usSensor.lightShooterRing(false);
 	}
 	
-	public void turnOnLights() {
-		// Turn ring light off
-		//ID - NEOPIXEL_SEGMENTID
-		//MODE - BEHAVIOR - ONLY ONE BEHAVIOR = 1 (All on or off) instead of flickering different LEDs in the neopixel
-		//COLOR - 0-OFF, 1-RED, 2-GREEN, 3-BLUE,  ... (this depends on the mode, in our case Behavior =1)
-		//BRIGHTNESS - 0(darkest) - 255 (brightest)
-
-		// Turn ring light on, green, brightness 128
-		lightSensor.pushCommand(1, 1, 2, 128);
+	public static void turnOnLights() {
+		usSensor.lightGearRing(true);
+		usSensor.lightShooterRing(true);
 	}
 	
 	public void getVisionCoordinatesFromNetworkTable() { 
@@ -54,8 +46,7 @@ public class Vision extends RunnableNotifier {
 		double [] defaultYArray = new double[0];
 		
 		double [] centerX = visionTable.getNumberArray(NetworkConstants.CENTER_X, defaultXArray);
-		double [] centerY = visionTable.getNumberArray(NetworkConstants.CENTER_Y, defaultYArray);
-		
+		double [] centerY = visionTable.getNumberArray(NetworkConstants.CENTER_Y, defaultYArray);		
 	}
 
 	private double getCenterX(int index) {
