@@ -16,7 +16,7 @@ public class MotionManager {
 	private List<double[][]> paths = new ArrayList<double[][]>();
 	private List<ProfileDetails> profileDetails = new ArrayList<ProfileDetails>();
 	private boolean loading = false, interrupt = false;
-	private int batchSize = 256;
+	private int batchSize = 256 * 4;
 	private int currIndex = 0;
 	private MotionControl control;
 	private int numTalons;
@@ -43,6 +43,15 @@ public class MotionManager {
 //				System.out.println("In MotionManager run. INT = " + interrupt + " loading = " + loading + " isLoaded = " + isLoaded);
 //				System.out.println("there are " + paths.size() + " paths");
 //				System.out.println("currIndex = " + currIndex);
+				SmartDashboard.putNumber("Val 0: ", control.getEncVel(0));
+				SmartDashboard.putNumber("Val 1: ", control.getEncVel(1));
+				SmartDashboard.putNumber("Val 2: ", control.getEncVel(2));
+				SmartDashboard.putNumber("Val 3: ", control.getEncVel(3));
+				
+				SmartDashboard.putNumber("Pos 0: ", control.getEncPos(0));
+				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
+				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
+				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
 				
 				for (int i = 0; i < control.talons.length; i++) {
 					Instrumentation.process(control.statuses[i], control.talons[i]);
@@ -205,7 +214,9 @@ public class MotionManager {
 				else if((j == 1 || j == 3) && !direc) pt.velocity = -pt.velocity;
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j];
-				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
+				System.out.println("PT POS: " + pt.position);
+				System.out.println("ZERO PT: " + pt.zeroPos + "\n");
+ 				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
 				control.pushMotionProfileTrajectory(j, pt);
 			}
 		}

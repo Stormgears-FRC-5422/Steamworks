@@ -68,7 +68,7 @@ public class Instrumentation {
 			if(--count <= 0){
 				count = 8;
 				/* every 8 loops, print our columns */
-				
+			
 				System.out.format("%-9s\t", "topCnt");
 				System.out.format("%-9s\t", "btmCnt");
 				System.out.format("%-9s\t", "set val");

@@ -1,9 +1,7 @@
 package org.usfirst.frc.team5422.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
@@ -13,11 +11,13 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.Spline;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.FRCSampleProfile;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
+import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
@@ -25,12 +25,10 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.FRCSampleProfile;
-import org.usfirst.frc.team5422.utils.RegisteredNotifier;
-
-import java.util.ArrayList;
-import java.util.List;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Robot extends IterativeRobot {
 	// Subsystems
@@ -100,13 +98,14 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+		Vision.turnOffLights();
 
-		//initializing the Robot for motionprofile mode
+		//initializing the Robot for motion profile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 		MotionManager m = Navigator.motionManager;
 		
 		// Test profile.  Keep this around somewhere
-		m.pushProfile(FRCSampleProfile.transform(), true, true);
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10, 60, Math.PI/2, 0), true, true);
 		
 		//starts publishing all sensors here
 		
@@ -163,7 +162,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("teleop init started.");
 		//Robot in Teleop Mode
 		robotMode = RobotModes.TELEOP;
-		Vision.turnOffLights();
+		Vision.turnOnLights();
 		
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 

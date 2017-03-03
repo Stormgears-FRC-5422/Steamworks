@@ -93,6 +93,7 @@ public class MotionControl {
 
 	public int getEncVel(int talonIndex) { return talons[talonIndex].getEncVelocity();	}
 
+	public int getEncPos(int talonIndex) {	return talons[talonIndex].getEncPosition();}
 	//TODO: add in some edge case error checking
 	public void enable() {
 		int i = 0;

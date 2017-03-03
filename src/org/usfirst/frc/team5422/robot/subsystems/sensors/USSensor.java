@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.I2C;
 
 public class USSensor extends StormgearsI2CSensor {
 	private byte[] sensorValues;
-	private byte[] lightValues = new byte[0];
+	private byte[] lightValues = new byte[2];
 	
 	USSensor(int deviceAddress, int numSensors) {
 		super(I2C.Port.kOnboard, deviceAddress);
@@ -12,12 +12,12 @@ public class USSensor extends StormgearsI2CSensor {
 		sensorValues = new byte[numSensors];		
 	}
 
-	public void pollDistance() {
+	public synchronized void pollDistance() {
 		fetchBytes("U", "Ultrasonic", sensorValues);	
 	}
 	
 	// Distance in inches
-	public int getDistance(int sensorNumber) {
+	public synchronized int getDistance(int sensorNumber) {
 		return (0xFF & sensorValues[sensorNumber]); // Java wants bytes to be signed.  We want unsigned value
 	}
 	
@@ -26,14 +26,14 @@ public class USSensor extends StormgearsI2CSensor {
 	final static String MODE_SHOOTER_RING_ON = "3";
 	final static String MODE_SHOOTER_RING_OFF = "4";
 
-	public void lightGearRing(boolean lightOn) {
+	public synchronized void lightGearRing(boolean lightOn) {
 		if(lightOn)
 			fetchBytes(MODE_GEAR_RING_ON, "GearRingOn", lightValues);
 		else
 			fetchBytes(MODE_GEAR_RING_OFF, "GearRingOff", lightValues);
 	}
 	
-	public void lightShooterRing(boolean lightOn) {
+	public synchronized void lightShooterRing(boolean lightOn) {
 		if(lightOn)
 			fetchBytes(MODE_SHOOTER_RING_ON, "ShooterRingOn", lightValues);
 		else
