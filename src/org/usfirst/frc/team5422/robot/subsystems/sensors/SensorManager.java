@@ -38,8 +38,10 @@ public class SensorManager {
 		globalMappingNotifier = new RegisteredNotifier(globalMapping, "GlobalMapping");
 		visionNotifier = new RegisteredNotifier(vision, "Vision");
 		stormNetNotifier = new RegisteredNotifier(stormNet, "StormNet");
-		
+				
 		_isInitiated = true;
+		
+		
 	}
 	
 	public static void startPublishingToNetwork(){

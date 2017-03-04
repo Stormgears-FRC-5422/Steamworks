@@ -25,6 +25,7 @@ public class Vision extends RunnableNotifier {
 		//lightSensor = new LightSensor(SteamworksConstants.STORMNET_LIGHTS_ARDUINO_ADDRESS);
 		usSensor = new USSensor(SteamworksConstants.STORMNET_ULTRASONIC_ARDUINO_ADDRESS, SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS);
 		usSensor.setDebug(true);
+		usSensor.ping(); // say hello
 	}
 
 	@Override
