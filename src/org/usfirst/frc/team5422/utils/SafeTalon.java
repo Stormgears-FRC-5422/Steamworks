@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5422.utils;
 
 import com.ctre.CANTalon;
-import com.ctre.CanTalonJNI;
 import com.ctre.GadgeteerUartClient;
 import edu.wpi.first.wpilibj.tables.ITable;
 
@@ -209,10 +208,6 @@ public class SafeTalon extends CANTalon {
     public synchronized void configPeakOutputVoltage(double forwardVoltage, double reverseVoltage) { super.configPeakOutputVoltage(forwardVoltage, reverseVoltage); }
 
     public synchronized void configNominalOutputVoltage(double forwardVoltage, double reverseVoltage) { super.configNominalOutputVoltage(forwardVoltage, reverseVoltage); }
-
-    public synchronized void setParameter(CanTalonJNI.param_t paramEnum, double value) { super.setParameter(paramEnum, value); }
-
-    public synchronized double getParameter(CanTalonJNI.param_t paramEnum) { return super.getParameter(paramEnum); }
 
     public synchronized void clearStickyFaults() { super.clearStickyFaults(); }
 
