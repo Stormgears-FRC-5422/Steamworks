@@ -105,7 +105,7 @@ public class Robot extends IterativeRobot {
 		MotionManager m = Navigator.motionManager;
 		
 		// Test profile.  Keep this around somewhere
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10, 60, Math.PI/2, 0), true, true);
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10, 60, 3*Math.PI/2, 0), true, true);
 		
 		//starts publishing all sensors here
 		

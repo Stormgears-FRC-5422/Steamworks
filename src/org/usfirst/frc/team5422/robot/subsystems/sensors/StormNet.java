@@ -19,6 +19,8 @@ public class StormNet extends RunnableNotifier{
 		irSensor =  new IRSensor(SteamworksConstants.STORMNET_IR_ARDUINO_ADDRESS, SteamworksConstants.NUMBER_OF_STORMNET_IRSENSOR);
 		irSensor.setDebug(true);
 		irSensor.ping(); // say hello
+		usSensor.setDebug(false);
+		irSensor.setDebug(false);
 	}
 	
 	@Override

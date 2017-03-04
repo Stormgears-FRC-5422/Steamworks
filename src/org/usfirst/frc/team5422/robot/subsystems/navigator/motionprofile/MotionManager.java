@@ -54,7 +54,7 @@ public class MotionManager {
 				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
 				
 				for (int i = 0; i < control.talons.length; i++) {
-					Instrumentation.process(control.statuses[i], control.talons[i]);
+				//	Instrumentation.process(control.statuses[i], control.talons[i]);
 				}	
 
 				
