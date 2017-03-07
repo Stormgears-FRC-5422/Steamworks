@@ -35,18 +35,19 @@ public class SensorManager {
 		vision = new Vision();
 //		shootingSensors = new ShootingSensors();
 
-		globalMappingNotifier = new RegisteredNotifier(globalMapping);
-		visionNotifier = new RegisteredNotifier(vision);
-		stormNetNotifier = new RegisteredNotifier(stormNet);
-
-
+		globalMappingNotifier = new RegisteredNotifier(globalMapping, "GlobalMapping");
+		visionNotifier = new RegisteredNotifier(vision, "Vision");
+		stormNetNotifier = new RegisteredNotifier(stormNet, "StormNet");
+				
 		_isInitiated = true;
+
+
 	}
 
 	public static void startPublishingToNetwork() {
-		globalMappingNotifier.startPeriodic(0.01);
-		stormNetNotifier.startPeriodic(0.01);
-		visionNotifier.startPeriodic(0.01);
+		globalMappingNotifier.startPeriodic(0.1);
+		stormNetNotifier.startPeriodic(0.1);
+		visionNotifier.startPeriodic(0.1);
 //		shootingSensors.start();
 
 		_isPublishing = true;

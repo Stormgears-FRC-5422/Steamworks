@@ -10,7 +10,7 @@ public class TestSensor extends StormgearsI2CSensor {
 	}
 
 	public void test() {
-		log("Test returned " + (ping() ? "true" : "false"));
+//		log("Test returned " + (ping() ? "true" : "false") );
 	}
 }
 

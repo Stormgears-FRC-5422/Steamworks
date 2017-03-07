@@ -1,14 +1,19 @@
 package org.usfirst.frc.team5422.robot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import java.util.ArrayList;
+import java.util.List;
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.*;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.FRCSampleProfile;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
@@ -20,10 +25,11 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-//import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager.TurnDetails;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 	// Subsystems
@@ -49,7 +55,7 @@ public class Robot extends IterativeRobot {
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = Navigator.getInstance();
 		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
-		gearManipulatorSubsystem = new Manipulator();
+ 		gearManipulatorSubsystem = new Manipulator();
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 
 		if (!SensorManager.isInitiated()) {
@@ -58,7 +64,6 @@ public class Robot extends IterativeRobot {
 		if (!SensorManager.isPublishing()) {
 			SensorManager.startPublishingToNetwork();
 		}
-
 	}
 
 	public static Shooter getShooterSubsystem() {
@@ -87,26 +92,32 @@ public class Robot extends IterativeRobot {
 
 	public void robotInit() {
 		System.out.println("robot init started.");
-
-
 	}
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+		Vision.turnOnLights();
 
+		//initializing the Robot for motion profile mode
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
+		MotionManager m = Navigator.motionManager;
+		
+		  // Test profile.  Keep this around somewhere
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(76/6.0/Math.PI, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+		
 		//starts publishing all sensors here
-
-		ArrayList<Pose> poses = new ArrayList<>();
-		poses.add(new Pose(0, 0, 0, 0));
-		poses.add(new Pose(0, 0.5, 0, 2));
-		poses.add(new Pose(0, 1, 0, 0));//in meters
-
+		
+/*		ArrayList<Pose> poses = new ArrayList<Pose>();
+		poses.add(new Pose(0,0,0,0));
+		poses.add(new Pose(0,0.5,0,2));
+		poses.add(new Pose(0,1,0,0));//in meters
+		
 		Spline spline = new Spline(poses);
 
 		System.out.println("started spline");
 		Navigator.driveSplineMeters(spline);
 		System.out.println("finished following spline");
-
+*/
 		//Robot in Autonomous mode
 		
 		/*ArrayList<Pose> poses = new ArrayList<Pose>();
@@ -148,7 +159,8 @@ public class Robot extends IterativeRobot {
 		System.out.println("teleop init started.");
 		//Robot in Teleop Mode
 		robotMode = RobotModes.TELEOP;
-		Vision.turnOffLights();
+		
+		Vision.turnOnLights();
 
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY);
@@ -165,16 +177,19 @@ public class Robot extends IterativeRobot {
 			SensorManager.stopPublishingToNetwork();
 		}
 
-		Navigator.motionManager.endProfile();
+		Vision.turnOffLights();
+		
+		//Navigator.motionManager.endProfile();
 
 		// shut down all notifiers.  This is a bit aggressive
 		for (RegisteredNotifier r : notifierRegistry) {
 			r.stop();
 		}
+		
+		
 	}
 
 	public void autonomousPeriodic() {
-		
 		/*
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
@@ -185,15 +200,21 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
+	
+	
 	public void teleopPeriodic() {
-
-
-		Navigator.getInstance();
+	//	robotMode = RobotModes.TELEOP;
+		//Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
+	//	Navigator.getInstance();
 		//Move the MecanumDrive
 		Navigator.getMecanumDrive().move();
-
 		dsio.checkSwitches();
 
+		SmartDashboard.putNumber("0 POS: " ,Drive.talons[0].getEncPosition());
+		SmartDashboard.putNumber("0 VEL: ", Drive.talons[0].getEncVelocity());
+		
+		SmartDashboard.putNumber("1 POS: " ,Drive.talons[1].getEncPosition());
+		SmartDashboard.putNumber("1 VEL: ", Drive.talons[1].getEncVelocity());
 		//Run WPILib commands
 		Scheduler.getInstance().run();
 

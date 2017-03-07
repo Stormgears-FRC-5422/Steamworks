@@ -4,22 +4,10 @@ import edu.wpi.first.wpilibj.Notifier;
 import org.usfirst.frc.team5422.robot.Robot;
 
 public class RegisteredNotifier extends Notifier {
-
 	private String name;
 
 	public RegisteredNotifier(Runnable run) {
-		super(run);
-		synchronized (Robot.notifierRegistry) {
-			Robot.notifierRegistry.add(this);
-		}
-
-		this.name = "Unnamed";
-
-		if (run == null) {
-			System.out.println(name + " IS NULL");
-		} else {
-			System.out.println(name + " IS NOT NULL");
-		}
+		this(run,"Unnamed");
 	}
 
 	public RegisteredNotifier(Runnable run, String name) {
@@ -31,9 +19,9 @@ public class RegisteredNotifier extends Notifier {
 		this.name = name;
 
 		if (run == null) {
-			System.out.println(name + " IS NULL");
+			System.out.println(name + " runnable IS NULL");
 		} else {
-			System.out.println(name + " IS NOT NULL");
+			System.out.println(name + " runnable IS NOT NULL");
 		}
 
 	}

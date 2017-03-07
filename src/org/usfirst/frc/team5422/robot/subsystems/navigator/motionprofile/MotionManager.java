@@ -1,4 +1,5 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Instrumentation;
 
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
@@ -7,21 +8,29 @@ import org.stormgears.StormUtils.SafeTalon;
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 //import com.ctre.CANTalon;
 
 public class MotionManager {
-	private List<double[][]> paths = new ArrayList<>();
-	private List<ProfileDetails> turns = new ArrayList<>();
-	private boolean immediate, go = false, interrupt = false;
-	private int batchSize = 256;
+	private List<double[][]> paths = new ArrayList<double[][]>();
+	private List<ProfileDetails> profileDetails = new ArrayList<ProfileDetails>();
+	private boolean loading = false, interrupt = false;
+	private int batchSize = 256 * 4;
 	private int currIndex = 0;
-	private MotionControl[] controls;
-
-	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable());
-	private final double[][] table = generateTable();
-
+	private MotionControl control;
+	private int numTalons;
+	private static Instrumentation instrumentation;
+	
+	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable(), "MotionManager");
+	private final double [][] table = generateTable();
+	private static final double deltaT = 0.01/60;
+	private static final double scale = 500d/Math.PI;
+	// TODO - make 1000 and 500 not magic numbers
+	
+	private boolean isLoaded = false;
+	
 	class PeriodicRunnable implements java.lang.Runnable {
 
 		// The job of this thread is to push data into the top api buffer.
@@ -29,42 +38,70 @@ public class MotionManager {
 		// from more than one path in a single pass)
 		public void run() {
 			// synchronize to avoid MT conflicts with the input of profiles
+			
 			// called from synchronized methods - which effectively sync(this)
 			synchronized (this) {
+//				System.out.println("In MotionManager run. INT = " + interrupt + " loading = " + loading + " isLoaded = " + isLoaded);
+//				System.out.println("there are " + paths.size() + " paths");
+//				System.out.println("currIndex = " + currIndex);
+//				SmartDashboard.putNumber("Val 0: ", control.getEncVel(0));
+//				SmartDashboard.putNumber("Val 1: ", control.getEncVel(1));
+				SmartDashboard.putNumber("Val 2: ", control.getEncVel(2));
+//				SmartDashboard.putNumber("Val 3: ", control.getEncVel(3));
+				
+//				SmartDashboard.putNumber("Pos 0: ", control.getEncPos(0));
+//				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
+				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
+//				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
+				
+				for (int i = 0; i < control.talons.length; i++) {
+				//	Instrumentation.process(control.statuses[i], control.talons[i]);
+				}	
+
+				
+				if (isLoaded) {
+//					System.out.println("Ready to react to loaded buffers");
+					control.enable();
+				}
+				
+				if (loading == false) return;
+
 				// Are we done?
-				if (paths.isEmpty()) {
+				if(paths.isEmpty()) {  // TODO: need a more elegant stop condition??
+//					System.out.println("Stop pushing points because paths are loaded. loading is " + loading);
 //					for(int i = 0; i < controls.length; i ++) {
 //						controls[i].stopControlThread();
 //					}
-					notifier.stop();
-					go = false;
-					System.out.println("Stopped pushing points because paths are done.");
+//					notifier.stop();
+					loading = false;
+					isLoaded = true;
 					// anything else? disable talons?
 					return;
 				}
 
-				if (immediate) {
+				// If the last profile was marked "immediate" we need to abandon the current path and clean up
+				if(interrupt) {
 					currIndex = 0;
-					for (MotionControl control : controls) control.clearMotionProfileTrajectories();
-					//remove all other profiles from the list
-					while (paths.size() > 1) {
+					control.clearMotionProfileTrajectories();
+					//remove all other profiles from the list except the most recent one
+					while(paths.size() > 1) {
 						paths.remove(0);
-						turns.remove(0);
+						profileDetails.remove(0);
 					}
-					immediate = false;
+					interrupt = false;
 				}
-
-				if (go) {
-					if (!turns.get(0).turn) pushLinear();
-					else pushTurn();
-					// If we have pushed the entire path, remove it and let the next path run on the next time through
-					// this could lead to a short cycle, but that is probably OK since we push points more quickly 
-					// than they can run anyway.
-					if (currIndex >= paths.get(0).length) {
-						currIndex = 0;
-						paths.remove(0);
-						turns.remove(0);
-					}
+				
+				// Push the next section
+				if(profileDetails.get(0).turn == true) pushTurn();
+				else pushLinear();
+				
+				// If we have pushed the entire path, remove it and let the next path run on the next time through
+				// this could lead to a short cycle, but that is probably OK since we push points more quickly 
+				// than they can run anyway.
+				if(currIndex >= paths.get(0).length) {
+					currIndex = 0;
+					paths.remove(0);
+					profileDetails.remove(0);
 				}
 			}
 		}
@@ -78,11 +115,10 @@ public class MotionManager {
 		boolean direction;
 		boolean done;
 	}
-
-	public MotionManager(SafeTalon[] talons) {
-		controls = new MotionControl[talons.length];
-		for (int i = 0; i < controls.length; i++)
-			controls[i] = new MotionControl(talons[i]);
+	
+	public MotionManager(SafeTalon [] talons) {
+		control = new MotionControl(talons);
+		numTalons = talons.length;
 	}	
 	
 	/*
@@ -98,46 +134,21 @@ public class MotionManager {
 	 * F = 0.16
 	 * 
 	 */
-
-	public double getRobotRPM() {
-		int[] vels = getEncVels();
-		double root = Math.sqrt(2);
-		double x = 0;
-		double y = 0;
-		for (int i = 0; i < vels.length; i++) {
-			if (i == 0 || i == 3) x -= vels[i] / root;
-			else x += vels[i] / root;
-			y += vels[i] / root;
-		}
-		x /= vels.length;
-		y /= vels.length;
-		//double[] solution = {Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0, Math.atan(y / x)};
-		return Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0;
-	}
-
-	private int[] getEncVels() {
-		int[] vels = new int[controls.length];
-		for (int i = 0; i < controls.length; i++) {
-			vels[i] = controls[i].getEncVel();
-		}
-		return vels;
-	}
-
-	public synchronized void pushProfile(double[][] pathArray, boolean immediate, boolean done) {
+	
+	public synchronized void pushProfile(double [][] pathArray, boolean immediate, boolean done) {
 		ProfileDetails d = new ProfileDetails();
 		d.done = done;
 		d.turn = false;
-		turns.add(d);
+		// other details ignored if turn is false
+		profileDetails.add(d);
 
-		this.immediate = immediate;
 		interrupt = immediate;
 		paths.add(pathArray);
-		go = true;
-		notifier.startPeriodic(0.005);
-		for (MotionControl control : controls) {
-			control.startControlThread();
-			System.out.println("Control started again in pushProfile");
-		}
+		loading = true;
+
+//		System.out.println("Starting controlThreads in pushProfile");
+		notifier.startPeriodic(0.05);  // pushing batchsize points at a time
+		control.startControlThread();
 	}
 
 	public synchronized void pushTurn(double theta, boolean immediate, boolean done) {
@@ -145,29 +156,17 @@ public class MotionManager {
 		d.done = done;
 		d.theta = theta;
 		d.turn = true;
+		profileDetails.add(d);
 
-		turns.add(d);
-
-		this.immediate = immediate;
 		interrupt = immediate;
 		paths.add(getTurnProfile(d));
-		go = true;
-		notifier.startPeriodic(0.005);
-		for (MotionControl control : controls) {
-			control.startControlThread();
-			System.out.println("Control started again profile");
-		}
-	}
+		loading = true;
 
-	private double[][] generateTable() {
-		double[][] table = new double[4][1000];
-		table[0] = getFuncs1(true);
-		table[1] = getFuncs2(true); //FOR TURN: false
-		table[2] = getFuncs2(false); //FOR TURN: true
-		table[3] = getFuncs1(false);
-		return table;
+//		System.out.println("Starting controlThreads in pushTurn");
+		notifier.startPeriodic(0.05);
+		control.startControlThread();
 	}
-
+	
 	/*
 	 * Precondition: path array a path in the form of v(velocity of center of robot), theta(direction of motion of center of robot)
 	 * 
@@ -191,97 +190,135 @@ public class MotionManager {
 	}
 
 	public void pushTurn() {
-		SmartDashboard.putString("push profile started", "");
+		System.out.println("pushTurn started");
 		//clear existing profiles
 		double[] positions = new double[4];
 		TrajectoryPoint pt = new TrajectoryPoint();
 		double[][] pathArray = paths.get(0);
-		boolean direc = turns.get(0).direction;
-		boolean done = turns.get(0).done;
-
-		for (int i = currIndex; i < currIndex + batchSize; i++) {
-			if (i >= pathArray.length) break;
-
-			if (interrupt) {
-				interrupt = false;
-				return;
-			}
-
-			int colIndex = (int) (pathArray[i][1] * 500 / Math.PI);
-
-			for (int j = 0; j < controls.length; j++) {
+		boolean direc = profileDetails.get(0).direction;
+		boolean done = profileDetails.get(0).done;
+		
+		for(int i = currIndex; i < currIndex + batchSize; i ++) {
+			if(i >= pathArray.length) break;
+		
+//			if(interrupt) {
+//				interrupt = false;
+//				return;
+//			}
+			
+			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
+			
+			for(int j = 0; j < numTalons; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
 				pt.velocityOnly = false;
 				pt.zeroPos = (i == currIndex); //needed for successive profiles, only first pt should be set to true
 				pt.velocity = pathArray[i][0] * table[j][colIndex]; //TODO: change signs as appropriate for turning
-				if ((j == 0 || j == 2) && direc) pt.velocity *= -1;
-				else if ((j == 1 || j == 3) && !direc) pt.velocity *= -1;
-				positions[j] += pt.velocity * 0.01 / 60; //NEW LINE(conversion from RPM to 10ms)
-				pt.position = positions[j]; //NEW LINE
-				pt.isLastPoint = (i + 1 == pathArray.length && done);
-				//System.out.println("point vel: " + pt.velocity);
-				controls[j].pushMotionProfileTrajectory(pt);
+				if((j == 0 || j == 2) && direc) pt.velocity = -pt.velocity;
+				else if((j == 1 || j == 3) && !direc) pt.velocity = -pt.velocity;
+				positions[j] += pt.velocity * deltaT; 
+ 				pt.position = positions[j];
+				System.out.println("PT POS: " + pt.position);
+				System.out.println("ZERO PT: " + pt.zeroPos + "\n");
+ 				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
+				control.pushMotionProfileTrajectory(j, pt);
 			}
 		}
-		startProfile();
+		
+		if (currIndex == 0) startProfile();
 		currIndex += batchSize;
+		
 	}
 
 	public void pushLinear() {
+//		System.out.println("pushLinear started");
 		double[][] pathArray = paths.get(0);
-		SmartDashboard.putString("pushLinear started", "");
 		TrajectoryPoint pt = new TrajectoryPoint();
 		double[] positions = new double[4];
-		boolean done = turns.get(0).done;
+		boolean done = profileDetails.get(0).done;
 
-		for (int i = currIndex; i < currIndex + batchSize; i++) {
-			if (i >= pathArray.length) break;
-
-			if (interrupt) {
-				interrupt = false;
-				return;
-			}
-
-			int colIndex = (int) (((pathArray[i][1] + 2 * Math.PI) % (2 * Math.PI)) * 500 / Math.PI);
-
-
+//		long starttime = System.nanoTime();
+		for(int i = currIndex; i < currIndex + batchSize; i ++) {
+			if(i >= pathArray.length) break;
+		
+//			if(interrupt) {
+//				interrupt = false;
+//				return;
+//			}
+			
+			int colIndex = (int)(((pathArray[i][1] + 2*Math.PI) % (2*Math.PI)) * 500/Math.PI);
+			
 			//System.out.println("i is " + i + ", pathArray[i][1] is " + pathArray[i][1] + ", colIndex is " + colIndex);
 
-			for (int j = 0; j < controls.length; j++) {
+			for(int j = 0; j < numTalons; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
 				pt.velocityOnly = false;
 				pt.zeroPos = (i == currIndex); //needed for successive profiles, only first pt should be set to true
 				pt.velocity = pathArray[i][0] * table[j][colIndex];
-				positions[j] += pt.velocity * 0.01 / 60; //NEW LINE(conversion from RPM to 10ms)
-				pt.position = positions[j]; //NEW LINE
-				pt.isLastPoint = (i + 1 == pathArray.length && done);
-				//System.out.println("point vel: " + pt.velocity);
-				controls[j].pushMotionProfileTrajectory(pt);
+				positions[j] += pt.velocity * deltaT; 
+ 				pt.position = positions[j]; 
+				// TODO - probably want the commented setting, but need to test it.
+ 				pt.isLastPoint = false; //(done && ( (i + 1) == pathArray.length));  //TODO
+				control.pushMotionProfileTrajectory(j, pt);
 			}
 		}
-		startProfile();
+
+//		long elapsed = System.nanoTime() - starttime;
+//		System.out.println("Total time computing: " + elapsed);
+
+		//if (currIndex == 0) startProfile();
+		
 		currIndex += batchSize;
 	}
 
 	public void startProfile() {
-		for (MotionControl control : controls) control.enable();
+		control.enable();
 	}
 
 	public void endProfile() {
-		for (MotionControl control : controls) control.disable();
+		control.disable();
+	}
+	
+	public void shutDownProfiling() {
+		control.shutDownProfiling();
 	}
 
-	public void shutDownProfiling() {
-		for (MotionControl control : controls) {
-			control.clearMotionProfileTrajectories();
-			control.clearUnderrun();
-			control.changeControlMode(TalonControlMode.Speed); //may need to be vbus
+	public double getRobotRPM() {
+		int[] vels = getEncVels();
+		double root = Math.sqrt(2);
+		double x = 0;
+		double y = 0;
+		for(int i = 0; i < vels.length; i ++) {
+			if(i == 0 || i == 3) x -= vels[i] / root;
+			else x += vels[i] / root;
+			y += vels[i] / root;
 		}
+		x /= vels.length;
+		y /= vels.length;
+		//double[] solution = {Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0, Math.atan(y / x)};
+		return Math.sqrt(x * x + y * y) * 10.0 * 60.0 / 8192.0;
 	}
+	
+	private int[] getEncVels() {
+		int[] vels = new int[numTalons];
+		for(int i = 0; i < numTalons ; i ++) {
+			vels[i] = control.getEncVel(i);
+		}
+		return vels;
+	}
+	
 
 	//helper methods for generating table
+	private double [][] generateTable() {
+		double [][] table = new double[4][1000];
+		table[0] = getFuncs1(true);
+		table[1] = getFuncs2(true);  //FOR TURN: false
+		table[2] = getFuncs2(false); //FOR TURN: true
+		table[3] = getFuncs1(false);
+		return table;
+	}
+
 	private double[] getFuncs1(boolean neg) {
 		double[] temp = new double[1000];
 		for (int i = 0; i < 1000; i++) {
