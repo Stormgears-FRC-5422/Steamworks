@@ -17,19 +17,19 @@ public class TrapezoidalProfile {
 //			System.out.println(profileTest[i][0] + "," + profileTest[i][1] + "," + position);
 //		}
 //	}
-	
-	public static double [][] getTrapezoidZero(double rotations, double maxVel, double theta, double vStart) {
-		return generateZeroProfile(maxVel/60.0, maxVel/60.0, rotations,theta, vStart); //should want starting ticks as 0 here
-		
+
+	public static double[][] getTrapezoidZero(double rotations, double maxVel, double theta, double vStart) {
+		return generateZeroProfile(maxVel / 60.0, maxVel / 60.0, rotations, theta, vStart); //should want starting ticks as 0 here
+
 	}
 
 	private static double[][] generateZeroProfile(double maxAccel, double maxVel, double distance, double theta, double vStart) {
 		maxAccel = maxAccel * 8192.0;
 		maxVel = maxVel * 8192.0;
-		distance = distance * 8192.0; 
-		
+		distance = distance * 8192.0;
+
 		SmartDashboard.putNumber("Dist: ", distance);
-		
+
 		double timeTotal = getTotalTimeZero(maxAccel, maxVel, distance, vStart);
 		int length = (int) (timeTotal * 100) + 2;
 		double[][] profile = new double[length][];

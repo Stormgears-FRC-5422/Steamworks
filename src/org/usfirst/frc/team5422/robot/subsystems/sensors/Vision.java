@@ -11,7 +11,7 @@ public class Vision extends RunnableNotifier {
 
 	//private static LightSensor lightSensor;
 	private static USSensor usSensor;
-	
+
 	//TODO: change this to the actual Grip contours report 
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	//TODO: change this to the actual Shooter contours report	
@@ -40,13 +40,13 @@ public class Vision extends RunnableNotifier {
 		usSensor.lightGearRing(true);
 		usSensor.lightShooterRing(true);
 	}
-	
-	public void getVisionCoordinatesFromNetworkTable() { 
-		double [] defaultXArray = new double[0];
-		double [] defaultYArray = new double[0];
-		
-		double [] centerX = visionTable.getNumberArray(NetworkConstants.CENTER_X, defaultXArray);
-		double [] centerY = visionTable.getNumberArray(NetworkConstants.CENTER_Y, defaultYArray);		
+
+	public void getVisionCoordinatesFromNetworkTable() {
+		double[] defaultXArray = new double[0];
+		double[] defaultYArray = new double[0];
+
+		double[] centerX = visionTable.getNumberArray(NetworkConstants.CENTER_X, defaultXArray);
+		double[] centerY = visionTable.getNumberArray(NetworkConstants.CENTER_Y, defaultYArray);
 	}
 
 	private double getCenterX(int index) {

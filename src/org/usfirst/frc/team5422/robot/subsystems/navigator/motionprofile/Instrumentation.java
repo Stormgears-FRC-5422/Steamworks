@@ -48,7 +48,9 @@ public class Instrumentation {
 		return _table[sv.value];
 	}
 
-	/** round to six decimal places */
+	/**
+	 * round to six decimal places
+	 */
 	@SuppressWarnings("unused")
 	static private double round(double toround) {
 		long whole = (long) (toround * 1000000.0 + 0.5);
@@ -58,7 +60,7 @@ public class Instrumentation {
 	public static void process(CANTalon.MotionProfileStatus status1, SafeTalon talon) {
 		double now = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
-		if((now-timeout) > 0.1){
+		if ((now - timeout) > 0.1) {
 			timeout = now;
 			/* fire a loop every 200ms */
 

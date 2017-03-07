@@ -85,7 +85,7 @@ public class RealBotMecanumDrive extends Drive {
 	}
 
 	public void move() {
-	//	System.out.println("Mecanum Drive moving...");
+		//	System.out.println("Mecanum Drive moving...");
 		Joystick joy = Robot.dsio.getJoystick();
 
 		double theta = Math.atan2(joy.getX(), joy.getY());
@@ -98,10 +98,7 @@ public class RealBotMecanumDrive extends Drive {
 			setDriveTalonsZeroVelocity();
 		}
 
-		
-		
 
-		
 	}
 
 	
@@ -179,7 +176,7 @@ public class RealBotMecanumDrive extends Drive {
 		if (Math.abs(theta - 3.0 * Math.PI / 2.0) <= Math.PI / 12.0) {
 			theta = 3.0 * Math.PI / 2.0;
 		}
-		
+
 		vels[0] = -(Math.sin(theta + Math.PI / 2.0) + Math.cos(theta + Math.PI / 2.0));
 		vels[1] = (Math.sin(theta + Math.PI / 2.0) - Math.cos(theta + Math.PI / 2.0));
 		vels[2] = -(Math.sin(theta + Math.PI / 2.0) - Math.cos(theta + Math.PI / 2.0));
@@ -215,7 +212,7 @@ public class RealBotMecanumDrive extends Drive {
 
 		for (int i = 0; i < talons.length; i++) {
 			talons[i].changeControlMode(TalonControlMode.Speed);
-			talons[i].set(vels[i]/8192.0 * 600);
+			talons[i].set(vels[i] / 8192.0 * 600);
 		}
 	}
 
