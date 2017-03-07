@@ -4,7 +4,6 @@ package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.stormgears.StormUtils.SafeTalon;
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 

@@ -11,7 +11,6 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.FRCSampleProfile;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
@@ -39,7 +38,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 	public static RobotModes robotMode = RobotModes.AUTONOMOUS;
-	public static List<RegisteredNotifier> notifierRegistry = new ArrayList<>();
+	public static final List<RegisteredNotifier> notifierRegistry = new ArrayList<>();
 
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;

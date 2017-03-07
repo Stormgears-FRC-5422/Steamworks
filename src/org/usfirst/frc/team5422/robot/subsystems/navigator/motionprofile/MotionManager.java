@@ -1,21 +1,19 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Instrumentation;
 
-import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.stormgears.StormUtils.SafeTalon;
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 //import com.ctre.CANTalon;
 
 public class MotionManager {
-	private List<double[][]> paths = new ArrayList<double[][]>();
-	private List<ProfileDetails> profileDetails = new ArrayList<ProfileDetails>();
+	private List<double[][]> paths = new ArrayList<>();
+	private List<ProfileDetails> profileDetails = new ArrayList<>();
 	private boolean loading = false, interrupt = false;
 	private int batchSize = 256 * 4;
 	private int currIndex = 0;
@@ -53,9 +51,9 @@ public class MotionManager {
 //				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
 				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
 //				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
-				
-				for (int i = 0; i < control.talons.length; i++) {
-				//	Instrumentation.process(control.statuses[i], control.talons[i]);
+
+				for (SafeTalon talon : control.talons) {
+					//	Instrumentation.process(control.statuses[i], control.talons[i]);
 				}	
 
 				
@@ -64,7 +62,7 @@ public class MotionManager {
 					control.enable();
 				}
 				
-				if (loading == false) return;
+				if (!loading) return;
 
 				// Are we done?
 				if(paths.isEmpty()) {  // TODO: need a more elegant stop condition??
@@ -92,7 +90,7 @@ public class MotionManager {
 				}
 				
 				// Push the next section
-				if(profileDetails.get(0).turn == true) pushTurn();
+				if(profileDetails.get(0).turn) pushTurn();
 				else pushLinear();
 				
 				// If we have pushed the entire path, remove it and let the next path run on the next time through

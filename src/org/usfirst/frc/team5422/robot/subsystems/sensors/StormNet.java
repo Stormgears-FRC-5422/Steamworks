@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;

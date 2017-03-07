@@ -1,3 +1,8 @@
+package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
+
+import com.ctre.CANTalon;
+import org.stormgears.StormUtils.SafeTalon;
+
 /**
  * Since this example focuses on Motion Control, lets print everything related to MP in a clean
  * format.  Expect to see something like......
@@ -19,11 +24,6 @@
  * <p>
  * ...where the columns are reprinted occasionally so you know whats up.
  */
-package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
-
-import com.ctre.CANTalon;
-import org.stormgears.StormUtils.SafeTalon;
-
 public class Instrumentation {
 
 	static double timeout = 0;
