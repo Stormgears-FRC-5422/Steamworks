@@ -45,9 +45,9 @@ public class SensorManager {
 	}
 	
 	public static void startPublishingToNetwork(){
-		globalMappingNotifier.startPeriodic(0.01);
-		stormNetNotifier.startPeriodic(0.01);
-		visionNotifier.startPeriodic(0.01);
+		globalMappingNotifier.startPeriodic(0.1);
+		stormNetNotifier.startPeriodic(0.1);
+		visionNotifier.startPeriodic(0.1);
 //		shootingSensors.start();
 		
 		_isPublishing = true;

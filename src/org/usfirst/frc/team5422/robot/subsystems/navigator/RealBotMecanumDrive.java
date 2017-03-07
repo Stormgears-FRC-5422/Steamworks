@@ -45,7 +45,8 @@ public class RealBotMecanumDrive extends Drive {
 		if (robotRunMode == RobotModes.AUTONOMOUS) {
 			for(int i = 0; i < talons.length; i ++) {
 				SafeTalon talon = talons[i];
-				talon.reverseOutput(true); 
+				talon.reverseOutput(true);
+			//	talon.reverseSensor(true);
 				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 				talon.configEncoderCodesPerRev(2048);
 				talon.changeControlMode(TalonControlMode.MotionProfile);
@@ -59,17 +60,20 @@ public class RealBotMecanumDrive extends Drive {
 			}
 						
 		} else { //RobotModes.TELEOP
+			//System.out.println("Teleop Working");
 			for(int i = 0; i < talons.length; i ++) {			
-				talons[i].reverseOutput(true);
-				talons[i].changeControlMode(TalonControlMode.Speed);
+				SafeTalon talon = talons[i];
+				talon.reverseOutput(true);
+				//talon.reverseSensor(true);
+				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				talon.configEncoderCodesPerRev(2048);
+				talon.changeControlMode(TalonControlMode.Speed);
 				//Velocity PID Values
-				talons[i].setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
+				talon.setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
 						RobotDriveConstants.CLONEBOT_VELOCITY_I, 
 						RobotDriveConstants.CLONEBOT_VELOCITY_D);
-				talons[i].setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
-				talons[i].setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);
-				talons[i].reverseSensor(false);
-				
+				talon.setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
+				talon.setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);
 				//Position PID Values
 //				talons[i].setPID(SteamworksConstants.CLONEBOT_POSITION_P, 
 //								 SteamworksConstants.CLONEBOT_POSITION_I, 
@@ -86,7 +90,7 @@ public class RealBotMecanumDrive extends Drive {
 	}
 	
 	public void move() {
-		System.out.println("Mecanum Drive moving...");
+	//	System.out.println("Mecanum Drive moving...");
 		Joystick joy = Robot.dsio.getJoystick();
 
 		double theta = Math.atan2(joy.getX(), joy.getY());
@@ -216,7 +220,7 @@ public class RealBotMecanumDrive extends Drive {
 		
 		for(int i = 0; i < talons.length; i ++) {
 			talons[i].changeControlMode(TalonControlMode.Speed);
-			talons[i].set(vels[i]);
+			talons[i].set(vels[i]/8192.0 * 600);
 		}
 	}
 	

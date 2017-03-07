@@ -11,7 +11,7 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocat
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.shooterMode;
 
-/**
+/** 
  * Driver Station Input Output (D.S.I.O.)
  * Handles everything related to the button board and joystick
  * If you want to use a button, YOU MUST do it through here; ask Michael to add it
@@ -48,17 +48,18 @@ public class DSIO {
 	}
 
 	public void checkSwitches() {
-
+		//System.out.println("check switch...");	
 		//Error Check for both switches
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID) && buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
 			Robot.climberIntakeSubsystem.stop();
 
-		System.out.println("in check switches method...");
+	//	System.out.println("in check switches method...");
 		// RED SWITCH (Climb when in ON position)
-		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID))
-			//System.out.println("RED SWITCH Pressed...");
+		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID)) {
+			//System.out.println("RED SWITCH Pressed..." + getSliderValueClimber());
 			Robot.climberIntakeSubsystem.climb(getSliderValueClimber());
-
+		//	Robot.climberIntakeSubsystem.climb(1);
+		}
 		// ORANGE SWITCH
 		else if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
 			//System.out.println("ORANGE SWITCH Pressed...");

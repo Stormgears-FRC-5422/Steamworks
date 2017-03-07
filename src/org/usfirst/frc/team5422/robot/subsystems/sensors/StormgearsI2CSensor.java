@@ -390,9 +390,10 @@ public class StormgearsI2CSensor extends I2C {
 
 //Command implementation:
     // Just echo PING - should return the id of the sensor
-    public boolean ping() {
+    public byte ping() {
     	byte[] receiveBuffer = new byte[1];
-    	return fetchCommand("P".getBytes(), "Ping", receiveBuffer);
+    	fetchCommand("P".getBytes(), "Ping", receiveBuffer);
+    	return receiveBuffer[0];
 	}
     // echo FAST - change the rate of the blinking LED
     public boolean fast() {

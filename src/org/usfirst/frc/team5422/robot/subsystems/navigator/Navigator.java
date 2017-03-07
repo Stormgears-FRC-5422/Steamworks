@@ -41,15 +41,16 @@ public class Navigator extends Subsystem{
 		networkTable = NetworkTable.getTable(NetworkConstants.GLOBAL_MAPPING);
 		
 		//using Stormgears CloneBot Mecanum Drive
-        mecanumDrive = new CloneBotMecanumDrive();
+       // mecanumDrive = new CloneBotMecanumDrive();
 		
-		motionManager = new MotionManager(CloneBotMecanumDrive.talons);
+		//using Stormgears RealBot Mecanum Drive
+        mecanumDrive = new RealBotMecanumDrive();
+
+		motionManager = new MotionManager(RealBotMecanumDrive.talons);
 		
 		SplineFollowThread.setMotionManager(motionManager);
         		
-		//using Stormgears CloneBot Mecanum Drive
-        //mecanumDrive = new RealBotMecanumDrive();
-
+		
         //to test using WPI Mecanum Drive
         //mecanumDrive = new WPIMecanumDrive();        
 	}

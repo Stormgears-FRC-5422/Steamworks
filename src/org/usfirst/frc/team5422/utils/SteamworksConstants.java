@@ -10,7 +10,7 @@ public class SteamworksConstants
     public static final int SHOOTER_TALON_ID = 888;   //TODO: Change this to the real talon ID
     public static final int SHOOTER_RELAY_ID = 0;
     public static final int CLIMBER_INTAKE_TALON_ID = 4;
-    public static final int SECONDARY_INTAKE_TALON_ID = 0;
+    public static final int SECONDARY_INTAKE_TALON_ID = 66;
 
 	// StormNet IDs
 	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 8;
@@ -19,7 +19,7 @@ public class SteamworksConstants
 	public static int STORMNET_IR_ARDUINO_ADDRESS = 11;
 	public static int NUMBER_OF_STORMNET_IRSENSOR = 1;
 	
-	public static int STORMNET_LIGHTS_ARDUINO_ADDRESS = 5;
+	public static int STORMNET_LIGHTS_ARDUINO_ADDRESS = 13;
 	
 	public static int ROBOT_ULTRASONIC_SEPARATION_IN = 24;
 	public static int FRAME_WIDTH = 320;//in pixels
