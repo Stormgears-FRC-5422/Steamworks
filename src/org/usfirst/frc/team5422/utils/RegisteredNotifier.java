@@ -8,7 +8,7 @@ public class RegisteredNotifier extends Notifier {
 	private String name;
 	
 	public RegisteredNotifier(Runnable run) {
-		this(run,"Unnamed");
+		this(run, "Unnamed");
 	}
 
 	public RegisteredNotifier(Runnable run, String name) {

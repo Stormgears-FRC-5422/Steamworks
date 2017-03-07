@@ -1,16 +1,15 @@
 package org.usfirst.frc.team5422.utils;
 
-public class SteamworksConstants
-{
-    // USB CHANNELS
-    public static final int JOYSTICK_USB_CHANNEL = 0;
-    public static final int BUTTON_BOARD_USB_CHANNEL = 1;
-    
-    // TALON IDS GO HERE
-    public static final int SHOOTER_TALON_ID = 888;   //TODO: Change this to the real talon ID
-    public static final int SHOOTER_RELAY_ID = 0;
-    public static final int CLIMBER_INTAKE_TALON_ID = 4;
-    public static final int SECONDARY_INTAKE_TALON_ID = 66;
+public class SteamworksConstants {
+	// USB CHANNELS
+	public static final int JOYSTICK_USB_CHANNEL = 0;
+	public static final int BUTTON_BOARD_USB_CHANNEL = 1;
+
+	// TALON IDS GO HERE
+	public static final int SHOOTER_TALON_ID = 888;   //TODO: Change this to the real talon ID
+	public static final int SHOOTER_RELAY_ID = 0;
+	public static final int CLIMBER_INTAKE_TALON_ID = 4;
+	public static final int SECONDARY_INTAKE_TALON_ID = 66;
 
 	// StormNet IDs
 	public static int STORMNET_ULTRASONIC_ARDUINO_ADDRESS = 8;
