@@ -23,14 +23,14 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/Google Drive/Stormgears 2017/Subteam Folders/Software/Dependencies" />
+          <root url="file://$USER_HOME$/wpilib/user/java/lib" />
         </CLASSES>
         <JAVADOC />
         <NATIVE>
-          <root url="file://$USER_HOME$/Google Drive/Stormgears 2017/Subteam Folders/Software/Dependencies" />
+          <root url="file://$USER_HOME$/wpilib/user/java/lib" />
         </NATIVE>
         <SOURCES />
-        <jarDirectory url="file://$USER_HOME$/Google Drive/Stormgears 2017/Subteam Folders/Software/Dependencies" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="false" />
       </library>
     </orderEntry>
   </component>
