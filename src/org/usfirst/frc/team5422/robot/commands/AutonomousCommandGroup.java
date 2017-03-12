@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -11,9 +14,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  *
  */
 public class AutonomousCommandGroup extends CommandGroup {
-	public AutonomousCommand autonomousCommand;
-	private ArrayList<Pose> routeToGear, routeToDropOff;
-
+	public PlaceGearCommand autoPlaceGearCommand;
+	public RobotAutoDropOffCommand autoRobotDropOffCommand;
+	
+	private autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation;
+	private autonomousDropOffLocationOptions selectedAutonomousDropOffLocation;
+	private alliances selectedAlliance;
     public AutonomousCommandGroup() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
@@ -35,15 +41,19 @@ public class AutonomousCommandGroup extends CommandGroup {
 		//addSequential(autonomousCommand);
 	}
 
-	public AutonomousCommandGroup(ArrayList<Pose> routeToGear, ArrayList<Pose> routeToDropOff) {
+	public AutonomousCommandGroup(alliances selectedAlliance, autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation, autonomousDropOffLocationOptions selectedAutonomousDropOffLocation) {
 		requires(Robot.navigatorSubsystem);
-
-		this.routeToGear = routeToGear;
-		this.routeToDropOff = routeToDropOff;
-
-		System.out.println("creating autonomous command ");
-		autonomousCommand = new AutonomousCommand(this.routeToGear, this.routeToDropOff );
-		addSequential(autonomousCommand);
+		this.selectedAlliance = selectedAlliance;
+		this.selectedAutonomousGearPlacementLocation = selectedAutonomousGearPlacementLocation;
+		this.selectedAutonomousDropOffLocation = selectedAutonomousDropOffLocation;
+		
+		System.out.println("creating autonomous PlaceGearCommand ");
+		autoPlaceGearCommand = new PlaceGearCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
+		autoRobotDropOffCommand = new RobotAutoDropOffCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
+		
+		addSequential(autoPlaceGearCommand);
+		addSequential(autoRobotDropOffCommand);
+		
 	}
 
 	protected void initialize() {

@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
 	public static ClimberIntake climberIntakeSubsystem;
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
-	public static RobotModes robotMode =  RobotModes.AUTONOMOUS;
+	public static RobotModes robotMode = RobotModes.AUTONOMOUS;
 	public static List<RegisteredNotifier> notifierRegistry = new ArrayList<RegisteredNotifier>();
 
 	public alliances allianceSelected = alliances.RED;
@@ -67,46 +67,48 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
-	public static Shooter getShooterSubsystem() {
-		return shooterSubsystem;
-	}
-
-	public static void setShooterSubsystem(Shooter shooterSubsystem) {
-		Robot.shooterSubsystem = shooterSubsystem;
-	}
-
-	public static ClimberIntake getClimberSubsystem() {
-		return climberIntakeSubsystem;
-	}
-
-	public static void setClimberSubsystem(ClimberIntake climberSubsystem) {
-		Robot.climberIntakeSubsystem = climberSubsystem;
-	}
-
-	public static Manipulator getGearManipulatorSubsystem() {
-		return gearManipulatorSubsystem;
-	}
-
-	public static void setGearManipulatorSubsystem(Manipulator gearManipulatorSubsystem) {
-		Robot.gearManipulatorSubsystem = gearManipulatorSubsystem;
-	}
-
 	public void robotInit() {
 		System.out.println("robot init started.");
 	}
 
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
+		robotMode = RobotModes.AUTONOMOUS;
+		
+		//select the autonomous command for this run
+		selectAutonomousCommand();
+
+		//if any residual commands exist, cancel them
+		if (autonomousCommand != null) {
+			autonomousCommand.cancel();
+		}
+
+		//starts publishing all sensors here
+		if (!SensorManager.isPublishing()) {
+			SensorManager.startPublishingToNetwork();
+		}
+		
+		Vision.turnOnLights();
+
+		//execute autonomous command
+		if (autonomousCommand != null) {
+			System.out.println("starting the autonomous command...from autonomousInit()");
+			autonomousCommand.start();
+		} else {
+			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
+		}
+		
+/*
 		Vision.turnOnLights();
 
 		//initializing the Robot for motion profile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
+
 		MotionManager m = Navigator.motionManager;
 		
 		  // Test profile.  Keep this around somewhere
 		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(76/6.0/Math.PI, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-		
-		//starts publishing all sensors here
+*/		
 		
 /*		ArrayList<Pose> poses = new ArrayList<Pose>();
 		poses.add(new Pose(0,0,0,0));
@@ -126,50 +128,21 @@ public class Robot extends IterativeRobot {
 		poses.add(new Pose(0, 2, 0, 0));
 		Spline spline = new Spline(poses);
 		Navigator.driveSpline(spline);*/
-			
-		
-		/*robotMode = RobotModes.AUTONOMOUS;
-
-		//if any residual commands exist, cancel them
-		if (autonomousCommand != null) {
-			autonomousCommand.cancel();
-		}
-		SensorManager.vision.turnOnLights();
-		
-		//initializing the Robot for motionprofile mode
-		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
-
-		
-		Navigator.motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
-		SensorManager.vision.alignToGear();
-		
-		//select the autonomous command for this run
-		selectAutonomousCommand();
-
-		//execute autonomous command
-		if (autonomousCommand != null) {
-			autonomousCommand.start();
-		}else{
-			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
-		}
-		*/
 	}
-	
-
-	
+		
 	public void teleopInit() {
 		System.out.println("teleop init started.");
 		//Robot in Teleop Mode
 		robotMode = RobotModes.TELEOP;
 		
-		Vision.turnOnLights();
-		
-		//initializing the Robot for joystick Velocity mode
-		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
-		
 		if (autonomousCommand != null){			
 			autonomousCommand.cancel();
 		}
+
+		Vision.turnOnLights();
+		
+		//initializing the Robot for joystick Velocity mode
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 		
 	}
 
 	public void disabledInit() {
@@ -191,11 +164,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		/*
 		if (autonomousCommand != null) {
 			Scheduler.getInstance().run();
 		}
-		*/
+
 		if(!SensorManager.isPublishing()){
 			SensorManager.startPublishingToNetwork();
 		}
@@ -255,8 +227,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAutonomousCommand() {
-		ArrayList<Pose> routeToGear, routeToDropOff;
-
 		selectAlliance();
 		selectAutonomousGearPlacement();
 		selectAutonomousDropOffLocation();
@@ -265,81 +235,31 @@ public class Robot extends IterativeRobot {
 		System.out.println("GEAR PLACEMENT LOCATION: " + autonomousGearPlacementSelected.toString());
 		System.out.println("DROP OFF LOCATION: " + autonomousDropOffLocationSelected.toString());
 
-		FieldPositions.initialize(allianceSelected);
-		AutoRoutes.initialize(allianceSelected);
-
-		switch (autonomousGearPlacementSelected) {
-			case PLACE_GEAR_LEFT_AIRSHIP:
-				System.out.println("[Autonomous Routing] Starting at left starting position, going to left gear hook.");
-				routeToGear = AutoRoutes.leftStartToGear;
-
-				switch (autonomousDropOffLocationSelected) {
-					case BASELINE:
-						System.out.println("[Autonomous Routing] Continuing on to baseline from left gear.");
-						routeToDropOff = AutoRoutes.leftGearToBaseline;
-						break;
-					case GEAR_PICKUP:
-						System.out.println("[Autonomous Routing] Continuing on to gear pickup from left gear.");
-						routeToDropOff = AutoRoutes.leftGearToGearPickup;
-						break;
-					default:
-						routeToDropOff = new ArrayList<>();
-						break;
-				}
-				break;
-			case PLACE_GEAR_RIGHT_AIRSHIP:
-				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
-				routeToGear = AutoRoutes.rightStartToGear;
-
-				switch (autonomousDropOffLocationSelected) {
-					case BASELINE:
-						System.out.println("[Autonomous Routing] Continuing on to baseline from right gear.");
-						routeToDropOff = AutoRoutes.rightGearToBaseline;
-						break;
-					case GEAR_PICKUP:
-						System.out.println("[Autonomous Routing] Continuing on to gear pickup from right gear.");
-						routeToDropOff = AutoRoutes.rightGearToGearPickup;
-						break;
-					default:
-						routeToDropOff = new ArrayList<>();
-						break;
-				}
-				break;
-			case PLACE_GEAR_CENTER_AIRSHIP:
-				System.out.println("[Autonomous Routing] Starting at center starting position, going to center gear hook.");
-				routeToGear = AutoRoutes.centerStartToGear;
-
-				switch (autonomousDropOffLocationSelected) {
-					case BASELINE:
-						System.out.println("[Autonomous Routing] Continuing on to baseline from center gear.");
-						routeToDropOff = AutoRoutes.centerGearToBaseline;
-						break;
-					case GEAR_PICKUP:
-						System.out.println("[Autonomous Routing] Continuing on to gear pickup from center gear.");
-						routeToDropOff = AutoRoutes.centerGearToGearPickup;
-						break;
-					default:
-						routeToDropOff = new ArrayList<>();
-						break;
-				}
-				break;
-			case NONE:
-				//autonomousCommand = new AutonomousCommand();
-				return;
-			default:
-				routeToGear = new ArrayList<>();
-				routeToDropOff = new ArrayList<>();
-				break;
-		}
-
-		for (int i = 0; i < routeToGear.size(); i++) {
-			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
-		}
-		for (int i = 0; i < routeToDropOff.size(); i++) {
-			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
-		}
-
 		System.out.println("creating autonomous command group");
-		autonomousCommand = new AutonomousCommandGroup(routeToGear, routeToDropOff);
+		autonomousCommand = new AutonomousCommandGroup(allianceSelected, autonomousGearPlacementSelected, autonomousDropOffLocationSelected);
 	}
+	public static Shooter getShooterSubsystem() {
+		return shooterSubsystem;
+	}
+
+	public static void setShooterSubsystem(Shooter shooterSubsystem) {
+		Robot.shooterSubsystem = shooterSubsystem;
+	}
+
+	public static ClimberIntake getClimberSubsystem() {
+		return climberIntakeSubsystem;
+	}
+
+	public static void setClimberSubsystem(ClimberIntake climberSubsystem) {
+		Robot.climberIntakeSubsystem = climberSubsystem;
+	}
+
+	public static Manipulator getGearManipulatorSubsystem() {
+		return gearManipulatorSubsystem;
+	}
+
+	public static void setGearManipulatorSubsystem(Manipulator gearManipulatorSubsystem) {
+		Robot.gearManipulatorSubsystem = gearManipulatorSubsystem;
+	}
+
 }

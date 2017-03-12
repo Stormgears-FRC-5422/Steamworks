@@ -1,62 +1,54 @@
 package org.usfirst.frc.team5422.robot.commands;
 
-import java.util.ArrayList;
-
 import org.usfirst.frc.team5422.robot.Robot;
+
+import edu.wpi.first.wpilibj.command.Command;
+
 import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 
-import edu.wpi.first.wpilibj.command.Command;
+import java.text.FieldPosition;
+import java.util.ArrayList;
 
-public class PlaceGearCommand extends Command {
+public class RobotAutoDropOffCommand extends Command {
 	private ArrayList<Pose> routeToGear, routeToDropOff;
 	private autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation;
 	private autonomousDropOffLocationOptions selectedAutonomousDropOffLocation;
 	private alliances selectedAlliance;
 	
-	public PlaceGearCommand() {
-    	requires(Robot.navigatorSubsystem);
-    	requires(Robot.gearManipulatorSubsystem);    	
+	public RobotAutoDropOffCommand() {
+		// When this is called, autonomous isn't doing anything
 	}
-	
-	public PlaceGearCommand(alliances selectedAlliance, autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation, autonomousDropOffLocationOptions selectedAutonomousDropOffLocation) {
-		requires(Robot.navigatorSubsystem);
-    	requires(Robot.gearManipulatorSubsystem);    	
 
-    	this.selectedAlliance = selectedAlliance;
+	public RobotAutoDropOffCommand(alliances selectedAlliance, autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation, autonomousDropOffLocationOptions selectedAutonomousDropOffLocation) {
+		//ArrayList<Pose> routeToGear, ArrayList<Pose> routeToDropOff) {
+		requires(Robot.navigatorSubsystem);
+		this.selectedAlliance = selectedAlliance;
 		this.selectedAutonomousGearPlacementLocation = selectedAutonomousGearPlacementLocation;
 		this.selectedAutonomousDropOffLocation = selectedAutonomousDropOffLocation;
-		System.out.println("In PlaceGearCommand Constructor..." + 
-				"Alliance: " + this.selectedAlliance.toString() + 
-				"GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
-				"Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
+		System.out.println("In Autonomous Command");
 	}
 	
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		System.out.println("Place Gear Command initialized...with FieldPositions and AutoRoutes");
+		System.out.println("Automous Command initialized...");
 		FieldPositions.initialize(this.selectedAlliance);
 		AutoRoutes.initialize(this.selectedAlliance);
 	}
-		
+
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		System.out.println("Robot executing Autonomous PlaceGearCommand...");
-		
-		System.out.println("In Execute() of PlaceGearCommand Constructor..." + 
-				" Alliance: " + this.selectedAlliance.toString() + 
-				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
-				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
-		
+		System.out.println("Robot executing AutonomousCommand...");
 		switch (selectedAutonomousGearPlacementLocation) {
 			case PLACE_GEAR_LEFT_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at left starting position, going to left gear hook.");
@@ -130,27 +122,25 @@ public class PlaceGearCommand extends Command {
 		MotionManager m = Navigator.motionManager;		
 		  // Test profile.  Keep this around somewhere
 		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(76/6.0/Math.PI, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-//		SensorManager.vision.alignToGear();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		System.out.println("Entering isFinished method of PlaceGearCommand...");
-		
-		//default value returned was "false"
 		return true;
 	}
 
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		System.out.println("Place Gear Command ended...");
+		System.out.println("Autonomous Command ended...");
+		
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+
 	}
 }
