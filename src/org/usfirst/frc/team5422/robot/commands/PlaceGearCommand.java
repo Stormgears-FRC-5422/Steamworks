@@ -16,7 +16,7 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacemen
 import edu.wpi.first.wpilibj.command.Command;
 
 public class PlaceGearCommand extends Command {
-	private ArrayList<Pose> routeToGear, routeToDropOff;
+	private ArrayList<Pose> routeToGear;
 	private autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation;
 	private autonomousDropOffLocationOptions selectedAutonomousDropOffLocation;
 	private alliances selectedAlliance;
@@ -61,70 +61,24 @@ public class PlaceGearCommand extends Command {
 			case PLACE_GEAR_LEFT_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at left starting position, going to left gear hook.");
 				routeToGear = AutoRoutes.leftStartToGear;
-
-				switch (selectedAutonomousDropOffLocation) {
-					case BASELINE:
-						System.out.println("[Autonomous Routing] Continuing on to baseline from left gear.");
-						routeToDropOff = AutoRoutes.leftGearToBaseline;
-						break;
-					case GEAR_PICKUP:
-						System.out.println("[Autonomous Routing] Continuing on to gear pickup from left gear.");
-						routeToDropOff = AutoRoutes.leftGearToGearPickup;
-						break;
-					default:
-						routeToDropOff = new ArrayList<>();
-						break;
-				}
 				break;
 			case PLACE_GEAR_RIGHT_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
 				routeToGear = AutoRoutes.rightStartToGear;
-
-				switch (selectedAutonomousDropOffLocation) {
-					case BASELINE:
-						System.out.println("[Autonomous Routing] Continuing on to baseline from right gear.");
-						routeToDropOff = AutoRoutes.rightGearToBaseline;
-						break;
-					case GEAR_PICKUP:
-						System.out.println("[Autonomous Routing] Continuing on to gear pickup from right gear.");
-						routeToDropOff = AutoRoutes.rightGearToGearPickup;
-						break;
-					default:
-						routeToDropOff = new ArrayList<>();
-						break;
-				}
 				break;
 			case PLACE_GEAR_CENTER_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at center starting position, going to center gear hook.");
 				routeToGear = AutoRoutes.centerStartToGear;
-
-				switch (selectedAutonomousDropOffLocation) {
-					case BASELINE:
-						System.out.println("[Autonomous Routing] Continuing on to baseline from center gear.");
-						routeToDropOff = AutoRoutes.centerGearToBaseline;
-						break;
-					case GEAR_PICKUP:
-						System.out.println("[Autonomous Routing] Continuing on to gear pickup from center gear.");
-						routeToDropOff = AutoRoutes.centerGearToGearPickup;
-						break;
-					default:
-						routeToDropOff = new ArrayList<>();
-						break;
-				}
 				break;
 			case NONE:
 				return;
 			default:
 				routeToGear = new ArrayList<>();
-				routeToDropOff = new ArrayList<>();
 				break;
 		}
 
 		for (int i = 0; i < routeToGear.size(); i++) {
 			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
-		}
-		for (int i = 0; i < routeToDropOff.size(); i++) {
-			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
 		}
 
 		MotionManager m = Navigator.motionManager;		
