@@ -83,6 +83,9 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
+		//initializing the Robot for motion profile mode
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
+		
 		//starts publishing all sensors here
 		if (!SensorManager.isPublishing()) {
 			SensorManager.startPublishingToNetwork();
