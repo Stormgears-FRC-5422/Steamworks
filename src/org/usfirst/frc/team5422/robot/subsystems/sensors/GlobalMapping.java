@@ -63,8 +63,11 @@ public class GlobalMapping extends RunnableNotifier {
 
 	@Override
 	public void run() {
-		updatePose();
-
+		
+		synchronized(Navigator.talonLock) {
+			updatePose();
+		}
+		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
 		networkPublish(NetworkConstants.GP_Y, y);
@@ -87,8 +90,8 @@ public class GlobalMapping extends RunnableNotifier {
 		//TODO:: get encoder values
 		enc_fl = Drive.talons[0].getEncPosition();
 		enc_fr = Drive.talons[1].getEncPosition();
-		enc_bl = Drive.talons[3].getEncPosition();
-		enc_br = Drive.talons[2].getEncPosition();
+		enc_bl = Drive.talons[2].getEncPosition();
+		enc_br = Drive.talons[3].getEncPosition();
 
 		int d_enc_fl = (int) (enc_fl - prev_enc_fl);
 		int d_enc_fr = (int) (enc_fr - prev_enc_fr);
