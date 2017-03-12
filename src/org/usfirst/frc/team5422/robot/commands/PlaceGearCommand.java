@@ -34,9 +34,9 @@ public class PlaceGearCommand extends Command {
 		this.selectedAutonomousGearPlacementLocation = selectedAutonomousGearPlacementLocation;
 		this.selectedAutonomousDropOffLocation = selectedAutonomousDropOffLocation;
 		System.out.println("In PlaceGearCommand Constructor..." + 
-				"Alliance: " + this.selectedAlliance.toString() + 
-				"GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
-				"Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
+				" Alliance: " + this.selectedAlliance.toString() + 
+				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
+				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
 	}
 	
 	// Called just before this Command runs the first time
