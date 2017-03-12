@@ -142,6 +142,11 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
+		//starts publishing all sensors here
+		if (!SensorManager.isPublishing()) {
+			SensorManager.startPublishingToNetwork();
+		}
+
 		Vision.turnOnLights();
 		
 		//initializing the Robot for joystick Velocity mode
