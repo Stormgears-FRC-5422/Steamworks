@@ -68,7 +68,7 @@ public class GlobalMapping extends RunnableNotifier{
 	public void run(){
 		
 		synchronized(Navigator.talonLock) {
-			updatePose();
+			//updatePose();
 		}
 		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());

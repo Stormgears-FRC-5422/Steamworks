@@ -7,14 +7,8 @@ import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.FRCSampleProfile;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
@@ -83,8 +77,13 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
+		//initializing the Robot for motion profile mode
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
+		
 		//starts publishing all sensors here
-		SensorManager.startPublishingToNetwork();
+		if (!SensorManager.isPublishing()) {
+			SensorManager.startPublishingToNetwork();
+		}
 		
 		Vision.turnOnLights();
 
@@ -137,10 +136,12 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
+		//starts publishing all sensors here
+		if (!SensorManager.isPublishing()) {
+			SensorManager.startPublishingToNetwork();
+		}
+
 		Vision.turnOnLights();
-
-		SensorManager.startPublishingToNetwork();
-
 		
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 		
@@ -148,16 +149,18 @@ public class Robot extends IterativeRobot {
 
 	public void disabledInit() {
 		System.out.println("disabled init started.");
-		SensorManager.stopPublishingToNetwork();
+		if(SensorManager.isPublishing()){
+			SensorManager.stopPublishingToNetwork();
+		}
 		
 		Vision.turnOffLights();
 		
 		//Navigator.motionManager.endProfile();
 		
 		// shut down all notifiers.  This is a bit aggressive
-//		for (RegisteredNotifier r : notifierRegistry) {
-//			r.stop();
-//		}	
+		for (RegisteredNotifier r : notifierRegistry) {
+			r.stop();
+		}	
 		
 		
 	}
@@ -167,6 +170,9 @@ public class Robot extends IterativeRobot {
 			Scheduler.getInstance().run();
 		}
 
+		if(!SensorManager.isPublishing()){
+			SensorManager.startPublishingToNetwork();
+		}
 	}
 
 	
@@ -187,6 +193,10 @@ public class Robot extends IterativeRobot {
 		//Run WPILib commands
 		Scheduler.getInstance().run();
 		
+		if(!SensorManager.isPublishing()){
+			SensorManager.startPublishingToNetwork();
+		}
+
 	}
 
 	public void disabledPeriodic() {
