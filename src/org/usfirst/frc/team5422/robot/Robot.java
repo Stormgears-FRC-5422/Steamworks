@@ -80,10 +80,7 @@ public class Robot extends IterativeRobot {
 		//initializing the Robot for motion profile mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 		
-		//starts publishing all sensors here
-		if (!SensorManager.isPublishing()) {
-			SensorManager.startPublishingToNetwork();
-		}
+		SensorManager.startPublishingToNetwork();
 		
 		Vision.turnOnLights();
 
@@ -136,11 +133,7 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
-		//starts publishing all sensors here
-		if (!SensorManager.isPublishing()) {
-			SensorManager.startPublishingToNetwork();
-		}
-
+		SensorManager.startPublishingToNetwork();
 		Vision.turnOnLights();
 		
 		//initializing the Robot for joystick Velocity mode
@@ -149,18 +142,16 @@ public class Robot extends IterativeRobot {
 
 	public void disabledInit() {
 		System.out.println("disabled init started.");
-		if(SensorManager.isPublishing()){
-			SensorManager.stopPublishingToNetwork();
-		}
-		
+
+		SensorManager.stopPublishingToNetwork();
 		Vision.turnOffLights();
 		
 		//Navigator.motionManager.endProfile();
 		
 		// shut down all notifiers.  This is a bit aggressive
-		for (RegisteredNotifier r : notifierRegistry) {
-			r.stop();
-		}	
+//		for (RegisteredNotifier r : notifierRegistry) {
+//			r.stop();
+//		}	
 		
 		
 	}
@@ -170,9 +161,6 @@ public class Robot extends IterativeRobot {
 			Scheduler.getInstance().run();
 		}
 
-		if(!SensorManager.isPublishing()){
-			SensorManager.startPublishingToNetwork();
-		}
 	}
 
 	
@@ -192,11 +180,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("1 VEL: ", Drive.talons[1].getEncVelocity());
 		//Run WPILib commands
 		Scheduler.getInstance().run();
-		
-		if(!SensorManager.isPublishing()){
-			SensorManager.startPublishingToNetwork();
-		}
-
 	}
 
 	public void disabledPeriodic() {
