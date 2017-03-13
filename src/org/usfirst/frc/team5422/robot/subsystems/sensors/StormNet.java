@@ -7,8 +7,8 @@ import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 public class StormNet extends RunnableNotifier {
-	USSensor usSensor;
-	IRSensor irSensor;
+	public USSensor usSensor;
+	public IRSensor irSensor;
 
 	public StormNet() {
 		super(NetworkConstants.STORM_NET, 0.001);
@@ -40,5 +40,6 @@ public class StormNet extends RunnableNotifier {
 		networkPublish("IR Alignment Offset", irSensor.getAlignmentOffset());
 		networkPublish("IR Sensor Details", Arrays.toString(irSensor.getAllDetails()));
 	}
+
 
 }

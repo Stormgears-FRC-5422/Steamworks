@@ -84,9 +84,7 @@ public class Robot extends IterativeRobot {
 		}
 
 		//starts publishing all sensors here
-		if (!SensorManager.isPublishing()) {
-			SensorManager.startPublishingToNetwork();
-		}
+		SensorManager.startPublishingToNetwork();
 		
 		Vision.turnOnLights();
 
@@ -140,6 +138,9 @@ public class Robot extends IterativeRobot {
 		}
 
 		Vision.turnOnLights();
+
+		SensorManager.startPublishingToNetwork();
+
 		
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 		
@@ -147,18 +148,16 @@ public class Robot extends IterativeRobot {
 
 	public void disabledInit() {
 		System.out.println("disabled init started.");
-		if(SensorManager.isPublishing()){
-			SensorManager.stopPublishingToNetwork();
-		}
+		SensorManager.stopPublishingToNetwork();
 		
 		Vision.turnOffLights();
 		
 		//Navigator.motionManager.endProfile();
 		
 		// shut down all notifiers.  This is a bit aggressive
-		for (RegisteredNotifier r : notifierRegistry) {
-			r.stop();
-		}	
+//		for (RegisteredNotifier r : notifierRegistry) {
+//			r.stop();
+//		}	
 		
 		
 	}
@@ -168,9 +167,6 @@ public class Robot extends IterativeRobot {
 			Scheduler.getInstance().run();
 		}
 
-		if(!SensorManager.isPublishing()){
-			SensorManager.startPublishingToNetwork();
-		}
 	}
 
 	
@@ -191,10 +187,6 @@ public class Robot extends IterativeRobot {
 		//Run WPILib commands
 		Scheduler.getInstance().run();
 		
-		if(!SensorManager.isPublishing()){
-			SensorManager.startPublishingToNetwork();
-		}
-
 	}
 
 	public void disabledPeriodic() {

@@ -4,12 +4,13 @@ import edu.wpi.first.wpilibj.I2C;
 
 public class USSensor extends StormgearsI2CSensor {
 	private byte[] sensorValues;
-	private byte[] lightValues = new byte[2];
+	private byte[] lightValues;
 	
 	USSensor(int deviceAddress, int numSensors) {
 		super(I2C.Port.kOnboard, deviceAddress);
 		setSensorCount(numSensors);	
-		sensorValues = new byte[numSensors];		
+		sensorValues = new byte[numSensors];	
+		lightValues = new byte[2];  // short
 	}
 
 	public synchronized void pollDistance() {

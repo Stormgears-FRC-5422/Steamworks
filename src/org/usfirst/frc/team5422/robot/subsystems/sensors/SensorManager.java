@@ -63,4 +63,13 @@ public class SensorManager {
 		
 		_isPublishing = false;
 	}
+	
+	public static void lightGearRing(boolean lightOn) {
+	//	stormNet.usSensor.lightGearRing(lightOn);
+	}
+	
+	public static void lightShooterRing(boolean lightOn) {
+	//	stormNet.usSensor.lightShooterRing(lightOn);
+	}
+	
 }

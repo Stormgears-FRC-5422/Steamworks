@@ -2,7 +2,6 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
 import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
@@ -10,22 +9,12 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision extends RunnableNotifier {
-
-	//private static LightSensor lightSensor;
-	private static USSensor usSensor;
-	
-	//TODO: change this to the actual Grip contours report 
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
-	//TODO: change this to the actual Shooter contours report	
 	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	
 	public Vision() {
 		super(NetworkConstants.VISION, 0.001);
 		System.out.println("Vision system constructed");
-		//lightSensor = new LightSensor(SteamworksConstants.STORMNET_LIGHTS_ARDUINO_ADDRESS);
-		usSensor = new USSensor(SteamworksConstants.STORMNET_ULTRASONIC_ARDUINO_ADDRESS, SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS);
-		usSensor.setDebug(true);
-		usSensor.ping(); // say hello
 	}
 
 	@Override
@@ -34,13 +23,13 @@ public class Vision extends RunnableNotifier {
 	}
 	
 	public static void turnOffLights() {
-		usSensor.lightGearRing(false);
-		usSensor.lightShooterRing(false);
+		SensorManager.lightGearRing(false);
+		SensorManager.lightShooterRing(false);
 	}
 	
 	public static void turnOnLights() {
-		usSensor.lightGearRing(true);
-		usSensor.lightShooterRing(true);
+		SensorManager.lightGearRing(true);
+		SensorManager.lightShooterRing(true);
 	}
 	
 	public void getVisionCoordinatesFromNetworkTable() { 
