@@ -1,6 +1,6 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
-import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
@@ -8,7 +8,7 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Vision extends RunnableNotifier {
+public class Vision extends RunnableSubsystem {
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	

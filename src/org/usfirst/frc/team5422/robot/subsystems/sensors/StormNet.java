@@ -2,11 +2,11 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
 import java.util.Arrays;
 
-import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
-public class StormNet extends RunnableNotifier {
+public class StormNet extends RunnableSubsystem {
 	public USSensor usSensor;
 	public IRSensor irSensor;
 

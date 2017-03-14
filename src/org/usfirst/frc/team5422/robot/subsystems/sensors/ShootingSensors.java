@@ -1,8 +1,8 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
-import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 
-public class ShootingSensors extends RunnableNotifier{
+public class ShootingSensors extends RunnableSubsystem{
 	public ShootingSensors(){
 		super("ShootingSensors", 0.001);
 	}

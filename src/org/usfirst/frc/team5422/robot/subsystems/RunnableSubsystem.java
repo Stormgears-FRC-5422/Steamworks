@@ -2,13 +2,13 @@ package org.usfirst.frc.team5422.robot.subsystems;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
-public class RunnableNotifier implements Runnable{
+public class RunnableSubsystem implements Runnable {
 	
-	private RunnableNotifier instance;
+	private RunnableSubsystem instance;
 	
 	private NetworkTable networkTable;
 	
-	public RunnableNotifier(String networkKey, double period){
+	public RunnableSubsystem(String networkKey, double period){
 		networkTable = NetworkTable.getTable(networkKey);
 		this.networkKey = networkKey;
 	}
@@ -27,9 +27,9 @@ public class RunnableNotifier implements Runnable{
 		return this.networkKey;
 	}
 	
-	RunnableNotifier getInstance() throws Exception{
+	RunnableSubsystem getInstance() throws Exception{
 		if(instance==null){
-			throw new Exception("RunnableNotifier not initialized\nPlease Initialize in SensorManager.java");
+			throw new Exception("RunnableSubsystem not initialized\nPlease Initialize in child class");
 		}
 		return instance;
 	}

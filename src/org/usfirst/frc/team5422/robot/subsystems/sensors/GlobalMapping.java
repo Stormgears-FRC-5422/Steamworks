@@ -2,7 +2,7 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
-import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
+import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -10,7 +10,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
 
-public class GlobalMapping extends RunnableNotifier{
+public class GlobalMapping extends RunnableSubsystem{
 
 	static final double SQRT_2 = Math.sqrt(2);
 	static final int ENCODER_RESOLUTION = 2048;//?????
