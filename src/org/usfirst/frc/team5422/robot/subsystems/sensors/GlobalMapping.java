@@ -45,7 +45,7 @@ public class GlobalMapping extends RunnableSubsystem{
 	static AHRS ahrs = new AHRS(Port.kMXP);
 	
 	public GlobalMapping(){
-		super(NetworkConstants.GLOBAL_MAPPING, 0.001);
+		super(NetworkConstants.GLOBAL_MAPPING);
 		
 		enc_fl = 0;
 		enc_fr = 0;

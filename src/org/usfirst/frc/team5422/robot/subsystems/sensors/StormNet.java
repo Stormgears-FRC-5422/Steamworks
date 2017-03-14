@@ -11,7 +11,7 @@ public class StormNet extends RunnableSubsystem {
 	public IRSensor irSensor;
 
 	public StormNet() {
-		super(NetworkConstants.STORM_NET, 0.001);
+		super(NetworkConstants.STORM_NET);
 		usSensor = new USSensor(SteamworksConstants.STORMNET_ULTRASONIC_ARDUINO_ADDRESS,
 				SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS);
 		usSensor.setDebug(true);

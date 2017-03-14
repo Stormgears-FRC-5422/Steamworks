@@ -4,7 +4,7 @@ import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 
 public class ShootingSensors extends RunnableSubsystem{
 	public ShootingSensors(){
-		super("ShootingSensors", 0.001);
+		super("ShootingSensors");
 	}
 	
 	@Override

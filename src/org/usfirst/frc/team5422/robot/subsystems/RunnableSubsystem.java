@@ -8,7 +8,7 @@ public class RunnableSubsystem implements Runnable {
 	
 	private NetworkTable networkTable;
 	
-	public RunnableSubsystem(String networkKey, double period){
+	public RunnableSubsystem(String networkKey){
 		networkTable = NetworkTable.getTable(networkKey);
 		this.networkKey = networkKey;
 	}

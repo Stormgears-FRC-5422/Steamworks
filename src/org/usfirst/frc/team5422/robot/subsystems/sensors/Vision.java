@@ -13,7 +13,7 @@ public class Vision extends RunnableSubsystem {
 	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	
 	public Vision() {
-		super(NetworkConstants.VISION, 0.001);
+		super(NetworkConstants.VISION);
 		System.out.println("Vision system constructed");
 	}
 
