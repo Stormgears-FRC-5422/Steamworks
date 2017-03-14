@@ -13,12 +13,12 @@ public class USSensor extends StormgearsI2CSensor {
 		lightValues = new byte[2];  // short
 	}
 
-	public synchronized void pollDistance() {
+	public void pollDistance() {
 		fetchBytes("U", "Ultrasonic", sensorValues);	
 	}
 	
 	// Distance in inches
-	public synchronized int getDistance(int sensorNumber) {
+	public int getDistance(int sensorNumber) {
 		return (0xFF & sensorValues[sensorNumber]); // Java wants bytes to be signed.  We want unsigned value
 	}
 	
@@ -27,14 +27,14 @@ public class USSensor extends StormgearsI2CSensor {
 	final static String MODE_SHOOTER_RING_ON = "3";
 	final static String MODE_SHOOTER_RING_OFF = "4";
 
-	public synchronized void lightGearRing(boolean lightOn) {
+	public void lightGearRing(boolean lightOn) {
 		if(lightOn)
 			fetchBytes(MODE_GEAR_RING_ON, "GearRingOn", lightValues);
 		else
 			fetchBytes(MODE_GEAR_RING_OFF, "GearRingOff", lightValues);
 	}
 	
-	public synchronized void lightShooterRing(boolean lightOn) {
+	public void lightShooterRing(boolean lightOn) {
 		if(lightOn)
 			fetchBytes(MODE_SHOOTER_RING_ON, "ShooterRingOn", lightValues);
 		else
