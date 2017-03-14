@@ -11,15 +11,14 @@ public class SensorManager {
 	
 	private static GlobalMapping globalMapping;
 	private static Vision vision;
-	//private static ShootingSensors shootingSensors;
 	private static StormNet stormNet;
+	//private static ShootingSensors shootingSensors;
 	
 	private static boolean _isPublishing = false;
 	
 	private static boolean _isInitiated = false;
 	
 	public static boolean isPublishing(){
-		
 		return _isPublishing;
 	}
 	
@@ -29,26 +28,25 @@ public class SensorManager {
 	}
 	
 	public static void initiateSensorSystems(){
-		
-		globalMapping = new GlobalMapping();
-		stormNet = new StormNet();
-		vision = new Vision();
-//		shootingSensors = new ShootingSensors();
-		
-		globalMappingNotifier = new RegisteredNotifier(globalMapping, "GlobalMapping");
-		visionNotifier = new RegisteredNotifier(vision, "Vision");
-		stormNetNotifier = new RegisteredNotifier(stormNet, "StormNet");
-				
-		_isInitiated = true;
-		
-		
+		if (!_isInitiated) {
+			globalMapping = new GlobalMapping();
+			stormNet = new StormNet();
+			vision = new Vision();
+			//shootingSensors = new ShootingSensors();
+			
+			globalMappingNotifier = new RegisteredNotifier(globalMapping, "GlobalMapping");
+			visionNotifier = new RegisteredNotifier(vision, "Vision");
+			stormNetNotifier = new RegisteredNotifier(stormNet, "StormNet");
+					
+			_isInitiated = true;
+		}		
 	}
 	
 	public static void startPublishingToNetwork(){
 		globalMappingNotifier.startPeriodic(0.1);
 		stormNetNotifier.startPeriodic(0.1);
 		visionNotifier.startPeriodic(0.1);
-//		shootingSensors.start();
+		//shootingSensors.start();
 		
 		_isPublishing = true;
 	}
@@ -58,8 +56,6 @@ public class SensorManager {
 		stormNetNotifier.stop();
 		visionNotifier.stop();
 //		shootingSensors.stop();
-		
-		System.out.println("Stopping threads...");
 		
 		_isPublishing = false;
 	}

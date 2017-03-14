@@ -43,7 +43,6 @@ public class Robot extends IterativeRobot {
 	public Command autonomousCommand = null;
 
 	public Robot() {
-		
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
 
@@ -53,12 +52,8 @@ public class Robot extends IterativeRobot {
  		gearManipulatorSubsystem = new Manipulator();
 		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
 		
-		if(!SensorManager.isInitiated()){
-			SensorManager.initiateSensorSystems();
-		}
-		if (!SensorManager.isPublishing()) {
-			SensorManager.startPublishingToNetwork();			
-		}
+		SensorManager.initiateSensorSystems();
+		SensorManager.startPublishingToNetwork();			
 	}
 
 	public void robotInit() {
@@ -81,7 +76,6 @@ public class Robot extends IterativeRobot {
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
 		
 		SensorManager.startPublishingToNetwork();
-		
 		Vision.turnOnLights();
 
 		//execute autonomous command
@@ -223,6 +217,7 @@ public class Robot extends IterativeRobot {
 		System.out.println("creating autonomous command group");
 		autonomousCommand = new AutonomousCommandGroup(allianceSelected, autonomousGearPlacementSelected, autonomousDropOffLocationSelected);
 	}
+	
 	public static Shooter getShooterSubsystem() {
 		return shooterSubsystem;
 	}
