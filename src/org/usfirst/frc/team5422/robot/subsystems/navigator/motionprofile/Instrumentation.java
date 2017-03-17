@@ -23,7 +23,7 @@
  * 
  */
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
-import org.usfirst.frc.team5422.utils.SafeTalon;
+import org.stormgears.StormUtils.SafeTalon;
 import com.ctre.CANTalon;
 
 public class Instrumentation {

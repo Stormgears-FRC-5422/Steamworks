@@ -4,7 +4,7 @@ import org.usfirst.frc.team5422.utils.RobotDriveConstants;
 import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
-import org.usfirst.frc.team5422.utils.SafeTalon;
+import org.stormgears.StormUtils.SafeTalon;
 //import com.ctre.CANTalon;
 
 public abstract class Drive {
