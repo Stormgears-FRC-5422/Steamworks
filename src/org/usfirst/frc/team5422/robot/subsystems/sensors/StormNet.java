@@ -33,6 +33,9 @@ public class StormNet extends RunnableSubsystem {
 			networkPublish("ULTRASONIC_" + Integer.toString(sensorNumber + 1), usSensor.getDistance(sensorNumber));
 		}
 
+		networkPublish("Gear Ring Light", usSensor.getGearLightStatus() ? "On" : "Off");
+		networkPublish("Shooter Ring Light", usSensor.getShooterLightStatus() ? "On" : "Off");
+
 		irSensor.pollGearState();
 		networkPublish("IR Gear State", irSensor.getState().toString());
 

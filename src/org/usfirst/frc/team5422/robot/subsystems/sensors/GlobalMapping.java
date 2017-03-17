@@ -10,7 +10,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
 
-public class GlobalMapping extends RunnableSubsystem{
+public class GlobalMapping extends RunnableSubsystem {
 
 	static final double SQRT_2 = Math.sqrt(2);
 	static final int ENCODER_RESOLUTION = 2048;//?????
