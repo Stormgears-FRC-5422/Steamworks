@@ -1,12 +1,13 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
 
 
-import org.stormgears.StormUtils.SafeTalon;
+import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotionControl {
 	private static final double notifierRate = 0.005;
