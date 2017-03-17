@@ -7,25 +7,26 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.stormgears.StormUtils.SafeTalon;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 public class Shooter extends Subsystem {
 	SafeTalon motor;
-	Relay impeller;
+	SafeTalon impeller;
 
 	double shootVelocity;
+
+	public boolean alreadyRunning = false;
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	public Shooter(int talonId, int relayId) {
-		SmartDashboard.putNumber("Relay ID: ", relayId);
+	public Shooter(int shooterId, int impellerId) {
+		SmartDashboard.putNumber("Relay ID: ", impellerId);
 
-		motor = new SafeTalon(talonId);
+		motor = new SafeTalon(shooterId);
 		motor.changeControlMode(CANTalon.TalonControlMode.Speed);
-		motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-		motor.configEncoderCodesPerRev(8192);
 
-		impeller = new Relay(relayId);
+		impeller = new SafeTalon(impellerId);
 	}
 
 	public void initDefaultCommand() {
@@ -37,25 +38,28 @@ public class Shooter extends Subsystem {
 	}
 
 	public void startImpeller() {
-		impeller.set(Relay.Value.kForward);
+		impeller.set(1);
 	}
 
 	public void stopImpeller() {
-		impeller.set(Relay.Value.kOff);
+		impeller.set(0);
 	}
 
 	public void runImpellerReversed() {
-		impeller.set(Relay.Value.kReverse);
+		impeller.set(-1);
 	}
 
 	public void shoot() {
 		motor.set(shootVelocity * 81.92 * 0.5);
-//		Diagnostics.log("shootVelocity: " + shootVelocity);
-//		Diagnostics.log("shootVoltage: " + motor.getBusVoltage());
+		startImpeller();
+
+		alreadyRunning = true;
 	}
 
 	public void stop() {
 		motor.set(0);
 		stopImpeller();
+
+		alreadyRunning = false;
 	}
 }

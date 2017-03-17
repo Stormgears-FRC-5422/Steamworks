@@ -7,7 +7,7 @@ public class SteamworksConstants {
 
 	// TALON IDS GO HERE
 	public static final int SHOOTER_TALON_ID = 888;   //TODO: Change this to the real talon ID
-	public static final int SHOOTER_RELAY_ID = 0;
+	public static final int SHOOTER_IMPELLER_ID = 0;
 	public static final int CLIMBER_INTAKE_TALON_ID = 4;
 	public static final int SECONDARY_INTAKE_TALON_ID = 66;
 
