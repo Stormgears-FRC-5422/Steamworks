@@ -2,6 +2,7 @@ package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -28,13 +29,14 @@ public class AutoRoutes {
 	public static void initialize(alliances alliance) {
 		if (alliance == alliances.BLUE) {
 			leftStartToGear.add(0, new Pose(FieldPositions.rightStarting));
-			leftStartToGear.add(1, new Pose(FieldPositions.rightGearPeg));
+			leftStartToGear.add(1, new Pose(FieldPositions.rightIntermediate1Continue));
+			leftStartToGear.add(2, new Pose(FieldPositions.rightGearPeg));
 
 			leftGearToBaseline.add(0, new Pose(FieldPositions.rightGearPeg));
 			leftGearToBaseline.add(1, new Pose(FieldPositions.rightIntermediateStop));
 
 			leftGearToGearPickup.add(0, new Pose(FieldPositions.rightGearPeg));
-			leftGearToGearPickup.add(1, new Pose(FieldPositions.rightIntermediateContinue));
+			leftGearToGearPickup.add(1, new Pose(FieldPositions.rightIntermediate2Continue));
 			leftGearToGearPickup.add(2, new Pose(FieldPositions.rightDropOff));
 
 
@@ -45,7 +47,7 @@ public class AutoRoutes {
 			rightGearToBaseline.add(1, new Pose(FieldPositions.leftIntermediateStop));
 
 			rightGearToGearPickup.add(0, new Pose(FieldPositions.leftGearPeg));
-			rightGearToGearPickup.add(1, new Pose(FieldPositions.leftIntermediateContinue));
+			rightGearToGearPickup.add(1, new Pose(FieldPositions.leftIntermediate2Continue));
 			rightGearToGearPickup.add(2, new Pose(FieldPositions.left_CenterDropOff));
 
 
@@ -62,13 +64,14 @@ public class AutoRoutes {
 			centerGearToGearPickup.add(3, new Pose(FieldPositions.left_CenterDropOff));
 		} else {
 			leftStartToGear.add(0, new Pose(FieldPositions.leftStarting));
-			leftStartToGear.add(1, new Pose(FieldPositions.leftGearPeg));
+			leftStartToGear.add(1, new Pose(FieldPositions.leftIntermediate1Continue));
+			leftStartToGear.add(2, new Pose(FieldPositions.leftGearPeg));
 
 			leftGearToBaseline.add(0, new Pose(FieldPositions.leftGearPeg));
 			leftGearToBaseline.add(1, new Pose(FieldPositions.leftIntermediateStop));
 
 			leftGearToGearPickup.add(0, new Pose(FieldPositions.leftGearPeg));
-			leftGearToGearPickup.add(1, new Pose(FieldPositions.leftIntermediateContinue));
+			leftGearToGearPickup.add(1, new Pose(FieldPositions.leftIntermediate2Continue));
 			leftGearToGearPickup.add(2, new Pose(FieldPositions.left_CenterDropOff));
 
 
@@ -79,7 +82,7 @@ public class AutoRoutes {
 			rightGearToBaseline.add(1, new Pose(FieldPositions.rightIntermediateStop));
 
 			rightGearToGearPickup.add(0, new Pose(FieldPositions.rightGearPeg));
-			rightGearToGearPickup.add(1, new Pose(FieldPositions.rightIntermediateContinue));
+			rightGearToGearPickup.add(1, new Pose(FieldPositions.rightIntermediate2Continue));
 			rightGearToGearPickup.add(2, new Pose(FieldPositions.rightDropOff));
 
 

@@ -14,14 +14,20 @@ public class FieldPositions {
 	public static Pose leftGearPeg;
 	public static Pose rightGearPeg;
 	public static Pose centerGearPeg;
-
+	
 	public static Pose leftIntermediateStop;
+	
 	public static Pose rightIntermediateStop;
+
 	public static Pose centerIntermediate1Stop;
 	public static Pose centerIntermediate2Stop;
 
-	public static Pose leftIntermediateContinue;
-	public static Pose rightIntermediateContinue;
+	public static Pose leftIntermediate1Continue;
+	public static Pose leftIntermediate2Continue;
+
+	public static Pose rightIntermediate1Continue;
+	public static Pose rightIntermediate2Continue;
+	
 	public static Pose centerIntermediate1Continue;
 	public static Pose centerIntermediate2Continue;
 
@@ -44,14 +50,20 @@ public class FieldPositions {
 			leftGearPeg = new Pose(108, 120, 0.46, 0.01f);
 			rightGearPeg = new Pose(220, 120, 2.68, 0.01f);
 			centerGearPeg = new Pose(164, 83, 1.57, 0.01f);
-
+			
 			leftIntermediateStop = new Pose(48, 214, 2.08, 0.0f);
+			
 			rightIntermediateStop = new Pose(250, 214, 1.93, 0.0f);
+
 			centerIntermediate1Stop = new Pose(82, 83, 3.14, 0.0f);
 			centerIntermediate2Stop = new Pose(48, 214, 1.84, 0.0f);
 
-			leftIntermediateContinue = new Pose(48, 214, 2.08, 2.44f);
-			rightIntermediateContinue = new Pose(250, 214, 1.93, 2.44f);
+			leftIntermediate1Continue = new Pose(84, 108, 1.57, 0.01f);
+			leftIntermediate2Continue = new Pose(48, 214, 2.08, 2.44f);
+
+			rightIntermediate1Continue = new Pose(243, 108, 1.57, 0.01f);
+			rightIntermediate2Continue = new Pose(250, 214, 1.93, 2.44f);
+			
 			centerIntermediate1Continue = new Pose(82, 83, 3.14, 2.44f);
 			centerIntermediate2Continue = new Pose(48, 214, 1.84, 2.44f);
 
@@ -67,12 +79,18 @@ public class FieldPositions {
 			centerGearPeg = new Pose(width - 164, 83, 1.57, 0.01f);
 
 			leftIntermediateStop = new Pose(width - 48, 214, 2.08, 0.0f);
+
 			rightIntermediateStop = new Pose(width - 250, 214, 1.93, 0.0f);
+
 			centerIntermediate1Stop = new Pose(width - 82, 83, 3.14, 0.0f);
 			centerIntermediate2Stop = new Pose(width - 48, 214, 1.84, 0.0f);
 
-			leftIntermediateContinue = new Pose(width - 48, 214, 2.08, 2.44f);
-			rightIntermediateContinue = new Pose(width - 250, 214, 1.93, 2.44f);
+			leftIntermediate1Continue = new Pose(width - 84, 108, 1.57, 0.01f);
+			leftIntermediate2Continue = new Pose(width - 48, 214, 2.08, 2.44f);
+
+			rightIntermediate1Continue = new Pose(width - 243, 108, 1.57, 0.01f);
+			rightIntermediate2Continue = new Pose(width - 250, 214, 1.93, 2.44f);
+
 			centerIntermediate1Continue = new Pose(width - 82, 83, 3.14, 2.44f);
 			centerIntermediate2Continue = new Pose(width - 48, 214, 1.84, 2.44f);
 
