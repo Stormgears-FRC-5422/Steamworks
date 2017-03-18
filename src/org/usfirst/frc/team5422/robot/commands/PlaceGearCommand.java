@@ -9,6 +9,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
@@ -20,6 +21,7 @@ public class PlaceGearCommand extends Command {
 	private autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation;
 	private autonomousDropOffLocationOptions selectedAutonomousDropOffLocation;
 	private alliances selectedAlliance;
+	private MotionManager m;		
 	
 	public PlaceGearCommand() {
     	requires(Robot.navigatorSubsystem);
@@ -43,8 +45,7 @@ public class PlaceGearCommand extends Command {
 	@Override
 	protected void initialize() {
 		System.out.println("Place Gear Command initialized...with FieldPositions and AutoRoutes");
-		FieldPositions.initialize(this.selectedAlliance);
-		AutoRoutes.initialize(this.selectedAlliance);
+		m = Navigator.motionManager;
 	}
 		
 	// Called repeatedly when this Command is scheduled to run
@@ -57,18 +58,44 @@ public class PlaceGearCommand extends Command {
 				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
 				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
 		
+		Pose srcPosition;
+		Pose dstPosition;
+		double distanceToPeg = 0.0; 
+		double xseg = 0.0;
+		double yseg = 0.0;
 		switch (selectedAutonomousGearPlacementLocation) {
 			case PLACE_GEAR_LEFT_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at left starting position, going to left gear hook.");
 				routeToGear = AutoRoutes.leftStartToGear;
+				srcPosition = routeToGear.get(0);
+				dstPosition = routeToGear.get(1);
+				xseg = dstPosition.x - srcPosition.x;
+				yseg = dstPosition.y - srcPosition.y;
+				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
+				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToPeg + " inches to left gear hook.");
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
 				break;
 			case PLACE_GEAR_RIGHT_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
 				routeToGear = AutoRoutes.rightStartToGear;
+				srcPosition = routeToGear.get(0);
+				dstPosition = routeToGear.get(1);
+				xseg = dstPosition.x - srcPosition.x;
+				yseg = dstPosition.y - srcPosition.y;
+				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
+				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToPeg + " inches to right gear hook.");
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
 				break;
 			case PLACE_GEAR_CENTER_AIRSHIP:
-				System.out.println("[Autonomous Routing] Starting at center starting position, going to center gear hook.");
+				System.out.println("[Autonomous Routing] Starting at center starting position");
 				routeToGear = AutoRoutes.centerStartToGear;
+				srcPosition = routeToGear.get(0);
+				dstPosition = routeToGear.get(1);
+				distanceToPeg = dstPosition.y - srcPosition.y; 				
+				System.out.println("[Autonomous Routing] Starting at center and going " + distanceToPeg + " inches to center gear hook.");
+		 	    // Test profile.  Keep this around somewhere
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+//				SensorManager.vision.alignToGear();
 				break;
 			case NONE:
 				return;
@@ -81,10 +108,6 @@ public class PlaceGearCommand extends Command {
 			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
 		}
 
-		MotionManager m = Navigator.motionManager;		
-		  // Test profile.  Keep this around somewhere
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(76/6.0/Math.PI, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-//		SensorManager.vision.alignToGear();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

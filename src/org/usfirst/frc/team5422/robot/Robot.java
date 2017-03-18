@@ -7,7 +7,9 @@ import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
@@ -66,6 +68,11 @@ public class Robot extends IterativeRobot {
 		
 		//select the autonomous command for this run
 		selectAutonomousCommand();
+
+		//these two lines should follow the selectAutonomousCommand 
+		//so that the alliance is initialized
+		FieldPositions.initialize(allianceSelected);
+		AutoRoutes.initialize(allianceSelected);
 
 		//if any residual commands exist, cancel them
 		if (autonomousCommand != null) {
