@@ -19,8 +19,6 @@ public class GlobalMapping extends RunnableSubsystem {
 	static final double RADIANS_PER_TICK = 2*PI/(float)ENCODER_RESOLUTION;
 	static final double WHEEL_RADIUS = 0.479;//meters
 	
-	
-	
 	//encodervalues are dummies
 	static long enc_fl;
 	static long enc_fr;
@@ -66,11 +64,8 @@ public class GlobalMapping extends RunnableSubsystem {
 	}
 	
 	@Override
-	public void run(){
-		
-		synchronized(Navigator.talonLock) {
-			updatePose();
-		}
+	public void run(){		
+		updatePose();
 		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
@@ -89,8 +84,6 @@ public class GlobalMapping extends RunnableSubsystem {
 	}
 	
 	public static void updatePose(){
-		
-		Navigator.getMecanumDrive();
 		//TODO:: get encoder values
 		enc_fl = Drive.talons[RobotDriveConstants.DRIVE_TALON_LEFT_FRONT].getEncPosition();
 		enc_fr = Drive.talons[RobotDriveConstants.DRIVE_TALON_RIGHT_FRONT].getEncPosition();

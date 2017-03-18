@@ -91,38 +91,7 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.start();
 		} else {
 			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
-		}
-		
-/*
-		Vision.turnOnLights();
-
-		//initializing the Robot for motion profile mode
-		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
-
-		MotionManager m = Navigator.motionManager;
-		
-		  // Test profile.  Keep this around somewhere
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(76/6.0/Math.PI, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-*/		
-		
-/*		ArrayList<Pose> poses = new ArrayList<Pose>();
-		poses.add(new Pose(0,0,0,0));
-		poses.add(new Pose(0,0.5,0,2));
-		poses.add(new Pose(0,1,0,0));//in meters
-		
-		Spline spline = new Spline(poses);
-		
-		System.out.println("started spline");
-		Navigator.driveSplineMeters(spline);
-		System.out.println("finished following spline");
-*/
-		//Robot in Autonomous mode
-		
-		/*ArrayList<Pose> poses = new ArrayList<Pose>();
-		poses.add(new Pose(0, 0, 0, 0));
-		poses.add(new Pose(0, 2, 0, 0));
-		Spline spline = new Spline(poses);
-		Navigator.driveSpline(spline);*/
+		}		
 	}
 		
 	public void teleopInit() {
