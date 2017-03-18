@@ -18,10 +18,10 @@ public class WPIMecanumDrive extends Drive {
 	
 	public WPIMecanumDrive() {
 		super();
-		robotDrive = new RobotDrive(talons[RobotDriveConstants.kFrontLeftChannel], 
-									talons[RobotDriveConstants.kRearLeftChannel], 
-									talons[RobotDriveConstants.kFrontRightChannel], 
-									talons[RobotDriveConstants.kRearRightChannel]);
+		robotDrive = new RobotDrive(talons[RobotDriveConstants.DRIVE_TALON_LEFT_FRONT],
+									talons[RobotDriveConstants.DRIVE_TALON_LEFT_REAR], 
+									talons[RobotDriveConstants.DRIVE_TALON_RIGHT_FRONT], 
+									talons[RobotDriveConstants.DRIVE_TALON_RIGHT_REAR]);
 
 		robotDrive.setInvertedMotor(MotorType.kFrontLeft, true); // invert the
 		// left side motors
