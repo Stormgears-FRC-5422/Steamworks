@@ -11,7 +11,7 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocat
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.shooterMode;
 
-/**
+/** 
  * Driver Station Input Output (D.S.I.O.)
  * Handles everything related to the button board and joystick
  * If you want to use a button, YOU MUST do it through here; ask Michael to add it
@@ -53,12 +53,12 @@ public class DSIO {
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID) && buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
 			Robot.climberIntakeSubsystem.stop();
 
-		//	System.out.println("in check switches method...");
+	//	System.out.println("in check switches method...");
 		// RED SWITCH (Climb when in ON position)
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID)) {
 			//System.out.println("RED SWITCH Pressed..." + getSliderValueClimber());
 			Robot.climberIntakeSubsystem.climb(getSliderValueClimber());
-			//	Robot.climberIntakeSubsystem.climb(1);
+		//	Robot.climberIntakeSubsystem.climb(1);
 		}
 		// ORANGE SWITCH
 		else if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
@@ -95,7 +95,11 @@ public class DSIO {
 	}
 
 	public double getSliderValueClimber() {
-		return (-1*(joystick.getThrottle() - 1) / 2);
+
+		double climberVelocity = (-1*(joystick.getThrottle() - 1) / 2);
+
+
+		return climberVelocity;
 	}
 
 	public Joystick getJoystick() {
@@ -103,19 +107,19 @@ public class DSIO {
 	}
 	private void initializeChoosers() {
 
-		allianceChooser = new SendableChooser<>();
+		allianceChooser = new SendableChooser<alliances>();
 		allianceChooser.addDefault("Red Alliance (Boiler to the right)", alliances.RED);
 		allianceChooser.addObject("Blue Alliance (Boiler to the left)", alliances.BLUE);
 		SmartDashboard.putData("Alliance Chooser", allianceChooser);
 
-		autonomousGearPlacementOptionsChooser = new SendableChooser<>();
+		autonomousGearPlacementOptionsChooser = new SendableChooser<autonomousGearPlacementOptions>();
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Left", autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
 		SmartDashboard.putData("Autonomous Gear Placement Chooser", autonomousGearPlacementOptionsChooser);
 
-		autonomousDropOffLocationOptionsChooser = new SendableChooser<>();
+		autonomousDropOffLocationOptionsChooser = new SendableChooser<autonomousDropOffLocationOptions>();
 		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
 		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
 		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);

@@ -1,17 +1,18 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
-import java.util.Arrays;
 
-import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
+import org.usfirst.frc.team5422.robot.subsystems.RunnableNotifier;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
-public class StormNet extends RunnableSubsystem {
-	public USSensor usSensor;
-	public IRSensor irSensor;
+import java.util.Arrays;
+
+public class StormNet extends RunnableNotifier {
+	USSensor usSensor;
+	IRSensor irSensor;
 
 	public StormNet() {
-		super(NetworkConstants.STORM_NET);
+		super(NetworkConstants.STORM_NET, 0.001);
 		usSensor = new USSensor(SteamworksConstants.STORMNET_ULTRASONIC_ARDUINO_ADDRESS,
 				SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS);
 		usSensor.setDebug(true);
@@ -33,9 +34,6 @@ public class StormNet extends RunnableSubsystem {
 			networkPublish("ULTRASONIC_" + Integer.toString(sensorNumber + 1), usSensor.getDistance(sensorNumber));
 		}
 
-		networkPublish("Gear Ring Light", usSensor.getGearLightStatus() ? "On" : "Off");
-		networkPublish("Shooter Ring Light", usSensor.getShooterLightStatus() ? "On" : "Off");
-
 		irSensor.pollGearState();
 		networkPublish("IR Gear State", irSensor.getState().toString());
 
@@ -43,6 +41,5 @@ public class StormNet extends RunnableSubsystem {
 		networkPublish("IR Alignment Offset", irSensor.getAlignmentOffset());
 		networkPublish("IR Sensor Details", Arrays.toString(irSensor.getAllDetails()));
 	}
-
 
 }

@@ -22,10 +22,10 @@ public class PlaceGearCommand extends Command {
 	private alliances selectedAlliance;
 	
 	public PlaceGearCommand() {
-    	requires(Robot.navigatorSubsystem);
-    	requires(Robot.gearManipulatorSubsystem);    	
+		requires(Robot.navigatorSubsystem);
+		requires(Robot.gearManipulatorSubsystem);
 	}
-	
+
 	public PlaceGearCommand(alliances selectedAlliance, autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation, autonomousDropOffLocationOptions selectedAutonomousDropOffLocation) {
 		requires(Robot.navigatorSubsystem);
     	requires(Robot.gearManipulatorSubsystem);    	

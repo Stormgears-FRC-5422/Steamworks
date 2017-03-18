@@ -1,74 +1,73 @@
-/**
- * Since this example focuses on Motion Control, lets print everything related to MP in a clean 
- * format.  Expect to see something like......
- * 
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * outputEnable    topBufferRem    topBufferCnt    btmBufferCnt    IsValid     HasUnderrun      IsUnderrun          IsLast         VelOnly         targPos         targVel
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * outputEnable    topBufferRem    topBufferCnt    btmBufferCnt    IsValid     HasUnderrun      IsUnderrun          IsLast         VelOnly         targPos         targVel
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * Hold            2048            0               0               1                                                                               5.0             0.0
- * 
- * ...where the columns are reprinted occasionally so you know whats up.
- * 
- * 
- * 
- */
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
-import org.stormgears.StormUtils.SafeTalon;
-import com.ctre.CANTalon;
 
+import com.ctre.CANTalon;
+import org.stormgears.StormUtils.SafeTalon;
+
+/**
+ * Since this example focuses on Motion Control, lets print everything related to MP in a clean
+ * format.  Expect to see something like......
+ * <p>
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * outputEnable    topBufferRem    topBufferCnt    btmBufferCnt    IsValid     HasUnderrun      IsUnderrun          IsLast         VelOnly         targPos         targVel
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * outputEnable    topBufferRem    topBufferCnt    btmBufferCnt    IsValid     HasUnderrun      IsUnderrun          IsLast         VelOnly         targPos         targVel
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * Hold            2048            0               0               1                                                                               5.0             0.0
+ * <p>
+ * ...where the columns are reprinted occasionally so you know whats up.
+ */
 public class Instrumentation {
 
 	static double timeout = 0;
 	static int count = 0;
 
-	private static final String []_table = {" Dis "," En  ","Hold "};
-	
+	private static final String[] _table = {" Dis ", " En  ", "Hold "};
+
 	public static void OnUnderrun() {
 		//System.out.format("%s\n", "UNDERRUN");
 	}
+
 	public static void OnNoProgress() {
 		//System.out.format("%s\n", "NOPROGRESS");
 	}
-	
+
 	@SuppressWarnings("unused")
-	static private String StrOutputEnable(CANTalon.SetValueMotionProfile sv)
-	{
-		if(sv == null)
+	static private String StrOutputEnable(CANTalon.SetValueMotionProfile sv) {
+		if (sv == null)
 			return "null";
-		if(sv.value > 3)
+		if (sv.value > 3)
 			return "Inval";
 		return _table[sv.value];
 	}
-	
-	/** round to six decimal places */
+
+	/**
+	 * round to six decimal places
+	 */
 	@SuppressWarnings("unused")
-	static private double round(double toround)
-	{
-		long whole = (long)(toround * 1000000.0 + 0.5);
-		return ((double)whole) * 0.000001;
+	static private double round(double toround) {
+		long whole = (long) (toround * 1000000.0 + 0.5);
+		return ((double) whole) * 0.000001;
 	}
-	
+
 	public static void process(CANTalon.MotionProfileStatus status1, SafeTalon talon) {
 		double now = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
-		if((now-timeout) > 0.1){
+		if ((now - timeout) > 0.1) {
 			timeout = now;
 			/* fire a loop every 200ms */
 
-			if(--count <= 0){
+			if (--count <= 0) {
 				count = 8;
 				/* every 8 loops, print our columns */
-			
+
 				System.out.format("%-9s\t", "topCnt");
 				System.out.format("%-9s\t", "btmCnt");
 				System.out.format("%-9s\t", "set val");
@@ -82,7 +81,7 @@ public class Instrumentation {
 				System.out.format("%-9s\t", "Control Mode");
 				//System.out.format("%-9s\t", "Encoder Codes Per Rev");
 				System.out.format("%-9s\t", "F");
-				
+
 				System.out.format("\n");
 			}
 			/* every loop, print our values */
