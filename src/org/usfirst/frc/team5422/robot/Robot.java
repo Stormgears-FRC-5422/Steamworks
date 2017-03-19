@@ -52,9 +52,8 @@ public class Robot extends IterativeRobot {
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = Navigator.getInstance();
 		shooterSubsystem = new Shooter(RobotTalonConstants.SHOOTER_TALON_ID, RobotTalonConstants.SHOOTER_RELAY_ID);
- 		gearManipulatorSubsystem = new Manipulator();
 		climberIntakeSubsystem = new ClimberIntake(RobotTalonConstants.CLIMBER_TALON_ID);
-		
+ 		gearManipulatorSubsystem = new Manipulator(SteamworksConstants.LEFT_FLAP_CHANNEL, SteamworksConstants.RIGHT_FLAP_CHANNEL);
 		SensorManager.initiateSensorSystems();
 		SensorManager.startPublishingToNetwork();			
 	}

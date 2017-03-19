@@ -5,7 +5,10 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.robot.Robot;
+import org.usfirst.frc.team5422.robot.commands.GearFlapCommand;
+import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.utils.ButtonIds;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
@@ -23,7 +26,7 @@ public class DSIO {
 	public SendableChooser<autonomousGearPlacementOptions> autonomousGearPlacementOptionsChooser;
 	public SendableChooser<autonomousDropOffLocationOptions> autonomousDropOffLocationOptionsChooser;
 
-	JoystickButton bigBlue, smallBlue, greenSwitch, orangeSwitch, redSwitch;
+	JoystickButton bigBlue, smallBlue, greenSwitch, orangeSwitch, redSwitch, smallGreen, smallYellow;
 
 	shooterMode robotShooterMode = shooterMode.MANUAL;
 
@@ -33,17 +36,27 @@ public class DSIO {
 		buttonBoard = new Joystick(buttonBoardUsbChannel);
 
 		bigBlue = new JoystickButton(buttonBoard, ButtonIds.BIG_BLUE_BUTTON_ID);
-		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE_BUTTON_ID);
+
 		greenSwitch = new JoystickButton(buttonBoard, ButtonIds.GREEN_SWITCH_ID);
 		orangeSwitch = new JoystickButton(buttonBoard, ButtonIds.ORANGE_SWITCH_ID);
 		redSwitch = new JoystickButton(buttonBoard, ButtonIds.RED_SWITCH_ID);
+
+		smallBlue = new JoystickButton(buttonBoard, ButtonIds.SMALL_BLUE_BUTTON_ID);
+		smallGreen = new JoystickButton(buttonBoard, ButtonIds.GREEN_BUTTON_ID);
+		smallYellow = new JoystickButton(buttonBoard, ButtonIds.YELLOW_BUTTON_ID);
 
 		initializeChoosers();
 
 		// Assign commands to pushable buttons
 
 		// Big Blue Button
-		//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
+//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
+
+		// White Button
+		smallBlue.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_RECEIVING));
+		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
+		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
+
 
 	}
 
