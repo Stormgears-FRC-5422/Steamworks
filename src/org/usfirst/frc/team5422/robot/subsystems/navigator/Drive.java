@@ -11,9 +11,10 @@ public abstract class Drive {
 	public static SafeTalon[] talons = new SafeTalon[RobotDriveConstants.NUM_DRIVE_TALONS];
 
 	public Drive() {
-		for(int i = 0; i < talons.length; i ++) {
-			talons[i] = new SafeTalon(i);
-		}	
+		talons[0] = new SafeTalon(RobotDriveConstants.DRIVE_TALON_LEFT_FRONT);
+		talons[1] = new SafeTalon(RobotDriveConstants.DRIVE_TALON_RIGHT_FRONT);
+		talons[2] = new SafeTalon(RobotDriveConstants.DRIVE_TALON_LEFT_REAR);
+		talons[3] = new SafeTalon(RobotDriveConstants.DRIVE_TALON_RIGHT_REAR);
 	}
 	
 	//implement this method in classes derived from this Drive class
@@ -24,10 +25,9 @@ public abstract class Drive {
 	abstract public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile);
 
 	public void setDriveTalonsZeroVelocity() {
-		for(int i = 0; i < talons.length; i ++) {
-			talons[i].set(0);
-		}
-		
+		for (SafeTalon t : talons) {
+			t.set(0);
+    	}		
 	}
 	
 	
