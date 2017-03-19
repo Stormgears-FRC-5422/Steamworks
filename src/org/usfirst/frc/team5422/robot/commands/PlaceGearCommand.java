@@ -59,21 +59,33 @@ public class PlaceGearCommand extends Command {
 				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
 		
 		Pose srcPosition;
+		Pose interimPosition;
 		Pose dstPosition;
+		double distanceToIntermediatePosition = 0.0; 
 		double distanceToPeg = 0.0; 
 		double xseg = 0.0;
 		double yseg = 0.0;
 		switch (selectedAutonomousGearPlacementLocation) {
 			case PLACE_GEAR_LEFT_AIRSHIP:
-				System.out.println("[Autonomous Routing] Starting at left starting position, going to left gear hook.");
+				System.out.println("[Autonomous Routing] Starting at left starting position, going to interim position towards left gear hook.");
 				routeToGear = AutoRoutes.leftStartToGear;
 				srcPosition = routeToGear.get(0);
-				dstPosition = routeToGear.get(1);
-				xseg = dstPosition.x - srcPosition.x;
-				yseg = dstPosition.y - srcPosition.y;
+				interimPosition = routeToGear.get(1);
+				distanceToIntermediatePosition = interimPosition.y - srcPosition.y;
+				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToIntermediatePosition + " inches to left interim position.");
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); 
+
+				dstPosition = routeToGear.get(2);
+				//rotate towards Left Gear position
+				Navigator.rotateAbsolute(dstPosition.theta);
+				//go the next segment from interim position to the left peg
+				xseg = Math.abs(dstPosition.x - interimPosition.x);
+				yseg = Math.abs(dstPosition.y - interimPosition.y);
 				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToPeg + " inches to left gear hook.");
-				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); 
+				
+				
 				break;
 			case PLACE_GEAR_RIGHT_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
