@@ -18,6 +18,18 @@ public class SteamworksConstants
 	public static int ROBOT_ULTRASONIC_SEPARATION_IN = 24;
 	public static int FRAME_WIDTH = 320;//in pixels
 	public static int FRAME_HEIGHT = 240;//in pixels
+
+	// Gear Manipulator Constants
+	public static final int FLAPS_NEUTRAL = 0;
+	public static final int FLAPS_RECEIVING = 1;
+	public static final int FLAPS_DISPENSE = 2;
+	public static final double FLAPS_NEUTRAL_POS = 0.69;
+	public static final double FLAPS_RECEIVING_POS = 1.0;
+	public static final double FLAPS_DISPENSE_POS = 0.32;
+	public static final int LEFT_FLAP_CHANNEL = 0;
+	public static final int RIGHT_FLAP_CHANNEL = 1;
+
+
 	
 	// Alliance options
 	public enum alliances {
