@@ -1,8 +1,8 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.robot.Robot;
-import org.usfirst.frc.team5422.utils.RobotDriveConstants;
-import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
 import org.usfirst.frc.team5422.utils.SafeTalon;
@@ -22,64 +22,47 @@ public class RealBotMecanumDrive extends Drive {
 	public RealBotMecanumDrive() {		
 		super();
 		
-		for(int i = 0; i < talons.length; i ++) {			
-			talons[i].reverseOutput(true);
-			talons[i].changeControlMode(TalonControlMode.Speed);
+		for (SafeTalon t : talons) {
+			t.reverseOutput(true);
+			t.changeControlMode(TalonControlMode.Speed);
 			//Velocity PID Values
-			talons[i].setPID(RobotDriveConstants.REALBOT_VELOCITY_P, 
-							 RobotDriveConstants.REALBOT_VELOCITY_I, 
-							 RobotDriveConstants.REALBOT_VELOCITY_D);
-			talons[i].setF(RobotDriveConstants.REALBOT_VELOCITY_F);
-			talons[i].setIZone(RobotDriveConstants.REALBOT_VELOCITY_IZONE);	
-			
-			//Position PID Values
-//			talons[i].setPID(SteamworksConstants.REALBOT_POSITION_P, 
-//							 SteamworksConstants.REALBOT_POSITION_I, 
-//							 SteamworksConstants.REALBOT_POSITION_D);
-//			talons[i].setF(SteamworksConstants.REALBOT_POSITION_F);
-//			talons[i].setIZone(SteamworksConstants.CLONEBOT_POSITION_IZONE);
-		}
+			t.setPID(RobotTalonConstants.REALBOT_VELOCITY_P, 
+							 RobotTalonConstants.REALBOT_VELOCITY_I, 
+							 RobotTalonConstants.REALBOT_VELOCITY_D);
+			t.setF(RobotTalonConstants.REALBOT_VELOCITY_F);
+			t.setIZone(RobotTalonConstants.REALBOT_VELOCITY_IZONE);	
+    	}
 	}
 	
 	public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile) {
 		if (robotRunMode == RobotModes.AUTONOMOUS) {
-			for(int i = 0; i < talons.length; i ++) {
-				SafeTalon talon = talons[i];
-				talon.reverseOutput(true);
-			//	talon.reverseSensor(true);
-				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-				talon.configEncoderCodesPerRev(2048);
-				talon.changeControlMode(TalonControlMode.MotionProfile);
+			for (SafeTalon t : talons) {
+				t.reverseOutput(true);
+			//	t.reverseSensor(true);
+				t.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				t.configEncoderCodesPerRev(2048);
+				t.changeControlMode(TalonControlMode.MotionProfile);
 				
 				//MOTION PROFILE PID for talons 0, 1, 3
-				talon.setP(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_P);
-				talon.setI(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_I); //0.0002
-				talon.setD(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_D); //10.24
-				talon.setIZone(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_IZONE); //1500
-				talon.setF(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_F);
-			}
-						
+				t.setP(RobotTalonConstants.REALBOT_MOTIONPROFILE_P);
+				t.setI(RobotTalonConstants.REALBOT_MOTIONPROFILE_I); //0.0002
+				t.setD(RobotTalonConstants.REALBOT_MOTIONPROFILE_D); //10.24
+				t.setIZone(RobotTalonConstants.REALBOT_MOTIONPROFILE_IZONE); //1500
+				t.setF(RobotTalonConstants.REALBOT_MOTIONPROFILE_F);
+			}						
 		} else { //RobotModes.TELEOP
-			//System.out.println("Teleop Working");
-			for(int i = 0; i < talons.length; i ++) {			
-				SafeTalon talon = talons[i];
-				talon.reverseOutput(true);
-				//talon.reverseSensor(true);
-				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-				talon.configEncoderCodesPerRev(2048);
-				talon.changeControlMode(TalonControlMode.Speed);
+			for (SafeTalon t : talons) {
+				t.reverseOutput(true);
+				//t.reverseSensor(true);
+				t.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+				t.configEncoderCodesPerRev(2048);
+				t.changeControlMode(TalonControlMode.Speed);
 				//Velocity PID Values
-				talon.setPID(RobotDriveConstants.CLONEBOT_VELOCITY_P, 
-						RobotDriveConstants.CLONEBOT_VELOCITY_I, 
-						RobotDriveConstants.CLONEBOT_VELOCITY_D);
-				talon.setF(RobotDriveConstants.CLONEBOT_VELOCITY_F);
-				talon.setIZone(RobotDriveConstants.CLONEBOT_VELOCITY_IZONE);
-				//Position PID Values
-//				talons[i].setPID(SteamworksConstants.CLONEBOT_POSITION_P, 
-//								 SteamworksConstants.CLONEBOT_POSITION_I, 
-//								 SteamworksConstants.CLONEBOT_POSITION_D);
-//				talons[i].setF(SteamworksConstants.CLONEBOT_POSITION_F);
-//				talons[i].setIZone(SteamworksConstants.CLONEBOT_POSITION_IZONE);
+				t.setPID(RobotTalonConstants.REALBOT_VELOCITY_P, 
+						RobotTalonConstants.REALBOT_VELOCITY_I, 
+						RobotTalonConstants.REALBOT_VELOCITY_D);
+				t.setF(RobotTalonConstants.REALBOT_VELOCITY_F);
+				t.setIZone(RobotTalonConstants.REALBOT_VELOCITY_IZONE);
 			}
 						
 		}

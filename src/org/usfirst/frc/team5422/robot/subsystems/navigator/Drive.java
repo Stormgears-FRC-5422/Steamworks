@@ -1,18 +1,18 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
-import org.usfirst.frc.team5422.utils.RobotDriveConstants;
-import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
 import org.usfirst.frc.team5422.utils.SafeTalon;
 //import com.ctre.CANTalon;
 
 public abstract class Drive {
-	public static SafeTalon[] talons = new SafeTalon[RobotDriveConstants.NUM_DRIVE_TALONS];
+	public static SafeTalon[] talons = new SafeTalon[RobotTalonConstants.NUM_DRIVE_TALONS];
 
 	public Drive() {
 		for(int i = 0; i < talons.length; i ++) {
-			talons[i] = new SafeTalon(RobotDriveConstants.DRIVE_IDS[i]);
+			talons[i] = new SafeTalon(RobotTalonConstants.DRIVE_IDS[i]);
 		}	
 	}
 	

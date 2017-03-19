@@ -41,7 +41,8 @@ public class AutoRoutes {
 
 
 			rightStartToGear.add(0, new Pose(FieldPositions.leftStarting));
-			rightStartToGear.add(1, new Pose(FieldPositions.leftGearPeg));
+			rightStartToGear.add(1, new Pose(FieldPositions.leftIntermediate1Continue));			
+			rightStartToGear.add(2, new Pose(FieldPositions.leftGearPeg));
 
 			rightGearToBaseline.add(0, new Pose(FieldPositions.leftGearPeg));
 			rightGearToBaseline.add(1, new Pose(FieldPositions.leftIntermediateStop));
@@ -76,7 +77,8 @@ public class AutoRoutes {
 
 
 			rightStartToGear.add(0, new Pose(FieldPositions.rightStarting));
-			rightStartToGear.add(1, new Pose(FieldPositions.rightGearPeg));
+			rightStartToGear.add(1, new Pose(FieldPositions.rightIntermediate1Continue));			
+			rightStartToGear.add(2, new Pose(FieldPositions.rightGearPeg));
 
 			rightGearToBaseline.add(0, new Pose(FieldPositions.rightGearPeg));
 			rightGearToBaseline.add(1, new Pose(FieldPositions.rightIntermediateStop));

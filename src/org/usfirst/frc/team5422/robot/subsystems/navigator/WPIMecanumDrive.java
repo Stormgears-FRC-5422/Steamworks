@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 
 import org.usfirst.frc.team5422.robot.Robot;
-import org.usfirst.frc.team5422.utils.RobotDriveConstants;
-import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
 public class WPIMecanumDrive extends Drive {
@@ -18,10 +18,10 @@ public class WPIMecanumDrive extends Drive {
 	
 	public WPIMecanumDrive() {
 		super();
-		robotDrive = new RobotDrive(talons[RobotDriveConstants.DRIVE_TALON_LEFT_FRONT],
-									talons[RobotDriveConstants.DRIVE_TALON_LEFT_REAR], 
-									talons[RobotDriveConstants.DRIVE_TALON_RIGHT_FRONT], 
-									talons[RobotDriveConstants.DRIVE_TALON_RIGHT_REAR]);
+		robotDrive = new RobotDrive(talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT],
+									talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR], 
+									talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT], 
+									talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR]);
 
 		robotDrive.setInvertedMotor(MotorType.kFrontLeft, true); // invert the
 		// left side motors
@@ -57,11 +57,11 @@ public class WPIMecanumDrive extends Drive {
 				talon.changeControlMode(TalonControlMode.MotionProfile);
 				
 				//MOTION PROFILE PID for talons 0, 1, 3
-				talon.setP(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_P);
-				talon.setI(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_I); //0.0002
-				talon.setD(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_D); //10.24
-				talon.setIZone(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_IZONE); //1500
-				talon.setF(RobotDriveConstants.CLONEBOT_MOTIONPROFILE_F);
+				talon.setP(RobotTalonConstants.CLONEBOT_MOTIONPROFILE_P);
+				talon.setI(RobotTalonConstants.CLONEBOT_MOTIONPROFILE_I); //0.0002
+				talon.setD(RobotTalonConstants.CLONEBOT_MOTIONPROFILE_D); //10.24
+				talon.setIZone(RobotTalonConstants.CLONEBOT_MOTIONPROFILE_IZONE); //1500
+				talon.setF(RobotTalonConstants.CLONEBOT_MOTIONPROFILE_F);
 			}
 						
 		} else { //RobotModes.TELEOP

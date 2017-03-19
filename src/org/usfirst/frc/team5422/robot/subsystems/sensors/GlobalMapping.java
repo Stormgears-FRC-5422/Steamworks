@@ -4,7 +4,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
-import org.usfirst.frc.team5422.utils.RobotDriveConstants;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -85,10 +85,10 @@ public class GlobalMapping extends RunnableSubsystem {
 	
 	public static void updatePose(){
 		//TODO:: get encoder values
-		enc_fl = Drive.talons[RobotDriveConstants.DRIVE_TALON_LEFT_FRONT].getEncPosition();
-		enc_fr = Drive.talons[RobotDriveConstants.DRIVE_TALON_RIGHT_FRONT].getEncPosition();
-		enc_bl = Drive.talons[RobotDriveConstants.DRIVE_TALON_LEFT_REAR].getEncPosition();
-		enc_br = Drive.talons[RobotDriveConstants.DRIVE_TALON_RIGHT_REAR].getEncPosition();
+		enc_fl = Drive.talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].getEncPosition();
+		enc_fr = Drive.talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].getEncPosition();
+		enc_bl = Drive.talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].getEncPosition();
+		enc_br = Drive.talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].getEncPosition();
 		
 		int d_enc_fl = (int) (enc_fl - prev_enc_fl);
 		int d_enc_fr = (int) (enc_fr - prev_enc_fr);

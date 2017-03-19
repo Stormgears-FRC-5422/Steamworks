@@ -15,7 +15,8 @@ import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
-import org.usfirst.frc.team5422.utils.RobotDriveConstants.RobotDriveProfile;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
@@ -50,9 +51,9 @@ public class Robot extends IterativeRobot {
 
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = Navigator.getInstance();
-		shooterSubsystem = new Shooter(SteamworksConstants.SHOOTER_TALON_ID, SteamworksConstants.SHOOTER_RELAY_ID);
+		shooterSubsystem = new Shooter(RobotTalonConstants.SHOOTER_TALON_ID, RobotTalonConstants.SHOOTER_RELAY_ID);
  		gearManipulatorSubsystem = new Manipulator();
-		climberIntakeSubsystem = new ClimberIntake(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
+		climberIntakeSubsystem = new ClimberIntake(RobotTalonConstants.CLIMBER_INTAKE_TALON_ID);
 		
 		SensorManager.initiateSensorSystems();
 		SensorManager.startPublishingToNetwork();			

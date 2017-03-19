@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.climber_intake;
 
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
 import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
@@ -13,8 +14,8 @@ public class ClimberIntake extends Subsystem {
 
 
 	public ClimberIntake(int climberIntakeTalonId){
-		climberIntakeTalon = new SafeTalon(SteamworksConstants.CLIMBER_INTAKE_TALON_ID);
-		secondaryIntakeTalon = new SafeTalon (SteamworksConstants.SECONDARY_INTAKE_TALON_ID);
+		climberIntakeTalon = new SafeTalon(RobotTalonConstants.CLIMBER_INTAKE_TALON_ID);
+		secondaryIntakeTalon = new SafeTalon (RobotTalonConstants.SECONDARY_INTAKE_TALON_ID);
 		
 	}
 
