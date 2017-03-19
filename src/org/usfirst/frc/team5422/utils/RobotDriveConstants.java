@@ -3,10 +3,10 @@ package org.usfirst.frc.team5422.utils;
 public class RobotDriveConstants extends SteamworksConstants{
 	public static int NUM_DRIVE_TALONS = 4;
 
-	// Channels for the CANTalon wheels
-	public static int[] DRIVE_IDS = {0, 1, 2, 3}; // These are the ids
+	// Channels (IDs) for the CANTalon wheels
+	public static int[] DRIVE_IDS = {0, 1, 2, 3};
 
-	// Common array indices
+	// Common array indices - these must remain 0 - 3 (NUM_DRIVE_TALONS - 1)
 	public static int DRIVE_TALON_LEFT_FRONT = 0;
 	public static int DRIVE_TALON_RIGHT_FRONT  = 1;
 	public static int DRIVE_TALON_LEFT_REAR = 2;
