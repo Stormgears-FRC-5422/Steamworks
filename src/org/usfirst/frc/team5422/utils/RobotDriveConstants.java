@@ -7,6 +7,8 @@ public class RobotDriveConstants extends SteamworksConstants{
 	public static int[] DRIVE_IDS = {0, 1, 2, 3};
 
 	// Common array indices - these must remain 0 - 3 (NUM_DRIVE_TALONS - 1)
+	// Note that each of these is also the index into the DRIVE_ID array above. If you want to change
+	// a drive ID, do so above, not by changing these numbers.
 	public static int DRIVE_TALON_LEFT_FRONT = 0;
 	public static int DRIVE_TALON_RIGHT_FRONT  = 1;
 	public static int DRIVE_TALON_LEFT_REAR = 2;
