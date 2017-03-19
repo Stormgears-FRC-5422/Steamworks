@@ -14,8 +14,8 @@ public class ClimberIntake extends Subsystem {
 
 
 	public ClimberIntake(int climberIntakeTalonId){
-		climberIntakeTalon = new SafeTalon(RobotTalonConstants.CLIMBER_INTAKE_TALON_ID);
-		secondaryIntakeTalon = new SafeTalon (RobotTalonConstants.SECONDARY_INTAKE_TALON_ID);
+		climberIntakeTalon = new SafeTalon(RobotTalonConstants.CLIMBER_TALON_ID);
+		secondaryIntakeTalon = new SafeTalon (RobotTalonConstants.INTAKE_TALON_ID);
 		
 	}
 

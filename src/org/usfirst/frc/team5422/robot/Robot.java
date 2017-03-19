@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
 		navigatorSubsystem = Navigator.getInstance();
 		shooterSubsystem = new Shooter(RobotTalonConstants.SHOOTER_TALON_ID, RobotTalonConstants.SHOOTER_RELAY_ID);
  		gearManipulatorSubsystem = new Manipulator();
-		climberIntakeSubsystem = new ClimberIntake(RobotTalonConstants.CLIMBER_INTAKE_TALON_ID);
+		climberIntakeSubsystem = new ClimberIntake(RobotTalonConstants.CLIMBER_TALON_ID);
 		
 		SensorManager.initiateSensorSystems();
 		SensorManager.startPublishingToNetwork();			
