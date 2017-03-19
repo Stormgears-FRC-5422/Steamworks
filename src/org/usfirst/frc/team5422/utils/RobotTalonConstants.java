@@ -14,10 +14,10 @@ public class RobotTalonConstants extends SteamworksConstants{
     // TALON IDS GO HERE
 	// Channels (IDs) for the CANTalon wheels
 	public static int[] DRIVE_IDS = {0, 1, 2, 3};
-    public static final int SHOOTER_TALON_ID = 888;   //TODO: Change this to the real talon ID
-    public static final int SHOOTER_RELAY_ID = 0;
     public static final int CLIMBER_INTAKE_TALON_ID = 4;
-    public static final int SECONDARY_INTAKE_TALON_ID = 6;
+    public static final int SECONDARY_INTAKE_TALON_ID = 5;
+    public static final int SHOOTER_TALON_ID = 6;
+    public static final int SHOOTER_RELAY_ID = 0;
 
 	
 	//Motion Profile PID Values for Clone Robot
