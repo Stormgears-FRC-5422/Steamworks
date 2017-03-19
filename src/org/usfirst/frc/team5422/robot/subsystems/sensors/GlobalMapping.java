@@ -65,7 +65,7 @@ public class GlobalMapping extends RunnableSubsystem {
 	
 	@Override
 	public void run(){		
-		//updatePose();
+		updatePose();
 		
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);

@@ -1,14 +1,17 @@
 package org.usfirst.frc.team5422.utils;
 
 public class RobotDriveConstants extends SteamworksConstants{
+	public static int NUM_DRIVE_TALONS = 4;
+
 	// Channels for the CANTalon wheels
+	public static int[] DRIVE_IDS = {0, 1, 2, 3}; // These are the ids
+
+	// Common array indices
 	public static int DRIVE_TALON_LEFT_FRONT = 0;
 	public static int DRIVE_TALON_RIGHT_FRONT  = 1;
 	public static int DRIVE_TALON_LEFT_REAR = 2;
 	public static int DRIVE_TALON_RIGHT_REAR  = 3;
 	
-	public static int NUM_DRIVE_TALONS = 4;
-
 	//Motion Profile PID Values for Clone Robot
 	public static double CLONEBOT_MOTIONPROFILE_F = 0;
 	public static double CLONEBOT_MOTIONPROFILE_P = 0.16;

@@ -12,7 +12,7 @@ public abstract class Drive {
 
 	public Drive() {
 		for(int i = 0; i < talons.length; i ++) {
-			talons[i] = new SafeTalon(i);
+			talons[i] = new SafeTalon(RobotDriveConstants.DRIVE_IDS[i]);
 		}	
 	}
 	
