@@ -77,4 +77,8 @@ public class SensorManager {
 		stormNet.usSensor.toggleLightGearRing();
 		stormNet.usSensor.toggleLightShooterRing();
 	}
+	
+	public static Vision getVisionSubsystem() {
+		return vision;
+	}
 }
