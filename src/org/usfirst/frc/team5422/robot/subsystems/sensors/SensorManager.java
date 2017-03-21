@@ -17,6 +17,8 @@ public class SensorManager {
 	private static boolean _isPublishing = false;
 	
 	private static boolean _isInitiated = false;
+	private static boolean _lightOn = false;
+
 	
 	public static boolean isPublishing(){
 		return _isPublishing;
@@ -27,6 +29,9 @@ public class SensorManager {
 		return _isInitiated;
 	}
 	
+	public static boolean isLightOn() {
+		return _lightOn;
+	}
 	public static void initiateSensorSystems(){
 		if (!_isInitiated) {
 			globalMapping = new GlobalMapping();
@@ -68,4 +73,8 @@ public class SensorManager {
 		stormNet.usSensor.lightShooterRing(lightOn);
 	}
 	
+	public static void toggleLights() {
+		stormNet.usSensor.toggleLightGearRing();
+		stormNet.usSensor.toggleLightShooterRing();
+	}
 }

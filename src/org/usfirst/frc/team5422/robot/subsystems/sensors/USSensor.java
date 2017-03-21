@@ -53,4 +53,12 @@ public class USSensor extends StormgearsI2CSensor {
 		// naively assume that the command worked
 		shooterLightOn = lightOn;
 	}
+	
+	public void toggleLightShooterRing() {
+		lightShooterRing(!shooterLightOn);
+	}
+	
+	public void toggleLightGearRing() {
+		lightGearRing(!gearLightOn);
+	}
 }
