@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
+import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
@@ -85,18 +86,24 @@ public class Vision extends RunnableSubsystem {
       Navigator.rotateRelative(diffAng); /**MOVING ROBOT**/
 
       SmartDashboard.putNumber("Angular Displacement to Gear Hook", diffAng * 180 / Math.PI);
+      NetworkTable visionTable = NetworkTable.getTable("VisionTable");
+      visionTable.putNumber("Angular Displacement", diffAng * 180 / Math.PI);
 
       // Distance
       
       distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
       distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
       double distY = (distLeft + distRight) / 2;
-      
+       
       double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
       double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
       SmartDashboard.putNumber("Distance from Gear-X: ", distX);
       SmartDashboard.putNumber("Distance from Gear-Y: ", distY);
-      Navigator.driveStraightRelativeInches(distX, distY);
+      visionTable.putNumber("Distance from Gear-X", distX);
+      visionTable.putNumber("Distance from Gear-Y", distY);
+      Navigator.driveStraightRelativeInches(distX+9, distY*0.6);
+      Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
+      Navigator.driveStraightRelativeInches(0, -12);
 //      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
    }
    

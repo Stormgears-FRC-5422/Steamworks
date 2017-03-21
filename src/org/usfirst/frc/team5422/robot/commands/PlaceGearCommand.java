@@ -9,6 +9,8 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
@@ -57,7 +59,7 @@ public class PlaceGearCommand extends Command {
 				" Alliance: " + this.selectedAlliance.toString() + 
 				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
 				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
-		
+		selectedAutonomousGearPlacementLocation = autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP;
 		Pose srcPosition;
 		Pose interimPosition;
 		Pose dstPosition;
@@ -106,8 +108,9 @@ public class PlaceGearCommand extends Command {
 				distanceToPeg = dstPosition.y - srcPosition.y; 				
 				System.out.println("[Autonomous Routing] Starting at center and going " + distanceToPeg + " inches to center gear hook.");
 		 	    // Test profile.  Keep this around somewhere
-				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-//				SensorManager.vision.alignToGear();
+//				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+				Vision vision = SensorManager.getVisionSubsystem();
+				vision.alignToGear();
 				break;
 			case NONE:
 				return;

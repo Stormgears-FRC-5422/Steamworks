@@ -148,6 +148,9 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putNumber("1 POS: " ,Drive.talons[1].getEncPosition());
 		SmartDashboard.putNumber("1 VEL: ", Drive.talons[1].getEncVelocity());
+		
+		Vision vision = SensorManager.getVisionSubsystem();
+		vision.alignToGear();
 		//Run WPILib commands
 		Scheduler.getInstance().run();
 	}
