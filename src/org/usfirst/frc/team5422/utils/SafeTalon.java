@@ -1,5 +1,4 @@
 package org.usfirst.frc.team5422.utils;
-package org.stormgears.StormUtils;
 
 import com.ctre.CANTalon;
 //import com.ctre.CanTalonJNI;
