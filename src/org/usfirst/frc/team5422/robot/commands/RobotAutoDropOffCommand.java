@@ -110,11 +110,11 @@ public class RobotAutoDropOffCommand extends Command {
 				break;
 		}
 
-		for (int i = 0; i < routeToGear.size(); i++) {
-			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
+		for (Pose aRouteToGear : routeToGear) {
+			System.out.println("X: " + aRouteToGear.x + " Y: " + aRouteToGear.y);
 		}
-		for (int i = 0; i < routeToDropOff.size(); i++) {
-			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
+		for (Pose aRouteToDropOff : routeToDropOff) {
+			System.out.println("X: " + aRouteToDropOff.x + " Y: " + aRouteToDropOff.y);
 		}
 
 		MotionManager m = Navigator.motionManager;		

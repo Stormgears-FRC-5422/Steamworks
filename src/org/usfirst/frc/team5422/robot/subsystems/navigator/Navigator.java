@@ -84,12 +84,12 @@ public class Navigator extends Subsystem{
 	public static void driveSplineInches(Pose[] poses){
 		
 		double k = 2.54/100.0;
-		
-		for(int i = 0; i < poses.length; i++){
-			poses[i].x *= k;
-			poses[i].y *= k;
-			poses[i].v_x *= k;
-			poses[i].v_y *= k;
+
+		for (Pose pose : poses) {
+			pose.x *= k;
+			pose.y *= k;
+			pose.v_x *= k;
+			pose.v_y *= k;
 		}
 		
 		driveSplineMeters(poses);
@@ -97,12 +97,12 @@ public class Navigator extends Subsystem{
 	
 	public static void driveSplineInches(ArrayList<Pose> poses){
 		double k = 2.54/100.0;
-		
-		for(int i = 0; i < poses.size(); i++){
-			poses.get(i).x *= k;
-			poses.get(i).y *= k;
-			poses.get(i).v_x *= k;
-			poses.get(i).v_y *= k;
+
+		for (Pose pose : poses) {
+			pose.x *= k;
+			pose.y *= k;
+			pose.v_x *= k;
+			pose.v_y *= k;
 		}
 		
 		driveSplineMeters(poses);

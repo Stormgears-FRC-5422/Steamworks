@@ -118,8 +118,8 @@ public class PlaceGearCommand extends Command {
 				break;
 		}
 
-		for (int i = 0; i < routeToGear.size(); i++) {
-			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
+		for (Pose aRouteToGear : routeToGear) {
+			System.out.println("X: " + aRouteToGear.x + " Y: " + aRouteToGear.y);
 		}
 
 	}
