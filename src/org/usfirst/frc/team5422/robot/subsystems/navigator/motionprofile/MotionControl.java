@@ -7,7 +7,6 @@ import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotionControl {
 	private static final double notifierRate = 0.005;

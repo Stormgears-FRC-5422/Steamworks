@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 	public static RobotModes robotMode = RobotModes.AUTONOMOUS;
-	public static List<RegisteredNotifier> notifierRegistry = new ArrayList<RegisteredNotifier>();
+	public static final List<RegisteredNotifier> notifierRegistry = new ArrayList<>();
 
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
@@ -164,7 +164,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAlliance() {
-		allianceSelected = (alliances) dsio.allianceChooser.getSelected();
+		allianceSelected = dsio.allianceChooser.getSelected();
 
 		switch (allianceSelected) {
 			case RED:
@@ -177,11 +177,11 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAutonomousDropOffLocation() {
-		autonomousDropOffLocationSelected = (autonomousDropOffLocationOptions) dsio.autonomousDropOffLocationOptionsChooser.getSelected();
+		autonomousDropOffLocationSelected = dsio.autonomousDropOffLocationOptionsChooser.getSelected();
 	}
 
 	private void selectAutonomousGearPlacement() {
-		autonomousGearPlacementSelected = (autonomousGearPlacementOptions) dsio.autonomousGearPlacementOptionsChooser.getSelected();
+		autonomousGearPlacementSelected = dsio.autonomousGearPlacementOptionsChooser.getSelected();
 	}
 
 	private void selectAutonomousCommand() {

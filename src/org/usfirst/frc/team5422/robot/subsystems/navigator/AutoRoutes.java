@@ -2,7 +2,6 @@ package org.usfirst.frc.team5422.robot.subsystems.navigator;
 
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**

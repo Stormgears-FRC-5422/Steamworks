@@ -83,7 +83,7 @@ public class Vision extends RunnableSubsystem {
 //      System.out.println("DiffAngle:" + diffAng);
       // TODO: Turn in place by -diffAng
 
-      Navigator.rotateRelative(diffAng); /**MOVING ROBOT**/
+      Navigator.rotateRelative(diffAng); /*MOVING ROBOT**/
 
       SmartDashboard.putNumber("Angular Displacement to Gear Hook", diffAng * 180 / Math.PI);
       NetworkTable visionTable = NetworkTable.getTable("VisionTable");

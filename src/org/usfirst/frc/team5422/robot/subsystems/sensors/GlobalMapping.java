@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.RobotTalonConstants;
@@ -72,7 +71,7 @@ public class GlobalMapping extends RunnableSubsystem {
 		networkPublish(NetworkConstants.GP_Y, y);
 		networkPublish(NetworkConstants.GP_VX, vx);
 		networkPublish(NetworkConstants.GP_VY, vy);
-	};
+	}
 	
 	static void resetPose(double X, double Y, double theta){//meters, meters, radians
 		x = X;

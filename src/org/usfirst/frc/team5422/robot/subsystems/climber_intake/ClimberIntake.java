@@ -1,6 +1,5 @@
 package org.usfirst.frc.team5422.robot.subsystems.climber_intake;
 
-import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.RobotTalonConstants;
 import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;

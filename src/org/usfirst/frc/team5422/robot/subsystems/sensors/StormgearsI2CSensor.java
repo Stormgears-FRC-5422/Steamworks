@@ -113,18 +113,18 @@ public class StormgearsI2CSensor extends I2C {
 	 * member is set to true. If the debug member is set to false this function
 	 * does nothing. 
 	 *
-	 * @param  Message	A message string to print to System.out.
-	 * @see	   log
+	 * @param  message	A message string to print to System.out.
+	 * @see	   this.log
 	 */	
 	public void debug(String message) {
-		if (m_debug == true)
+		if (m_debug)
 			log(message);		
 	}
 
 	/**
 	 * Unconditionally logs a message.
 	 *
-	 * @param  Message	A message string to print to System.out.
+	 * @param  message	A message string to print to System.out.
 	 */	
 	public void log(String message) {
 		System.out.println("id " + m_deviceAddress + ":" + message);		
@@ -209,7 +209,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @param  commandName	Friendly name of command for debug logging.
 	 * @param  receiveBuffer Bytes read from the slave by the master. 
 	 * @return Result of command. True for I2CSUCCESS (note the flip in sense)
-	 * @see transaction 		
+	 * @see this.transaction
 	 */	    
     protected boolean fetchCommand(byte[] command, String commandName, byte[] receiveBuffer) {
     	debug(commandName);
@@ -236,7 +236,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @param  commandName	Friendly name of command for debug logging.
 	 * @param  byteArray    Values read from the slave by the master. 
 	 * @return Result of command. True for I2CSUCCESS (note the flip in sense)
-	 * @see fetchCommand	
+	 * @see this.fetchCommand
 	 */	    
 	protected boolean fetchBytes(String command, String commandName, byte[] byteArray){
 		// fetching bytes doesn't require additional processing
@@ -256,7 +256,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @param  commandName	Friendly name of command for debug logging.
 	 * @param  shortArray   Values read from the slave by the master. 
 	 * @return Result of command. True for I2CSUCCESS (note the flip in sense)
-	 * @see fetchCommand	
+	 * @see this.fetchCommand
 	 */	    
 	protected boolean fetchShorts(String command, String commandName, short[] shortArray){
 		byte[] receiveBuffer = new byte[shortArray.length * Short.BYTES];
@@ -285,7 +285,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @param  commandName	Friendly name of command for debug logging.
 	 * @param  intArray   Values read from the slave by the master. 
 	 * @return Result of command. True for I2CSUCCESS (note the flip in sense)
-	 * @see fetchCommand	
+	 * @see this.fetchCommand
 	 */	    	
 	protected boolean fetchInts(String command, String commandName, int[] intArray){
 		byte[] receiveBuffer = new byte[intArray.length * Integer.BYTES];
@@ -314,7 +314,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @param  commandName	Friendly name of command for debug logging.
 	 * @param  longArray   Values read from the slave by the master. 
 	 * @return Result of command. True for I2CSUCCESS (note the flip in sense)
-	 * @see fetchCommand	
+	 * @see this.fetchCommand
 	 */	    	
 	protected boolean fetchLongs(String command, String commandName, long[] longArray){
 		byte[] receiveBuffer = new byte[longArray.length * Long.BYTES];
@@ -343,7 +343,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @param  commandName	Friendly name of command for debug logging.
 	 * @param  floatArray   Values read from the slave by the master. 
 	 * @return Result of command. True for I2CSUCCESS (note the flip in sense)
-	 * @see fetchCommand	
+	 * @see this.fetchCommand
 	 */	    	
 	protected boolean fetchFloats(String command, String commandName, float[] floatArray){
 		byte[] receiveBuffer = new byte[floatArray.length * Float.BYTES];
@@ -372,7 +372,7 @@ public class StormgearsI2CSensor extends I2C {
 	 * @param  commandName	Friendly name of command for debug logging.
 	 * @param  doubleArray   Values read from the slave by the master. 
 	 * @return Result of command. True for I2CSUCCESS (note the flip in sense)
-	 * @see fetchCommand	
+	 * @see this.fetchCommand
 	 */	    	
 	protected boolean fetchDoubles(String command, String commandName, double[] doubleArray){
 		byte[] receiveBuffer = new byte[doubleArray.length * Double.BYTES];

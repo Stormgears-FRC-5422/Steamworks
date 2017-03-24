@@ -2,7 +2,6 @@ package org.usfirst.frc.team5422.utils;
 
 import com.ctre.CANTalon;
 //import com.ctre.CanTalonJNI;
-import com.ctre.GadgeteerUartClient;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 import edu.wpi.first.wpilibj.PIDSourceType;
