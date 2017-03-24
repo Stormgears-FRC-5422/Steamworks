@@ -51,9 +51,9 @@ public class MotionManager {
 //				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
 //				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
 
-				for (SafeTalon talon : control.control.talons) {
+				for (SafeTalon talon : control.talons) {
 					//	Instrumentation.process(control.statuses[i], control.talons[i]);
-				}	
+				}
 
 				
 				if (isLoaded) {
