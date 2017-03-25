@@ -116,12 +116,12 @@ public class Robot extends IterativeRobot {
 		SensorManager.stopPublishingToNetwork();
 		Vision.turnOffLights();
 		
-		//Navigator.motionManager.endProfile();
+		Navigator.motionManager.endProfile();
 		
 		// shut down all notifiers.  This is a bit aggressive
-//		for (RegisteredNotifier r : notifierRegistry) {
-//			r.stop();
-//		}	
+		for (RegisteredNotifier r : notifierRegistry) {
+			r.stop();
+		}
 		
 		
 	}
