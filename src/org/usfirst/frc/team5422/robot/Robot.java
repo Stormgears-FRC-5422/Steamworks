@@ -103,11 +103,11 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
-		SensorManager.startPublishingToNetwork();
-		Vision.turnOnLights();
-		
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 		
+
+		SensorManager.startPublishingToNetwork();
+		Vision.turnOnLights();		
 	}
 
 	public void disabledInit() {
@@ -149,8 +149,6 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("1 POS: " ,Drive.talons[1].getEncPosition());
 		SmartDashboard.putNumber("1 VEL: ", Drive.talons[1].getEncVelocity());
 		
-		Vision vision = SensorManager.getVisionSubsystem();
-		vision.alignToGear();
 		//Run WPILib commands
 		Scheduler.getInstance().run();
 	}
