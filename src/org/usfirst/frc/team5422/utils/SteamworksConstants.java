@@ -128,6 +128,8 @@ public class SteamworksConstants
 	public static final int FIELD_WIDTH_IN = 327;
 	
 	// Vision constants
-	public static final int RINGLIGHT_PORT = 13;	
+	public static final int RINGLIGHT_PORT = 13;
+
+	public static boolean WEBDASHBOARD_ENABLED = true;
 	
 }

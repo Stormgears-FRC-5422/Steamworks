@@ -1,8 +1,11 @@
 package org.usfirst.frc.team5422.robot;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
+import org.stormgears.WebDashboard.WebDashboard;
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
@@ -46,6 +49,17 @@ public class Robot extends IterativeRobot {
 	public Command autonomousCommand = null;
 
 	public Robot() {
+		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
+			try {
+				WebDashboard.init("10.54.22.5:5802");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+//  		Diagnostics.init();
+		}
+
+
+
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
 
@@ -175,11 +189,49 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAutonomousDropOffLocation() {
-		autonomousDropOffLocationSelected = dsio.autonomousDropOffLocationOptionsChooser.getSelected();
+		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
+			String WB  = WebDashboard.getString("gearDropOff");
+			// TODO: make this better
+			if (WB == null) {
+				WB = "baseline";
+			}
+			switch (WB) {
+				case "baseline":
+					autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
+					break;
+				case "gearPickup":
+					autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.GEAR_PICKUP;
+					break;
+			}
+		} else {
+			autonomousDropOffLocationSelected = dsio.autonomousDropOffLocationOptionsChooser.getSelected();
+		}
 	}
 
 	private void selectAutonomousGearPlacement() {
-		autonomousGearPlacementSelected = dsio.autonomousGearPlacementOptionsChooser.getSelected();
+		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
+			String WB = WebDashboard.getString("gearPlacement");
+			// TODO: make this better
+			if (WB == null) {
+				WB = "center";
+			}
+			switch (WB) {
+				case "left":
+					autonomousGearPlacementSelected = autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP;
+					break;
+				case "center":
+					autonomousGearPlacementSelected = autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP;
+					break;
+				case "right":
+					autonomousGearPlacementSelected = autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP;
+					break;
+				case "none":
+					autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
+					break;
+			}
+		} else {
+			autonomousGearPlacementSelected = dsio.autonomousGearPlacementOptionsChooser.getSelected();
+		}
 	}
 
 	private void selectAutonomousCommand() {
