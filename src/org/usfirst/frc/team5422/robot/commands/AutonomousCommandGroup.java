@@ -49,7 +49,7 @@ public class AutonomousCommandGroup extends CommandGroup {
 		autoRobotDropOffCommand = new RobotAutoDropOffCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
 		
 		addSequential(autoPlaceGearCommand);
-		addSequential(autoRobotDropOffCommand);
+//		addSequential(autoRobotDropOffCommand);
 		
 	}
 
