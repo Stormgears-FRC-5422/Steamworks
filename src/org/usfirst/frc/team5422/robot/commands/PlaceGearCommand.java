@@ -116,9 +116,9 @@ public class PlaceGearCommand extends Command {
 				distanceToPeg = dstPosition.y - srcPosition.y; 				
 				System.out.println("[Autonomous Routing] Starting at center and going " + distanceToPeg + " inches to center gear hook.");
 		 	    // Test profile.  Keep this around somewhere
-//				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-				Vision vision = SensorManager.getVisionSubsystem();
-				vision.alignToGear();
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+//				Vision vision = SensorManager.getVisionSubsystem();
+//				vision.alignToGear();
 				break;
 			case NONE:
 				return;
