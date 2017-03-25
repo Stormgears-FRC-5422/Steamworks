@@ -79,11 +79,14 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
 		robotMode = RobotModes.AUTONOMOUS;
-		
+
+		//initializing the Robot for motion profile mode
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE);
+
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
-		//these two lines should follow the selectAutonomousCommand 
+		//these two lines should follow the selectAutonomousCommand
 		//so that the alliance is initialized
 		FieldPositions.initialize(allianceSelected);
 		AutoRoutes.initialize(allianceSelected);
@@ -91,11 +94,9 @@ public class Robot extends IterativeRobot {
 		//if any residual commands exist, cancel them
 		if (autonomousCommand != null) {
 			autonomousCommand.cancel();
+
 		}
 
-		//initializing the Robot for motion profile mode
-		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
-		
 		SensorManager.startPublishingToNetwork();
 		Vision.turnOnLights();
 
