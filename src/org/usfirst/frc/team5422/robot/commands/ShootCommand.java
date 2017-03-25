@@ -7,32 +7,28 @@ import org.usfirst.frc.team5422.robot.subsystems.shooter.shooter_thread.ShooterR
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 /**
- * Created by michael on 1/29/17.
+ * Command that shoots the balls
  */
 public class ShootCommand extends Command
 {
-    ShooterRunnable shooterRunnable;
-    Thread shooterThread;
-    SteamworksConstants.shooterMode shooterMode;
+    private ShooterRunnable shooterRunnable;
+    private Thread shooterThread;
 
-    public ShootCommand(int shootTimeSeconds, SteamworksConstants.shooterMode shooterMode)
+    public ShootCommand()
     {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.shooterSubsystem);
 
-        shooterRunnable = new ShooterRunnable(shootTimeSeconds);
-        this.shooterMode = shooterMode;
+        shooterRunnable = new ShooterRunnable();
     }
 
     // Called just before this Command runs the first time
     protected void initialize()
     {
-        if (shooterMode == SteamworksConstants.shooterMode.MANUAL)
-            Robot.shooterSubsystem.setShootVelocity(Robot.dsio.getManualShooterVelocity());
-        else
-            ;
+//        Diagnostics.log("shootCommand initializing...");
 
-        Diagnostics.log("shootCommand initializing...");
+        Robot.shooterSubsystem.initializeShooter();
+
         shooterThread = new Thread(shooterRunnable);
         shooterThread.start();
     }
@@ -40,19 +36,19 @@ public class ShootCommand extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
-        Robot.shooterSubsystem.shoot();
+
     }
 
-    // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished()
     {
+//        Diagnostics.log("shootCommand stopped.");
         return true;
     }
 
     // Called once after isFinished returns true
     protected void end()
     {
-        Diagnostics.log("It shot a ball!!");
+
     }
 
     // Called when another command which requires one or more of the same

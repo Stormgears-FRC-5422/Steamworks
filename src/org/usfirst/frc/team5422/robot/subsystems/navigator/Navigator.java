@@ -107,6 +107,28 @@ public class Navigator extends Subsystem{
 		
 		driveSplineMeters(poses);
 	}
+
+	public static void driveWithoutAsplineBecauseThoseDontWorkYet(ArrayList<Pose> pose) {
+		int routeLength = pose.size();
+
+		for (int i = 0; i < routeLength - 1; i++) {
+			Pose current = pose.get(i);
+			Pose dest = pose.get(i + 1);
+
+			double angle = Math.atan((dest.y - current.y) / (dest.x - current.x));
+			double distance = Math.sqrt(Math.pow((dest.x - current.x), 2) + Math.pow((dest.y - current.y), 2));
+			rotateRelative(angle);
+			motionManager.pushProfile(
+					TrapezoidalProfile.getTrapezoidZero(distance/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3 * Math.PI / 2, 0),
+					true,
+					true);
+
+			System.out.println("driving because splines are broken.");
+		}
+
+		rotateAbsolute(pose.get(routeLength - 1).theta);
+		System.out.println("finished with driving without splines.");
+	}
 	
 	public static void driveSplineInches(Spline spline){
 		double k = 2.54/100.0;

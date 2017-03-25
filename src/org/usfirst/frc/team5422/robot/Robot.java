@@ -49,13 +49,13 @@ public class Robot extends IterativeRobot {
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
 
+		shooterSubsystem = new Shooter(RobotTalonConstants.SHOOTER_TALON_ID, RobotTalonConstants.SHOOTER_RELAY_ID);
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = Navigator.getInstance();
-		shooterSubsystem = new Shooter(RobotTalonConstants.SHOOTER_TALON_ID, RobotTalonConstants.SHOOTER_RELAY_ID);
 		climberIntakeSubsystem = new ClimberIntake(RobotTalonConstants.CLIMBER_TALON_ID);
  		gearManipulatorSubsystem = new Manipulator(SteamworksConstants.LEFT_FLAP_CHANNEL, SteamworksConstants.RIGHT_FLAP_CHANNEL);
 		SensorManager.initiateSensorSystems();
-		SensorManager.startPublishingToNetwork();			
+		SensorManager.startPublishingToNetwork();
 	}
 
 	public void robotInit() {
@@ -98,16 +98,16 @@ public class Robot extends IterativeRobot {
 		System.out.println("teleop init started.");
 		//Robot in Teleop Mode
 		robotMode = RobotModes.TELEOP;
-		
-		if (autonomousCommand != null){			
+
+		if (autonomousCommand != null){
 			autonomousCommand.cancel();
 		}
 
 		SensorManager.startPublishingToNetwork();
 		Vision.turnOnLights();
-		
+
 		//initializing the Robot for joystick Velocity mode
-		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 		
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY);
 	}
 
 	public void disabledInit() {
@@ -116,12 +116,12 @@ public class Robot extends IterativeRobot {
 		SensorManager.stopPublishingToNetwork();
 		Vision.turnOffLights();
 		
-		//Navigator.motionManager.endProfile();
+		Navigator.motionManager.endProfile();
 		
 		// shut down all notifiers.  This is a bit aggressive
-//		for (RegisteredNotifier r : notifierRegistry) {
-//			r.stop();
-//		}	
+		for (RegisteredNotifier r : notifierRegistry) {
+			r.stop();
+		}
 		
 		
 	}
@@ -136,19 +136,19 @@ public class Robot extends IterativeRobot {
 	
 	
 	public void teleopPeriodic() {
-	//	robotMode = RobotModes.TELEOP;
-		//Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
-	//	Navigator.getInstance();
-		//Move the MecanumDrive
+		robotMode = RobotModes.TELEOP;
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY);
+		Navigator.getInstance();
+		// Move the MecanumDrive
 		Navigator.getMecanumDrive().move();
 		dsio.checkSwitches();
-		
+
 		SmartDashboard.putNumber("0 POS: " ,Drive.talons[0].getEncPosition());
 		SmartDashboard.putNumber("0 VEL: ", Drive.talons[0].getEncVelocity());
-		
+
 		SmartDashboard.putNumber("1 POS: " ,Drive.talons[1].getEncPosition());
 		SmartDashboard.putNumber("1 VEL: ", Drive.talons[1].getEncVelocity());
-		
+
 		Vision vision = SensorManager.getVisionSubsystem();
 		vision.alignToGear();
 		//Run WPILib commands

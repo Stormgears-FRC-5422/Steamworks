@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.commands.GearFlapCommand;
+import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.robot.commands.TurnLightOnOffCommand;
 import org.usfirst.frc.team5422.utils.ButtonIds;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
@@ -49,60 +50,35 @@ public class DSIO {
 		initializeChoosers();
 
 		// Assign commands to pushable buttons
-
-		// Big Blue Button
-//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
-
-		// White Button
 		smallBlue.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_RECEIVING));
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
 		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
 
+		// This is special
+		greenSwitch.whenPressed(new ShootCommand());
+
 
 	}
 
 	public void checkSwitches() {
-		//System.out.println("check switch...");	
-		//Error Check for both switches
+		// Error Check for both switches
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID) && buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
 			Robot.climberIntakeSubsystem.stop();
 
-	//	System.out.println("in check switches method...");
 		// RED SWITCH (Climb when in ON position)
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID)) {
-			//System.out.println("RED SWITCH Pressed..." + getSliderValueClimber());
 			Robot.climberIntakeSubsystem.climb(getSliderValueClimber());
-		//	Robot.climberIntakeSubsystem.climb(1);
 		}
 		// ORANGE SWITCH
 		else if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
-			//System.out.println("ORANGE SWITCH Pressed...");
 			Robot.climberIntakeSubsystem.takeIn();
 		else
 			Robot.climberIntakeSubsystem.stop();
 
 		// GREEN SWITCH
-		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID))
-			//System.out.println("GREEN SWITCH Pressed...");
-			robotShooterMode = shooterMode.AUTONOMOUS;
-		else
-			robotShooterMode = shooterMode.MANUAL;
-
-
-		SmartDashboard.putBoolean("BUTTON 7:", false);
-		SmartDashboard.putBoolean("BUTTON 8:", false);
-
-		//TODO: get rid of this once testing is done
-		if (joystick.getRawButton(7)) {
-			Robot.shooterSubsystem.startImpeller();
-			SmartDashboard.putBoolean("BUTTON 7:", true);
-		} else if (joystick.getRawButton(8)) {
-			Robot.shooterSubsystem.runImpellerReversed();
-			SmartDashboard.putBoolean("BUTTON 8:", true);
-		} else {
-			Robot.shooterSubsystem.stopImpeller();
-		}
+		if (!buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID))
+			Robot.shooterSubsystem.setEnabled(false);
 	}
 
 	public double getManualShooterVelocity() {

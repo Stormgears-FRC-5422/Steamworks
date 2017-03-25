@@ -29,7 +29,11 @@ public class SteamworksConstants
 	public static final int LEFT_FLAP_CHANNEL = 0;
 	public static final int RIGHT_FLAP_CHANNEL = 1;
 
-
+	// Shooter Constants
+	public static final double SHOOTER_P = 0.01;
+	public static final double SHOOTER_F = 0.01573846154;
+	public static final double SHOOT_LOW_SPEED = -52500;
+	public static final double SHOOT_HIGH_SPEED = -53250;
 	
 	// Alliance options
 	public enum alliances {
