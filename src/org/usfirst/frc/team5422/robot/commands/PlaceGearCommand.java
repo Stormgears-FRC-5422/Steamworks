@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
@@ -92,9 +93,17 @@ public class PlaceGearCommand extends Command {
 				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
 				routeToGear = AutoRoutes.rightStartToGear;
 				srcPosition = routeToGear.get(0);
-				dstPosition = routeToGear.get(1);
-				xseg = dstPosition.x - srcPosition.x;
-				yseg = dstPosition.y - srcPosition.y;
+				interimPosition = routeToGear.get(1);
+				distanceToIntermediatePosition = interimPosition.y - srcPosition.y;
+				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToIntermediatePosition + " inches to left interim position.");
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); 
+
+				dstPosition = routeToGear.get(2);
+				//rotate towards Left Gear position
+				Navigator.rotateAbsolute(dstPosition.theta);
+				//go the next segment from interim position to the left peg
+				xseg = Math.abs(dstPosition.x - interimPosition.x);
+				yseg = Math.abs(dstPosition.y - interimPosition.y);
 				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToPeg + " inches to right gear hook.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
@@ -118,8 +127,8 @@ public class PlaceGearCommand extends Command {
 				break;
 		}
 
-		for (Pose aRouteToGear : routeToGear) {
-			System.out.println("X: " + aRouteToGear.x + " Y: " + aRouteToGear.y);
+		for (int i = 0; i < routeToGear.size(); i++) {
+			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
 		}
 
 	}
