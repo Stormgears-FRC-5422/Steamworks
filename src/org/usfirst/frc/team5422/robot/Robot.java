@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
+import org.stormgears.WebDashboard.GameControl.GameControl;
+import org.stormgears.WebDashboard.GameControl.Radios;
 import org.stormgears.WebDashboard.WebDashboard;
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
@@ -56,6 +58,37 @@ public class Robot extends IterativeRobot {
 				e.printStackTrace();
 			}
 //  		Diagnostics.init();
+
+			WebDashboard.set("config", "game", new GameControl[]{
+					new Radios.Builder()
+							.setLabel("Alliance")
+							.setPath("alliance")
+							.setWidth(4)
+							.setEntries(new Radios.Radio[]{
+									new Radios.Radio("red", "Red"),
+									new Radios.Radio("blue", "Blue")
+							})
+							.createRadios(),
+					new Radios.Builder()
+							.setLabel("Gear Placement")
+							.setPath("gearPlacement")
+							.setWidth(4)
+							.setEntries(new Radios.Radio[]{
+									new Radios.Radio("left", "Place Gear Left"),
+									new Radios.Radio("center", "Place Gear Center"),
+									new Radios.Radio("right", "Place Gear Right")
+							})
+							.createRadios(),
+					new Radios.Builder()
+							.setLabel("Drop-Off Location")
+							.setPath("gearDropOff")
+							.setWidth(4)
+							.setEntries(new Radios.Radio[]{
+									new Radios.Radio("gearPickup", "Drop Off at Gear Pickup"),
+									new Radios.Radio("baseline", "Drop Off at Baseline")
+							})
+							.createRadios()
+			});
 		}
 
 
