@@ -10,6 +10,7 @@ public class Pose {
 
 	public static Pose createPoseTheta(double x, double y, double theta, double v) {
 		Pose p = new Pose();
+
 		p.x = x;
 		p.y = y;
 		p.v_x = Math.cos(theta) * v;
