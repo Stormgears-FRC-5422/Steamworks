@@ -211,15 +211,26 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAlliance() {
-		allianceSelected = dsio.allianceChooser.getSelected();
+		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
+			String WB = WebDashboard.getString("alliance");
+			switch (WB) {
+				case "red":
+					allianceSelected = alliances.RED;
+					break;
+				case "blue":
+					allianceSelected = alliances.BLUE;
+			}
+		} else {
+			allianceSelected = dsio.allianceChooser.getSelected();
 
-		switch (allianceSelected) {
-			case RED:
-				// BOILER IS TO THE RIGHT
-				break;
-			case BLUE:
-				// BOILER IS TO THE LEFT
-				break;
+			switch (allianceSelected) {
+				case RED:
+					// BOILER IS TO THE RIGHT
+					break;
+				case BLUE:
+					// BOILER IS TO THE LEFT
+					break;
+			}
 		}
 	}
 

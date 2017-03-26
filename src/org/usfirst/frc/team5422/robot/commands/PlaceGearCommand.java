@@ -55,7 +55,7 @@ public class PlaceGearCommand extends Command {
 				" Alliance: " + this.selectedAlliance.toString() +
 				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
 				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
-		selectedAutonomousGearPlacementLocation = autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP;
+//		selectedAutonomousGearPlacementLocation = autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP;
 		Pose srcPosition;
 		Pose interimPosition;
 		Pose dstPosition;
@@ -71,17 +71,18 @@ public class PlaceGearCommand extends Command {
 				interimPosition = routeToGear.get(1);
 				distanceToIntermediatePosition = interimPosition.y - srcPosition.y;
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToIntermediatePosition + " inches to left interim position.");
-				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition / HardwareConstants.ROTATION_CALC_FACTOR, 70, 3 * Math.PI / 2, 0), true, true);
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition / HardwareConstants.ROTATION_CALC_FACTOR, 70, 3 * Math.PI / 2, 0), true, false);
 
 				dstPosition = routeToGear.get(2);
 				//rotate towards Left Gear position
-				Navigator.rotateAbsolute(dstPosition.theta);
+//				Navigator.rotateAbsolute(dstPosition.theta);
+				m.pushTurn(Math.PI / 2 - dstPosition.theta, false, false);
 				//go the next segment from interim position to the left peg
 				xseg = Math.abs(dstPosition.x - interimPosition.x);
 				yseg = Math.abs(dstPosition.y - interimPosition.y);
 				distanceToPeg = Math.sqrt(xseg * xseg + yseg * yseg);
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToPeg + " inches to left gear hook.");
-				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg / HardwareConstants.ROTATION_CALC_FACTOR, 70, 3 * Math.PI / 2, 0), true, true);
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg / HardwareConstants.ROTATION_CALC_FACTOR, 70, 3 * Math.PI / 2, 0), false, true);
 
 
 				break;
