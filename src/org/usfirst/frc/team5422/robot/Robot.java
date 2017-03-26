@@ -57,7 +57,7 @@ public class Robot extends IterativeRobot {
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
-//  		Diagnostics.init();
+	  		Diagnostics.init();
 
 			WebDashboard.set("config", "game", new GameControl[]{
 					new Radios.Builder()
