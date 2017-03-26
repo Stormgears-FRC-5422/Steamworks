@@ -979,19 +979,19 @@ public class SafeTalon extends CANTalon {
 		}
 	}
 
-	@Override
-	public double getMotionMagicActTrajVelocity() {
-		synchronized (SafeTalon.lock) {
-			return super.getMotionMagicActTrajVelocity();
-		}
-	}
-
-	@Override
-	public double getMotionMagicActTrajPosition() {
-		synchronized (SafeTalon.lock) {
-			return super.getMotionMagicActTrajPosition();
-		}
-	}
+//	@Override
+//	public double getMotionMagicActTrajVelocity() {
+//		synchronized (SafeTalon.lock) {
+//			return super.getMotionMagicActTrajVelocity();
+//		}
+//	}
+//
+//	@Override
+//	public double getMotionMagicActTrajPosition() {
+//		synchronized (SafeTalon.lock) {
+//			return super.getMotionMagicActTrajPosition();
+//		}
+//	}
 
 	@Override
 	public void setCurrentLimit(int amps) {
