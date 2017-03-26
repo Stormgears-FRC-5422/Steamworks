@@ -212,8 +212,8 @@ public class MotionManager {
 				else if((j == 1 || j == 3) && !direc) pt.velocity = -pt.velocity;
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j];
-				System.out.println("PT POS: " + pt.position);
-				System.out.println("ZERO PT: " + pt.zeroPos + "\n");
+//				System.out.println("PT POS: " + pt.position);
+//				System.out.println("ZERO PT: " + pt.zeroPos + "\n");
  				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
 				control.pushMotionProfileTrajectory(j, pt);
 			}
