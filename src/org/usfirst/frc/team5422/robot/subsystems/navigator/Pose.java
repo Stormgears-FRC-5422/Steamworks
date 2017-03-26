@@ -8,27 +8,38 @@ public class Pose {
 	public double v_x;
 	public double v_y;
 
-	public Pose(double x, double y, double v_x, double v_y) {
-		this.x = x;
-		this.y = y;
-		this.v_x = v_x;
-		this.v_y = v_y;
+	public static Pose createPoseTheta(double x, double y, double theta, double v) {
+		Pose p = new Pose();
+		p.x = x;
+		p.y = y;
+		p.v_x = Math.cos(theta) * v;
+		p.v_y = Math.sin(theta) * v;
+		p.theta = theta;
+
+		return p;
 	}
 
-	public Pose(double x, double y, double theta, float v) {
-		this.x = x;
-		this.y = y;
-		this.v_x = Math.cos(theta) * v;
-		this.v_y = Math.sin(theta) * v;
-		this.theta = theta;
+	public static Pose createCopy(Pose p) {
+		Pose q = new Pose();
+
+		q.x = p.x;
+		q.y = p.y;
+		q.v_x = p.v_x;
+		q.v_y = p.v_y;
+		q.theta = p.theta;
+
+		return q;
 	}
 
-	public Pose(Pose p) {
-		this.x = p.x;
-		this.y = p.y;
-		this.v_x = p.v_x;
-		this.v_y = p.v_y;
-		this.theta = p.theta;
+	public static Pose createPose(double x, double y, double v_x, double v_y) {
+		Pose p = new Pose();
+
+		p.x = x;
+		p.y = y;
+		p.v_x = v_x;
+		p.v_y = v_y;
+
+		return p;
 	}
 
 	public void print() {

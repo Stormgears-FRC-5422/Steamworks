@@ -100,7 +100,7 @@ public class SplineFollowThread implements Runnable{
 		}
 		
 		//update the current pose with robot's manipulated
-		spline.updatePose(0, new Pose(x, y, weighted_v_x, weighted_v_y));
+		spline.updatePose(0, Pose.createPose(x, y, weighted_v_x, weighted_v_y));
 		//spline.printSplinePos("after 0 update");
 		
 		//System.out.println("number of segments: " + spline.getNumSegments());
@@ -110,7 +110,7 @@ public class SplineFollowThread implements Runnable{
 		
 		double v_mag = Math.sqrt(waypt_vx*waypt_vx + waypt_vy*waypt_vy);
 		
-		spline.updatePose(1, new Pose(spline.x(1, 1.0), spline.y(1, 1.0), v_mag*Math.sin(theta), v_mag*Math.sin(theta)) );
+		spline.updatePose(1, Pose.createPose(spline.x(1, 1.0), spline.y(1, 1.0), v_mag*Math.sin(theta), v_mag*Math.sin(theta)));
 		//spline.printSplinePos("after 1 update");
 	}
 	
@@ -143,7 +143,7 @@ public class SplineFollowThread implements Runnable{
 			//System.out.println("VX: " + vx);
 			//System.out.println("VY: " + vy);
 			
-			updateSpline(new Pose(x, y, vx, vy));
+			updateSpline(Pose.createPose(x, y, vx, vy));
 			
 			
 			

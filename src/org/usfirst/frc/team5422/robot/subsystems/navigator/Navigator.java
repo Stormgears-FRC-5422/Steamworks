@@ -137,7 +137,7 @@ public class Navigator extends Subsystem{
 			
 			Pose pose = spline.poses.get(i);
 			
-			spline.updatePose(i, new Pose(pose.x*k, pose.y*k, pose.v_x*k, pose.v_y*k));
+			spline.updatePose(i, Pose.createPose(pose.x*k, pose.y*k, pose.v_x*k, pose.v_y*k));
 		}
 		
 		driveSplineMeters(spline);
