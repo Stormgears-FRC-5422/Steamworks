@@ -70,6 +70,7 @@ public class PlaceGearCommand extends Command {
 				srcPosition = routeToGear.get(0);
 				interimPosition = routeToGear.get(1);
 				distanceToIntermediatePosition = interimPosition.y - srcPosition.y;
+				System.out.println("Distance to intermediate pos: " + distanceToIntermediatePosition);
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToIntermediatePosition + " inches to left interim position.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition / HardwareConstants.ROTATION_CALC_FACTOR, 70, 3 * Math.PI / 2, 0), true, false);
 
@@ -86,7 +87,7 @@ public class PlaceGearCommand extends Command {
 
 
 				break;
-			case PLACE_GEAR_RIGHT_AIRSHIP:
+			case PLACE_GEAR_RIGHT_AIRSHIP: // TODO: Finish these - they don't look finished to me
 				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
 				routeToGear = AutoRoutes.rightStartToGear;
 				srcPosition = routeToGear.get(0);

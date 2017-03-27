@@ -47,8 +47,8 @@ public class FieldPositions {
 			rightStarting = Pose.createPoseTheta(243, 12, 1.57, 0.01f);
 			centerStarting = Pose.createPoseTheta(164, 12, 1.57, 0.01f);
 
-			leftGearPeg = Pose.createPoseTheta(108, 120, 0.46, 0.01f);
-			rightGearPeg = Pose.createPoseTheta(220, 120, 2.68, 0.01f);
+			leftGearPeg = Pose.createPoseTheta(108, 120, Math.PI / 6.0, 0.01f);
+			rightGearPeg = Pose.createPoseTheta(220, 120, 5 * Math.PI / 6.0, 0.01f);
 			centerGearPeg = Pose.createPoseTheta(164, 83, 1.57, 0.01f);
 
 			leftIntermediateStop = Pose.createPoseTheta(48, 214, 2.08, 0.0f);
@@ -74,8 +74,8 @@ public class FieldPositions {
 			rightStarting = Pose.createPoseTheta(width - 243, 12, 1.57, 0.01f);
 			centerStarting = Pose.createPoseTheta(width - 164, 12, 1.57, 0.01f);
 
-			leftGearPeg = Pose.createPoseTheta(width - 108, 120, 0.46, 0.01f);
-			rightGearPeg = Pose.createPoseTheta(width - 220, 120, 2.68, 0.01f);
+			leftGearPeg = Pose.createPoseTheta(width - 108, 120, Math.PI / 6.0, 0.01f);
+			rightGearPeg = Pose.createPoseTheta(width - 220, 120, 5 * Math.PI / 6.0, 0.01f);
 			centerGearPeg = Pose.createPoseTheta(width - 164, 83, 1.57, 0.01f);
 
 			leftIntermediateStop = Pose.createPoseTheta(width - 48, 214, 2.08, 0.0f);
