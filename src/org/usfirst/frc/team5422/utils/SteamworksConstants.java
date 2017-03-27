@@ -23,17 +23,13 @@ public class SteamworksConstants
 	public static final int FLAPS_NEUTRAL = 0;
 	public static final int FLAPS_RECEIVING = 1;
 	public static final int FLAPS_DISPENSE = 2;
-	public static final double FLAPS_NEUTRAL_POS = 0.69;
-	public static final double FLAPS_RECEIVING_POS = 1.0;
-	public static final double FLAPS_DISPENSE_POS = 0.32;
+	public static final double FLAPS_NEUTRAL_POS = 1 - 0.69;
+	public static final double FLAPS_RECEIVING_POS = 1 - 1.0;
+	public static final double FLAPS_DISPENSE_POS = 1 - 0.32;
 	public static final int LEFT_FLAP_CHANNEL = 0;
 	public static final int RIGHT_FLAP_CHANNEL = 1;
 
-	// Shooter Constants
-	public static final double SHOOTER_P = 0.01;
-	public static final double SHOOTER_F = 0.01573846154;
-	public static final double SHOOT_LOW_SPEED = -52500;
-	public static final double SHOOT_HIGH_SPEED = -53250;
+
 	
 	// Alliance options
 	public enum alliances {
@@ -128,8 +124,6 @@ public class SteamworksConstants
 	public static final int FIELD_WIDTH_IN = 327;
 	
 	// Vision constants
-	public static final int RINGLIGHT_PORT = 13;
-
-	public static boolean WEBDASHBOARD_ENABLED = true;
+	public static final int RINGLIGHT_PORT = 13;	
 	
 }

@@ -49,12 +49,13 @@ public class WPIMecanumDrive extends Drive {
 	
 	public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile) {
 		if (robotRunMode == RobotModes.AUTONOMOUS) {
-			for (SafeTalon talon : talons) {
-				talon.reverseOutput(true);
+			for(int i = 0; i < talons.length; i ++) {
+				SafeTalon talon = talons[i];
+				talon.reverseOutput(true); 
 				talon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 				talon.configEncoderCodesPerRev(2048);
 				talon.changeControlMode(TalonControlMode.MotionProfile);
-
+				
 				//MOTION PROFILE PID for talons 0, 1, 3
 				talon.setP(RobotTalonConstants.CLONEBOT_MOTIONPROFILE_P);
 				talon.setI(RobotTalonConstants.CLONEBOT_MOTIONPROFILE_I); //0.0002

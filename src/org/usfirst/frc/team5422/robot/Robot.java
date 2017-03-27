@@ -1,21 +1,16 @@
 package org.usfirst.frc.team5422.robot;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
-import org.stormgears.WebDashboard.GameControl.GameControl;
-import org.stormgears.WebDashboard.GameControl.Radios;
-import org.stormgears.WebDashboard.WebDashboard;
 import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
@@ -42,7 +37,7 @@ public class Robot extends IterativeRobot {
 	public static Manipulator gearManipulatorSubsystem;
 	public static DSIO dsio;
 	public static RobotModes robotMode = RobotModes.AUTONOMOUS;
-	public static final List<RegisteredNotifier> notifierRegistry = new ArrayList<>();
+	public static List<RegisteredNotifier> notifierRegistry = new ArrayList<RegisteredNotifier>();
 
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
@@ -51,54 +46,13 @@ public class Robot extends IterativeRobot {
 	public Command autonomousCommand = null;
 
 	public Robot() {
-		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
-			try {
-				WebDashboard.init("10.54.22.5:5802");
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-	  		Diagnostics.init();
-
-			WebDashboard.set("config", "game", new GameControl[]{
-					new Radios.Builder()
-							.setLabel("Alliance")
-							.setPath("alliance")
-							.setWidth(4)
-							.setEntries(new Radios.Radio[]{
-									new Radios.Radio("red", "Red"),
-									new Radios.Radio("blue", "Blue")
-							})
-							.createRadios(),
-					new Radios.Builder()
-							.setLabel("Gear Placement")
-							.setPath("gearPlacement")
-							.setWidth(4)
-							.setEntries(new Radios.Radio[]{
-									new Radios.Radio("left", "Place Gear Left"),
-									new Radios.Radio("center", "Place Gear Center"),
-									new Radios.Radio("right", "Place Gear Right")
-							})
-							.createRadios(),
-					new Radios.Builder()
-							.setLabel("Drop-Off Location")
-							.setPath("gearDropOff")
-							.setWidth(4)
-							.setEntries(new Radios.Radio[]{
-									new Radios.Radio("gearPickup", "Drop Off at Gear Pickup"),
-									new Radios.Radio("baseline", "Drop Off at Baseline")
-							})
-							.createRadios()
-			});
-		}
-
-
-
+		
 		NetworkTable.globalDeleteAll(); //Removes unused garbage from NetworkTable
 		NetworkTable.initialize();
 
-		shooterSubsystem = new Shooter(RobotTalonConstants.SHOOTER_TALON_ID, RobotTalonConstants.SHOOTER_RELAY_ID);
 		dsio = new DSIO(SteamworksConstants.JOYSTICK_USB_CHANNEL, SteamworksConstants.BUTTON_BOARD_USB_CHANNEL);
 		navigatorSubsystem = Navigator.getInstance();
+		shooterSubsystem = new Shooter(RobotTalonConstants.SHOOTER_TALON_ID, RobotTalonConstants.SHOOTER_RELAY_ID);
 		climberIntakeSubsystem = new ClimberIntake(RobotTalonConstants.CLIMBER_TALON_ID);
  		gearManipulatorSubsystem = new Manipulator(SteamworksConstants.LEFT_FLAP_CHANNEL, SteamworksConstants.RIGHT_FLAP_CHANNEL);
 		SensorManager.initiateSensorSystems();
@@ -112,25 +66,28 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
 		robotMode = RobotModes.AUTONOMOUS;
-
-		//if any residual commands exist, cancel them
-		if (autonomousCommand != null) {
-			autonomousCommand.cancel();
-
-		}
-
 		//initializing the Robot for motion profile mode
-		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE);
-
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
+		MotionManager m = Navigator.motionManager;
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10, 70, 3 * Math.PI/2.0, 0), true, true);
+		
+		/*
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
-		//these two lines should follow the selectAutonomousCommand
+		//these two lines should follow the selectAutonomousCommand 
 		//so that the alliance is initialized
 		FieldPositions.initialize(allianceSelected);
 		AutoRoutes.initialize(allianceSelected);
 
+		//if any residual commands exist, cancel them
+		if (autonomousCommand != null) {
+			autonomousCommand.cancel();
+		}
 
+		//initializing the Robot for motion profile mode
+		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
+		
 		SensorManager.startPublishingToNetwork();
 		Vision.turnOnLights();
 
@@ -140,7 +97,7 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.start();
 		} else {
 			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
-		}		
+		}*/		
 	}
 		
 	public void teleopInit() {
@@ -152,11 +109,11 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
+		SensorManager.startPublishingToNetwork();
+		Vision.turnOnLights();
+		
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 		
-
-		SensorManager.startPublishingToNetwork();
-		Vision.turnOnLights();		
 	}
 
 	public void disabledInit() {
@@ -170,7 +127,7 @@ public class Robot extends IterativeRobot {
 		// shut down all notifiers.  This is a bit aggressive
 		for (RegisteredNotifier r : notifierRegistry) {
 			r.stop();
-		}
+		}	
 		
 		
 	}
@@ -198,6 +155,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("1 POS: " ,Drive.talons[1].getEncPosition());
 		SmartDashboard.putNumber("1 VEL: ", Drive.talons[1].getEncVelocity());
 		
+//		Vision vision = SensorManager.getVisionSubsystem();
+//		vision.alignToGear();
 		//Run WPILib commands
 		Scheduler.getInstance().run();
 	}
@@ -211,73 +170,24 @@ public class Robot extends IterativeRobot {
 	}
 
 	private void selectAlliance() {
-		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
-			String WB = WebDashboard.getString("alliance");
-			switch (WB) {
-				case "red":
-					allianceSelected = alliances.RED;
-					break;
-				case "blue":
-					allianceSelected = alliances.BLUE;
-			}
-		} else {
-			allianceSelected = dsio.allianceChooser.getSelected();
+		allianceSelected = (alliances) dsio.allianceChooser.getSelected();
 
-			switch (allianceSelected) {
-				case RED:
-					// BOILER IS TO THE RIGHT
-					break;
-				case BLUE:
-					// BOILER IS TO THE LEFT
-					break;
-			}
+		switch (allianceSelected) {
+			case RED:
+				// BOILER IS TO THE RIGHT
+				break;
+			case BLUE:
+				// BOILER IS TO THE LEFT
+				break;
 		}
 	}
 
 	private void selectAutonomousDropOffLocation() {
-		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
-			String WB  = WebDashboard.getString("gearDropOff");
-			// TODO: make this better
-			if (WB == null) {
-				WB = "baseline";
-			}
-			switch (WB) {
-				case "baseline":
-					autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
-					break;
-				case "gearPickup":
-					autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.GEAR_PICKUP;
-					break;
-			}
-		} else {
-			autonomousDropOffLocationSelected = dsio.autonomousDropOffLocationOptionsChooser.getSelected();
-		}
+		autonomousDropOffLocationSelected = (autonomousDropOffLocationOptions) dsio.autonomousDropOffLocationOptionsChooser.getSelected();
 	}
 
 	private void selectAutonomousGearPlacement() {
-		if (SteamworksConstants.WEBDASHBOARD_ENABLED) {
-			String WB = WebDashboard.getString("gearPlacement");
-			// TODO: make this better
-			if (WB == null) {
-				WB = "center";
-			}
-			switch (WB) {
-				case "left":
-					autonomousGearPlacementSelected = autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP;
-					break;
-				case "center":
-					autonomousGearPlacementSelected = autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP;
-					break;
-				case "right":
-					autonomousGearPlacementSelected = autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP;
-					break;
-				case "none":
-					autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
-					break;
-			}
-		} else {
-			autonomousGearPlacementSelected = dsio.autonomousGearPlacementOptionsChooser.getSelected();
-		}
+		autonomousGearPlacementSelected = (autonomousGearPlacementOptions) dsio.autonomousGearPlacementOptionsChooser.getSelected();
 	}
 
 	private void selectAutonomousCommand() {

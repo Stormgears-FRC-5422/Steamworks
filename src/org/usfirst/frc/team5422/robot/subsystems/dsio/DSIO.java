@@ -50,35 +50,60 @@ public class DSIO {
 		initializeChoosers();
 
 		// Assign commands to pushable buttons
+
+		// Big Blue Button
+//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
+
+		// White Button
 		smallBlue.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_RECEIVING));
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
 		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
 
-		// This is special
-		greenSwitch.whenPressed(new ShootCommand());
-
 
 	}
 
 	public void checkSwitches() {
-		// Error Check for both switches
+		//System.out.println("check switch...");	
+		//Error Check for both switches
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID) && buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
 			Robot.climberIntakeSubsystem.stop();
 
+	//	System.out.println("in check switches method...");
 		// RED SWITCH (Climb when in ON position)
 		if (buttonBoard.getRawButton(ButtonIds.RED_SWITCH_ID)) {
+			//System.out.println("RED SWITCH Pressed..." + getSliderValueClimber());
 			Robot.climberIntakeSubsystem.climb(getSliderValueClimber());
+		//	Robot.climberIntakeSubsystem.climb(1);
 		}
 		// ORANGE SWITCH
 		else if (buttonBoard.getRawButton(ButtonIds.ORANGE_SWITCH_ID))
+			//System.out.println("ORANGE SWITCH Pressed...");
 			Robot.climberIntakeSubsystem.takeIn();
 		else
 			Robot.climberIntakeSubsystem.stop();
 
 		// GREEN SWITCH
-		if (!buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID))
-			Robot.shooterSubsystem.setEnabled(false);
+		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID))
+			//System.out.println("GREEN SWITCH Pressed...");
+			robotShooterMode = shooterMode.AUTONOMOUS;
+		else
+			robotShooterMode = shooterMode.MANUAL;
+
+
+		SmartDashboard.putBoolean("BUTTON 7:", false);
+		SmartDashboard.putBoolean("BUTTON 8:", false);
+
+		//TODO: get rid of this once testing is done
+		if (joystick.getRawButton(7)) {
+			Robot.shooterSubsystem.startImpeller();
+			SmartDashboard.putBoolean("BUTTON 7:", true);
+		} else if (joystick.getRawButton(8)) {
+			Robot.shooterSubsystem.runImpellerReversed();
+			SmartDashboard.putBoolean("BUTTON 8:", true);
+		} else {
+			Robot.shooterSubsystem.stopImpeller();
+		}
 	}
 
 	public double getManualShooterVelocity() {
@@ -98,19 +123,19 @@ public class DSIO {
 	}
 	private void initializeChoosers() {
 
-		allianceChooser = new SendableChooser<>();
+		allianceChooser = new SendableChooser<alliances>();
 		allianceChooser.addDefault("Red Alliance (Boiler to the right)", alliances.RED);
 		allianceChooser.addObject("Blue Alliance (Boiler to the left)", alliances.BLUE);
 		SmartDashboard.putData("Alliance Chooser", allianceChooser);
 
-		autonomousGearPlacementOptionsChooser = new SendableChooser<>();
+		autonomousGearPlacementOptionsChooser = new SendableChooser<autonomousGearPlacementOptions>();
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Left", autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
 		SmartDashboard.putData("Autonomous Gear Placement Chooser", autonomousGearPlacementOptionsChooser);
 
-		autonomousDropOffLocationOptionsChooser = new SendableChooser<>();
+		autonomousDropOffLocationOptionsChooser = new SendableChooser<autonomousDropOffLocationOptions>();
 		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
 		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
 		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);

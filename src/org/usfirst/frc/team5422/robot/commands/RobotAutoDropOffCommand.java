@@ -10,10 +10,12 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 
+import java.text.FieldPosition;
 import java.util.ArrayList;
 
 public class RobotAutoDropOffCommand extends Command {
@@ -110,11 +112,11 @@ public class RobotAutoDropOffCommand extends Command {
 				break;
 		}
 
-		for (Pose aRouteToGear : routeToGear) {
-			System.out.println("X: " + aRouteToGear.x + " Y: " + aRouteToGear.y);
+		for (int i = 0; i < routeToGear.size(); i++) {
+			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
 		}
-		for (Pose aRouteToDropOff : routeToDropOff) {
-			System.out.println("X: " + aRouteToDropOff.x + " Y: " + aRouteToDropOff.y);
+		for (int i = 0; i < routeToDropOff.size(); i++) {
+			System.out.println("X: " + routeToDropOff.get(i).x + " Y: " + routeToDropOff.get(i).y);
 		}
 
 		MotionManager m = Navigator.motionManager;		

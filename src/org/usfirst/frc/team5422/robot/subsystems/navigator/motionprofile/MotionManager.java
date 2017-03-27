@@ -3,16 +3,18 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Instrum
 
 import org.usfirst.frc.team5422.utils.SafeTalon; 
 //import com.ctre.CANTalon;
+import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MotionManager {
-	private List<double[][]> paths = new ArrayList<>();
-	private List<ProfileDetails> profileDetails = new ArrayList<>();
+	private List<double[][]> paths = new ArrayList<double[][]>();
+	private List<ProfileDetails> profileDetails = new ArrayList<ProfileDetails>();
 	private boolean loading = false, interrupt = false;
 	private int batchSize = 256 * 4;
 	private int currIndex = 0;
@@ -36,6 +38,7 @@ public class MotionManager {
 		public void run() {
 			// synchronize to avoid MT conflicts with the input of profiles
 			
+		
 			// called from synchronized methods - which effectively sync(this)
 			synchronized(this) {
 //				System.out.println("In MotionManager run. INT = " + interrupt + " loading = " + loading + " isLoaded = " + isLoaded);
@@ -46,14 +49,14 @@ public class MotionManager {
 //				SmartDashboard.putNumber("Val 2: ", control.getEncVel(2));
 //				SmartDashboard.putNumber("Val 3: ", control.getEncVel(3));
 				
-//				SmartDashboard.putNumber("Pos 0: ", control.getEncPos(0));
-//				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
-//				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
-//				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
-
-				for (SafeTalon talon : control.talons) {
-					//	Instrumentation.process(control.statuses[i], control.talons[i]);
-				}
+				SmartDashboard.putNumber("Pos 0: ", control.getEncPos(0));
+				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
+				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
+				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
+				
+				for (int i = 0; i < control.talons.length; i++) {
+				//	Instrumentation.process(control.statuses[i], control.talons[i]);
+				}	
 
 				
 				if (isLoaded) {
@@ -61,7 +64,7 @@ public class MotionManager {
 					control.enable();
 				}
 				
-				if (!loading) return;
+				if (loading == false) return;
 
 				// Are we done?
 				if(paths.isEmpty()) {  // TODO: need a more elegant stop condition??
@@ -89,7 +92,7 @@ public class MotionManager {
 				}
 				
 				// Push the next section
-				if(profileDetails.get(0).turn) pushTurn();
+				if(profileDetails.get(0).turn == true) pushTurn();
 				else pushLinear();
 				
 				// If we have pushed the entire path, remove it and let the next path run on the next time through
@@ -212,8 +215,8 @@ public class MotionManager {
 				else if((j == 1 || j == 3) && !direc) pt.velocity = -pt.velocity;
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j];
-//				System.out.println("PT POS: " + pt.position);
-//				System.out.println("ZERO PT: " + pt.zeroPos + "\n");
+			//	System.out.println("PT POS: " + pt.position);
+			//	System.out.println("ZERO PT: " + pt.zeroPos + "\n");
  				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
 				control.pushMotionProfileTrajectory(j, pt);
 			}

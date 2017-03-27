@@ -1,6 +1,9 @@
 package org.usfirst.frc.team5422.robot.commands;
 
+import java.util.ArrayList;
+
 import org.usfirst.frc.team5422.robot.Robot;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;

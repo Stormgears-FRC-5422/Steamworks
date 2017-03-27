@@ -24,8 +24,8 @@ public abstract class Drive {
 	abstract public void initializeDriveMode(RobotModes robotRunMode, RobotDriveProfile driveProfile);
 
 	public void setDriveTalonsZeroVelocity() {
-		for (SafeTalon talon : talons) {
-			talon.set(0);
+		for(int i = 0; i < talons.length; i ++) {
+			talons[i].set(0);
 		}
 		
 	}

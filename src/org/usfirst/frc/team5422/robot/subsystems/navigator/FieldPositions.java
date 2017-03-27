@@ -43,59 +43,59 @@ public class FieldPositions {
 		int width = SteamworksConstants.FIELD_WIDTH_IN;
 
 		if (alliance == alliances.RED) {
-			leftStarting = Pose.createPoseTheta(84, 12, 1.57, 0.01f);
-			rightStarting = Pose.createPoseTheta(243, 12, 1.57, 0.01f);
-			centerStarting = Pose.createPoseTheta(164, 12, 1.57, 0.01f);
+			leftStarting = new Pose(84, 12, 1.57, 0.01f);
+			rightStarting = new Pose(243, 12, 1.57, 0.01f);
+			centerStarting = new Pose(164, 12, 1.57, 0.01f);
 
-			leftGearPeg = Pose.createPoseTheta(108, 120, 0.46, 0.01f);
-			rightGearPeg = Pose.createPoseTheta(220, 120, 2.68, 0.01f);
-			centerGearPeg = Pose.createPoseTheta(164, 83, 1.57, 0.01f);
+			leftGearPeg = new Pose(108, 120, Math.PI/6.0, 0.01f);
+			rightGearPeg = new Pose(220, 120, 5*Math.PI/6.0, 0.01f);
+			centerGearPeg = new Pose(164, 83, 1.57, 0.01f);
 
-			leftIntermediateStop = Pose.createPoseTheta(48, 214, 2.08, 0.0f);
+			leftIntermediateStop = new Pose(48, 214, 2.08, 0.0f);
 
-			rightIntermediateStop = Pose.createPoseTheta(250, 214, 1.93, 0.0f);
+			rightIntermediateStop = new Pose(250, 214, 1.93, 0.0f);
 
-			centerIntermediate1Stop = Pose.createPoseTheta(82, 83, 3.14, 0.0f);
-			centerIntermediate2Stop = Pose.createPoseTheta(48, 214, 1.84, 0.0f);
+			centerIntermediate1Stop = new Pose(82, 83, 3.14, 0.0f);
+			centerIntermediate2Stop = new Pose(48, 214, 1.84, 0.0f);
 
-			leftIntermediate1Continue = Pose.createPoseTheta(84, 108, 1.57, 0.01f);
-			leftIntermediate2Continue = Pose.createPoseTheta(48, 214, 2.08, 2.44f);
+			leftIntermediate1Continue = new Pose(84, 108, 1.57, 0.01f);
+			leftIntermediate2Continue = new Pose(48, 214, 2.08, 2.44f);
 
-			rightIntermediate1Continue = Pose.createPoseTheta(243, 108, 1.57, 0.01f);
-			rightIntermediate2Continue = Pose.createPoseTheta(250, 214, 1.93, 2.44f);
+			rightIntermediate1Continue = new Pose(243, 108, 1.57, 0.01f);
+			rightIntermediate2Continue = new Pose(250, 214, 1.93, 2.44f);
 
-			centerIntermediate1Continue = Pose.createPoseTheta(82, 83, 3.14, 2.44f);
-			centerIntermediate2Continue = Pose.createPoseTheta(48, 214, 1.84, 2.44f);
+			centerIntermediate1Continue = new Pose(82, 83, 3.14, 2.44f);
+			centerIntermediate2Continue = new Pose(48, 214, 1.84, 2.44f);
 
-			rightDropOff = Pose.createPoseTheta(36, 582, 2.10, 0.01f);
-			left_CenterDropOff = Pose.createPoseTheta(36, 582, 1.60, 0.01f);
+			rightDropOff = new Pose(36, 582, 2.10, 0.01f);
+			left_CenterDropOff = new Pose(36, 582, 1.60, 0.01f);
 		} else {
-			leftStarting = Pose.createPoseTheta(width - 84, 12, 1.57, 0.01f);
-			rightStarting = Pose.createPoseTheta(width - 243, 12, 1.57, 0.01f);
-			centerStarting = Pose.createPoseTheta(width - 164, 12, 1.57, 0.01f);
+			leftStarting = new Pose(width - 84, 12, 1.57, 0.01f);
+			rightStarting = new Pose(width - 243, 12, 1.57, 0.01f);
+			centerStarting = new Pose(width - 164, 12, 1.57, 0.01f);
 
-			leftGearPeg = Pose.createPoseTheta(width - 108, 120, 0.46, 0.01f);
-			rightGearPeg = Pose.createPoseTheta(width - 220, 120, 2.68, 0.01f);
-			centerGearPeg = Pose.createPoseTheta(width - 164, 83, 1.57, 0.01f);
+			leftGearPeg = new Pose(width - 108, 120, Math.PI/6.0, 0.01f);
+			rightGearPeg = new Pose(width - 220, 120, 5*Math.PI/6.0, 0.01f);
+			centerGearPeg = new Pose(width - 164, 83, 1.57, 0.01f);
 
-			leftIntermediateStop = Pose.createPoseTheta(width - 48, 214, 2.08, 0.0f);
+			leftIntermediateStop = new Pose(width - 48, 214, 2.08, 0.0f);
 
-			rightIntermediateStop = Pose.createPoseTheta(width - 250, 214, 1.93, 0.0f);
+			rightIntermediateStop = new Pose(width - 250, 214, 1.93, 0.0f);
 
-			centerIntermediate1Stop = Pose.createPoseTheta(width - 82, 83, 3.14, 0.0f);
-			centerIntermediate2Stop = Pose.createPoseTheta(width - 48, 214, 1.84, 0.0f);
+			centerIntermediate1Stop = new Pose(width - 82, 83, 3.14, 0.0f);
+			centerIntermediate2Stop = new Pose(width - 48, 214, 1.84, 0.0f);
 
-			leftIntermediate1Continue = Pose.createPoseTheta(width - 84, 108, 1.57, 0.01f);
-			leftIntermediate2Continue = Pose.createPoseTheta(width - 48, 214, 2.08, 2.44f);
+			leftIntermediate1Continue = new Pose(width - 84, 108, 1.57, 0.01f);
+			leftIntermediate2Continue = new Pose(width - 48, 214, 2.08, 2.44f);
 
-			rightIntermediate1Continue = Pose.createPoseTheta(width - 243, 108, 1.57, 0.01f);
-			rightIntermediate2Continue = Pose.createPoseTheta(width - 250, 214, 1.93, 2.44f);
+			rightIntermediate1Continue = new Pose(width - 243, 108, 1.57, 0.01f);
+			rightIntermediate2Continue = new Pose(width - 250, 214, 1.93, 2.44f);
 
-			centerIntermediate1Continue = Pose.createPoseTheta(width - 82, 83, 3.14, 2.44f);
-			centerIntermediate2Continue = Pose.createPoseTheta(width - 48, 214, 1.84, 2.44f);
+			centerIntermediate1Continue = new Pose(width - 82, 83, 3.14, 2.44f);
+			centerIntermediate2Continue = new Pose(width - 48, 214, 1.84, 2.44f);
 
-			rightDropOff = Pose.createPoseTheta(width - 36, 582, 2.10, 0.01f);
-			left_CenterDropOff = Pose.createPoseTheta(width - 36, 582, 1.60, 0.01f);
+			rightDropOff = new Pose(width - 36, 582, 2.10, 0.01f);
+			left_CenterDropOff = new Pose(width - 36, 582, 1.60, 0.01f);
 		}
 	}
 }

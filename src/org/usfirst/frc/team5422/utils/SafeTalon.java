@@ -1,13 +1,12 @@
 package org.usfirst.frc.team5422.utils;
 
 import com.ctre.CANTalon;
-//import com.ctre.CanTalonJNI;
+import com.ctre.GadgeteerUartClient;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class SafeTalon extends CANTalon {
-	public final static Object lock = new Object();
 
 	public SafeTalon(int deviceNumber) {
 		super(deviceNumber);
@@ -20,1081 +19,291 @@ public class SafeTalon extends CANTalon {
 	public SafeTalon(int deviceNumber, int controlPeriodMs, int enablePeriodMs) {
 		super(deviceNumber, controlPeriodMs, enablePeriodMs);
 	}
+	
+    public synchronized void pidWrite(double output) { super.pidWrite(output); }
 
-	@Override
-	public void pidWrite(double output) {
-		synchronized (SafeTalon.lock) {
-			super.pidWrite(output);
-		}
-	}
-
-	@Override
-	public void setPIDSourceType(PIDSourceType pidSource) {
-		synchronized (SafeTalon.lock) {
-			super.setPIDSourceType(pidSource);
-		}
-	}
-
-	@Override
-	public PIDSourceType getPIDSourceType() {
-		synchronized (SafeTalon.lock) {
-			return super.getPIDSourceType();
-		}
-	}
-
-	@Override
-	public double pidGet() {
-		synchronized (SafeTalon.lock) {
-			return super.pidGet();
-		}
-	}
-
-	@Override
-	public void delete() {
-		synchronized (SafeTalon.lock) {
-			super.delete();
-		}
-	}
-
-	@Override
-	public void set(double outputValue) {
-		synchronized (SafeTalon.lock) {
-			super.set(outputValue);
-		}
-	}
-
-	@Override
-	public void setInverted(boolean isInverted) {
-		synchronized (SafeTalon.lock) {
-			super.setInverted(isInverted);
-		}
-	}
-
-	@Override
-	public boolean getInverted() {
-		synchronized (SafeTalon.lock) {
-			return super.getInverted();
-		}
-	}
-
-	@Override
-	public void reset() {
-		synchronized (SafeTalon.lock) {
-			super.reset();
-		}
-	}
-
-	@Override
-	public boolean isEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isEnabled();
-		}
-	}
-
-	@Override
-	public double getError() {
-		synchronized (SafeTalon.lock) {
-			return super.getError();
-		}
-	}
-
-	@Override
-	public void setSetpoint(double setpoint) {
-		synchronized (SafeTalon.lock) {
-			super.setSetpoint(setpoint);
-		}
-	}
-
-	@Override
-	public void reverseSensor(boolean flip) {
-		synchronized (SafeTalon.lock) {
-			super.reverseSensor(flip);
-		}
-	}
-
-	@Override
-	public void reverseOutput(boolean flip) {
-		synchronized (SafeTalon.lock) {
-			super.reverseOutput(flip);
-		}
-	}
-
-	@Override
-	public double get() {
-		synchronized (SafeTalon.lock) {
-			return super.get();
-		}
-	}
-
-	@Override
-	public int getEncPosition() {
-		synchronized (SafeTalon.lock) {
-			return super.getEncPosition();
-		}
-	}
-
-	@Override
-	public void setEncPosition(int newPosition) {
-		synchronized (SafeTalon.lock) {
-			super.setEncPosition(newPosition);
-		}
-	}
-
-	@Override
-	public int getEncVelocity() {
-		synchronized (SafeTalon.lock) {
-			return super.getEncVelocity();
-		}
-	}
-
-	@Override
-	public int getPulseWidthPosition() {
-		synchronized (SafeTalon.lock) {
-			return super.getPulseWidthPosition();
-		}
-	}
-
-	@Override
-	public void setPulseWidthPosition(int newPosition) {
-		synchronized (SafeTalon.lock) {
-			super.setPulseWidthPosition(newPosition);
-		}
-	}
-
-	@Override
-	public int getPulseWidthVelocity() {
-		synchronized (SafeTalon.lock) {
-			return super.getPulseWidthVelocity();
-		}
-	}
-
-	@Override
-	public int getPulseWidthRiseToFallUs() {
-		synchronized (SafeTalon.lock) {
-			return super.getPulseWidthRiseToFallUs();
-		}
-	}
-
-	@Override
-	public int getPulseWidthRiseToRiseUs() {
-		synchronized (SafeTalon.lock) {
-			return super.getPulseWidthRiseToRiseUs();
-		}
-	}
-
-	@Override
-	public FeedbackDeviceStatus isSensorPresent(FeedbackDevice feedbackDevice) {
-		synchronized (SafeTalon.lock) {
-			return super.isSensorPresent(feedbackDevice);
-		}
-	}
-
-	@Override
-	public int getNumberOfQuadIdxRises() {
-		synchronized (SafeTalon.lock) {
-			return super.getNumberOfQuadIdxRises();
-		}
-	}
-
-	@Override
-	public int getPinStateQuadA() {
-		synchronized (SafeTalon.lock) {
-			return super.getPinStateQuadA();
-		}
-	}
-
-	@Override
-	public int getPinStateQuadB() {
-		synchronized (SafeTalon.lock) {
-			return super.getPinStateQuadB();
-		}
-	}
-
-	@Override
-	public int getPinStateQuadIdx() {
-		synchronized (SafeTalon.lock) {
-			return super.getPinStateQuadIdx();
-		}
-	}
-
-	@Override
-	public void setAnalogPosition(int newPosition) {
-		synchronized (SafeTalon.lock) {
-			super.setAnalogPosition(newPosition);
-		}
-	}
-
-	@Override
-	public int getAnalogInPosition() {
-		synchronized (SafeTalon.lock) {
-			return super.getAnalogInPosition();
-		}
-	}
-
-	@Override
-	public int getAnalogInRaw() {
-		synchronized (SafeTalon.lock) {
-			return super.getAnalogInRaw();
-		}
-	}
-
-	@Override
-	public int getAnalogInVelocity() {
-		synchronized (SafeTalon.lock) {
-			return super.getAnalogInVelocity();
-		}
-	}
-
-	@Override
-	public int getClosedLoopError() {
-		synchronized (SafeTalon.lock) {
-			return super.getClosedLoopError();
-		}
-	}
-
-	@Override
-	public void setAllowableClosedLoopErr(int allowableCloseLoopError) {
-		synchronized (SafeTalon.lock) {
-			super.setAllowableClosedLoopErr(allowableCloseLoopError);
-		}
-	}
-
-	@Override
-	public boolean isFwdLimitSwitchClosed() {
-		synchronized (SafeTalon.lock) {
-			return super.isFwdLimitSwitchClosed();
-		}
-	}
-
-	@Override
-	public boolean isRevLimitSwitchClosed() {
-		synchronized (SafeTalon.lock) {
-			return super.isRevLimitSwitchClosed();
-		}
-	}
-
-	@Override
-	public boolean isZeroSensorPosOnIndexEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isZeroSensorPosOnIndexEnabled();
-		}
-	}
-
-	@Override
-	public boolean isZeroSensorPosOnRevLimitEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isZeroSensorPosOnRevLimitEnabled();
-		}
-	}
-
-	@Override
-	public boolean isZeroSensorPosOnFwdLimitEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isZeroSensorPosOnFwdLimitEnabled();
-		}
-	}
-
-	@Override
-	public boolean getBrakeEnableDuringNeutral() {
-		synchronized (SafeTalon.lock) {
-			return super.getBrakeEnableDuringNeutral();
-		}
-	}
-
-	@Override
-	public void configEncoderCodesPerRev(int codesPerRev) {
-		synchronized (SafeTalon.lock) {
-			super.configEncoderCodesPerRev(codesPerRev);
-		}
-	}
-
-	@Override
-	public void configPotentiometerTurns(int turns) {
-		synchronized (SafeTalon.lock) {
-			super.configPotentiometerTurns(turns);
-		}
-	}
-
-	@Override
-	public double getTemperature() {
-		synchronized (SafeTalon.lock) {
-			return super.getTemperature();
-		}
-	}
-
-	@Override
-	public double getOutputCurrent() {
-		synchronized (SafeTalon.lock) {
-			return super.getOutputCurrent();
-		}
-	}
-
-	@Override
-	public double getOutputVoltage() {
-		synchronized (SafeTalon.lock) {
-			return super.getOutputVoltage();
-		}
-	}
-
-	@Override
-	public double getBusVoltage() {
-		synchronized (SafeTalon.lock) {
-			return super.getBusVoltage();
-		}
-	}
-
-	@Override
-	public double getPosition() {
-		synchronized (SafeTalon.lock) {
-			return super.getPosition();
-		}
-	}
-
-	@Override
-	public void setPosition(double pos) {
-		synchronized (SafeTalon.lock) {
-			super.setPosition(pos);
-		}
-	}
-
-	@Override
-	public double getSpeed() {
-		synchronized (SafeTalon.lock) {
-			return super.getSpeed();
-		}
-	}
-
-	@Override
-	public TalonControlMode getControlMode() {
-		synchronized (SafeTalon.lock) {
-			return super.getControlMode();
-		}
-	}
-
-	@Override
-	public void setControlMode(int mode) {
-		synchronized (SafeTalon.lock) {
-			super.setControlMode(mode);
-		}
-	}
-
-	@Override
-	public void changeControlMode(TalonControlMode controlMode) {
-		synchronized (SafeTalon.lock) {
-			super.changeControlMode(controlMode);
-		}
-	}
-
-	@Override
-	public void setFeedbackDevice(FeedbackDevice device) {
-		synchronized (SafeTalon.lock) {
-			super.setFeedbackDevice(device);
-		}
-	}
-
-	@Override
-	public void setStatusFrameRateMs(StatusFrameRate stateFrame, int periodMs) {
-		synchronized (SafeTalon.lock) {
-			super.setStatusFrameRateMs(stateFrame, periodMs);
-		}
-	}
-
-	@Override
-	public void enableControl() {
-		synchronized (SafeTalon.lock) {
-			super.enableControl();
-		}
-	}
-
-	@Override
-	public void enable() {
-		synchronized (SafeTalon.lock) {
-			super.enable();
-		}
-	}
-
-	@Override
-	public void disableControl() {
-		synchronized (SafeTalon.lock) {
-			super.disableControl();
-		}
-	}
-
-	@Override
-	public boolean isControlEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isControlEnabled();
-		}
-	}
-
-	@Override
-	public double getP() {
-		synchronized (SafeTalon.lock) {
-			return super.getP();
-		}
-	}
-
-	@Override
-	public double getI() {
-		synchronized (SafeTalon.lock) {
-			return super.getI();
-		}
-	}
-
-	@Override
-	public double getD() {
-		synchronized (SafeTalon.lock) {
-			return super.getD();
-		}
-	}
-
-	@Override
-	public double getF() {
-		synchronized (SafeTalon.lock) {
-			return super.getF();
-		}
-	}
-
-	@Override
-	public double getIZone() {
-		synchronized (SafeTalon.lock) {
-			return super.getIZone();
-		}
-	}
-
-	@Override
-	public double getCloseLoopRampRate() {
-		synchronized (SafeTalon.lock) {
-			return super.getCloseLoopRampRate();
-		}
-	}
-
-	@Override
-	public long GetFirmwareVersion() {
-		synchronized (SafeTalon.lock) {
-			return super.GetFirmwareVersion();
-		}
-	}
-
-	@Override
-	public long GetIaccum() {
-		synchronized (SafeTalon.lock) {
-			return super.GetIaccum();
-		}
-	}
-
-	@Override
-	public void setP(double p) {
-		synchronized (SafeTalon.lock) {
-			super.setP(p);
-		}
-	}
-
-	@Override
-	public void setI(double i) {
-		synchronized (SafeTalon.lock) {
-			super.setI(i);
-		}
-	}
-
-	@Override
-	public void setD(double d) {
-		synchronized (SafeTalon.lock) {
-			super.setD(d);
-		}
-	}
-
-	@Override
-	public void setF(double f) {
-		synchronized (SafeTalon.lock) {
-			super.setF(f);
-		}
-	}
-
-	@Override
-	public void setIZone(int izone) {
-		synchronized (SafeTalon.lock) {
-			super.setIZone(izone);
-		}
-	}
-
-	@Override
-	public void setCloseLoopRampRate(double rampRate) {
-		synchronized (SafeTalon.lock) {
-			super.setCloseLoopRampRate(rampRate);
-		}
-	}
-
-	@Override
-	public void setVoltageRampRate(double rampRate) {
-		synchronized (SafeTalon.lock) {
-			super.setVoltageRampRate(rampRate);
-		}
-	}
-
-	@Override
-	public void setVoltageCompensationRampRate(double rampRate) {
-		synchronized (SafeTalon.lock) {
-			super.setVoltageCompensationRampRate(rampRate);
-		}
-	}
-
-	@Override
-	public void ClearIaccum() {
-		synchronized (SafeTalon.lock) {
-			super.ClearIaccum();
-		}
-	}
-
-	@Override
-	public void setPID(double p, double i, double d, double f, int izone, double closeLoopRampRate, int profile) {
-		synchronized (SafeTalon.lock) {
-			super.setPID(p, i, d, f, izone, closeLoopRampRate, profile);
-		}
-	}
-
-	@Override
-	public void setPID(double p, double i, double d) {
-		synchronized (SafeTalon.lock) {
-			super.setPID(p, i, d);
-		}
-	}
-
-	@Override
-	public double getSetpoint() {
-		synchronized (SafeTalon.lock) {
-			return super.getSetpoint();
-		}
-	}
-
-	@Override
-	public void setProfile(int profile) {
-		synchronized (SafeTalon.lock) {
-			super.setProfile(profile);
-		}
-	}
-
-	/**
-	 * @deprecated
-	 */
-	@Override
-	public void stopMotor() {
-		synchronized (SafeTalon.lock) {
-			super.stopMotor();
-		}
-	}
-
-	@Override
-	public void disable() {
-		synchronized (SafeTalon.lock) {
-			super.disable();
-		}
-	}
-
-	@Override
-	public int getDeviceID() {
-		synchronized (SafeTalon.lock) {
-			return super.getDeviceID();
-		}
-	}
-
-	@Override
-	public void clearIAccum() {
-		synchronized (SafeTalon.lock) {
-			super.clearIAccum();
-		}
-	}
-
-	@Override
-	public void setForwardSoftLimit(double forwardLimit) {
-		synchronized (SafeTalon.lock) {
-			super.setForwardSoftLimit(forwardLimit);
-		}
-	}
-
-	@Override
-	public int getForwardSoftLimit() {
-		synchronized (SafeTalon.lock) {
-			return super.getForwardSoftLimit();
-		}
-	}
-
-	@Override
-	public void enableForwardSoftLimit(boolean enable) {
-		synchronized (SafeTalon.lock) {
-			super.enableForwardSoftLimit(enable);
-		}
-	}
-
-	@Override
-	public boolean isForwardSoftLimitEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isForwardSoftLimitEnabled();
-		}
-	}
-
-	@Override
-	public void setReverseSoftLimit(double reverseLimit) {
-		synchronized (SafeTalon.lock) {
-			super.setReverseSoftLimit(reverseLimit);
-		}
-	}
-
-	@Override
-	public int getReverseSoftLimit() {
-		synchronized (SafeTalon.lock) {
-			return super.getReverseSoftLimit();
-		}
-	}
-
-	@Override
-	public void enableReverseSoftLimit(boolean enable) {
-		synchronized (SafeTalon.lock) {
-			super.enableReverseSoftLimit(enable);
-		}
-	}
-
-	@Override
-	public boolean isReverseSoftLimitEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isReverseSoftLimitEnabled();
-		}
-	}
-
-	@Override
-	public void configMaxOutputVoltage(double voltage) {
-		synchronized (SafeTalon.lock) {
-			super.configMaxOutputVoltage(voltage);
-		}
-	}
-
-	@Override
-	public void configPeakOutputVoltage(double forwardVoltage, double reverseVoltage) {
-		synchronized (SafeTalon.lock) {
-			super.configPeakOutputVoltage(forwardVoltage, reverseVoltage);
-		}
-	}
-
-	@Override
-	public void configNominalOutputVoltage(double forwardVoltage, double reverseVoltage) {
-		synchronized (SafeTalon.lock) {
-			super.configNominalOutputVoltage(forwardVoltage, reverseVoltage);
-		}
-	}
-
-//	@Override
-//	public void setParameter(CanTalonJNI.param_t paramEnum, double value) {
-//		super.setParameter(paramEnum, value);
-//	}
-
-//	@Override
-//	public double getParameter(CanTalonJNI.param_t paramEnum) {
-//		return super.getParameter(paramEnum);
-//	}
-
-	@Override
-	public void clearStickyFaults() {
-		synchronized (SafeTalon.lock) {
-			super.clearStickyFaults();
-		}
-	}
-
-	@Override
-	public void enableLimitSwitch(boolean forward, boolean reverse) {
-		synchronized (SafeTalon.lock) {
-			super.enableLimitSwitch(forward, reverse);
-		}
-	}
-
-	@Override
-	public void ConfigFwdLimitSwitchNormallyOpen(boolean normallyOpen) {
-		synchronized (SafeTalon.lock) {
-			super.ConfigFwdLimitSwitchNormallyOpen(normallyOpen);
-		}
-	}
-
-	@Override
-	public void ConfigRevLimitSwitchNormallyOpen(boolean normallyOpen) {
-		synchronized (SafeTalon.lock) {
-			super.ConfigRevLimitSwitchNormallyOpen(normallyOpen);
-		}
-	}
-
-	@Override
-	public void enableBrakeMode(boolean brake) {
-		synchronized (SafeTalon.lock) {
-			super.enableBrakeMode(brake);
-		}
-	}
-
-	@Override
-	public int getFaultOverTemp() {
-		synchronized (SafeTalon.lock) {
-			return super.getFaultOverTemp();
-		}
-	}
-
-	@Override
-	public int getFaultUnderVoltage() {
-		synchronized (SafeTalon.lock) {
-			return super.getFaultUnderVoltage();
-		}
-	}
-
-	@Override
-	public int getFaultForLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getFaultForLim();
-		}
-	}
-
-	@Override
-	public int getFaultRevLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getFaultRevLim();
-		}
-	}
-
-	@Override
-	public int getFaultHardwareFailure() {
-		synchronized (SafeTalon.lock) {
-			return super.getFaultHardwareFailure();
-		}
-	}
-
-	@Override
-	public int getFaultForSoftLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getFaultForSoftLim();
-		}
-	}
-
-	@Override
-	public int getFaultRevSoftLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getFaultRevSoftLim();
-		}
-	}
-
-	@Override
-	public int getStickyFaultOverTemp() {
-		synchronized (SafeTalon.lock) {
-			return super.getStickyFaultOverTemp();
-		}
-	}
-
-	@Override
-	public int getStickyFaultUnderVoltage() {
-		synchronized (SafeTalon.lock) {
-			return super.getStickyFaultUnderVoltage();
-		}
-	}
-
-	@Override
-	public int getStickyFaultForLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getStickyFaultForLim();
-		}
-	}
-
-	@Override
-	public int getStickyFaultRevLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getStickyFaultRevLim();
-		}
-	}
-
-	@Override
-	public int getStickyFaultForSoftLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getStickyFaultForSoftLim();
-		}
-	}
-
-	@Override
-	public int getStickyFaultRevSoftLim() {
-		synchronized (SafeTalon.lock) {
-			return super.getStickyFaultRevSoftLim();
-		}
-	}
-
-	@Override
-	public void enableZeroSensorPositionOnIndex(boolean enable, boolean risingEdge) {
-		synchronized (SafeTalon.lock) {
-			super.enableZeroSensorPositionOnIndex(enable, risingEdge);
-		}
-	}
-
-	@Override
-	public void enableZeroSensorPositionOnForwardLimit(boolean enable) {
-		synchronized (SafeTalon.lock) {
-			super.enableZeroSensorPositionOnForwardLimit(enable);
-		}
-	}
-
-	@Override
-	public void enableZeroSensorPositionOnReverseLimit(boolean enable) {
-		synchronized (SafeTalon.lock) {
-			super.enableZeroSensorPositionOnReverseLimit(enable);
-		}
-	}
-
-	@Override
-	public void setNominalClosedLoopVoltage(double voltage) {
-		synchronized (SafeTalon.lock) {
-			super.setNominalClosedLoopVoltage(voltage);
-		}
-	}
-
-	@Override
-	public void DisableNominalClosedLoopVoltage() {
-		synchronized (SafeTalon.lock) {
-			super.DisableNominalClosedLoopVoltage();
-		}
-	}
-
-	@Override
-	public double GetNominalClosedLoopVoltage() {
-		synchronized (SafeTalon.lock) {
-			return super.GetNominalClosedLoopVoltage();
-		}
-	}
-
-	@Override
-	public void SetVelocityMeasurementPeriod(VelocityMeasurementPeriod period) {
-		synchronized (SafeTalon.lock) {
-			super.SetVelocityMeasurementPeriod(period);
-		}
-	}
-
-	@Override
-	public void SetVelocityMeasurementWindow(int windowSize) {
-		synchronized (SafeTalon.lock) {
-			super.SetVelocityMeasurementWindow(windowSize);
-		}
-	}
-
-	@Override
-	public VelocityMeasurementPeriod GetVelocityMeasurementPeriod() {
-		synchronized (SafeTalon.lock) {
-			return super.GetVelocityMeasurementPeriod();
-		}
-	}
-
-	@Override
-	public int GetVelocityMeasurementWindow() {
-		synchronized (SafeTalon.lock) {
-			return super.GetVelocityMeasurementWindow();
-		}
-	}
-
-	@Override
-	public void changeMotionControlFramePeriod(int periodMs) {
-		synchronized (SafeTalon.lock) {
-			super.changeMotionControlFramePeriod(periodMs);
-		}
-	}
-
-	@Override
-	public void clearMotionProfileTrajectories() {
-		synchronized (SafeTalon.lock) {
-			super.clearMotionProfileTrajectories();
-		}
-	}
-
-	@Override
-	public int getMotionProfileTopLevelBufferCount() {
-		synchronized (SafeTalon.lock) {
-			return super.getMotionProfileTopLevelBufferCount();
-		}
-	}
-
-	@Override
-	public boolean pushMotionProfileTrajectory(TrajectoryPoint trajPt) {
-		synchronized (SafeTalon.lock) {
-			return super.pushMotionProfileTrajectory(trajPt);
-		}
-	}
-
-	@Override
-	public boolean isMotionProfileTopLevelBufferFull() {
-		synchronized (SafeTalon.lock) {
-			return super.isMotionProfileTopLevelBufferFull();
-		}
-	}
-
-	@Override
-	public void processMotionProfileBuffer() {
-		synchronized (SafeTalon.lock) {
-			super.processMotionProfileBuffer();
-		}
-	}
-
-	@Override
-	public void getMotionProfileStatus(MotionProfileStatus motionProfileStatus) {
-		synchronized (SafeTalon.lock) {
-			super.getMotionProfileStatus(motionProfileStatus);
-		}
-	}
-
-	@Override
-	protected void setMotionProfileStatusFromJNI(MotionProfileStatus motionProfileStatus, int flags, int profileSlotSelect, int targPos, int targVel, int topBufferRem, int topBufferCnt, int btmBufferCnt, int outputEnable) {
-		synchronized (SafeTalon.lock) {
-			super.setMotionProfileStatusFromJNI(motionProfileStatus, flags, profileSlotSelect, targPos, targVel, topBufferRem, topBufferCnt, btmBufferCnt, outputEnable);
-		}
-	}
-
-	@Override
-	public void clearMotionProfileHasUnderrun() {
-		synchronized (SafeTalon.lock) {
-			super.clearMotionProfileHasUnderrun();
-		}
-	}
-
-	@Override
-	public void setMotionMagicCruiseVelocity(double motMagicCruiseVeloc) {
-		synchronized (SafeTalon.lock) {
-			super.setMotionMagicCruiseVelocity(motMagicCruiseVeloc);
-		}
-	}
-
-	@Override
-	public void setMotionMagicAcceleration(double motMagicAccel) {
-		synchronized (SafeTalon.lock) {
-			super.setMotionMagicAcceleration(motMagicAccel);
-		}
-	}
-
-	@Override
-	public double getMotionMagicCruiseVelocity() {
-		synchronized (SafeTalon.lock) {
-			return super.getMotionMagicCruiseVelocity();
-		}
-	}
-
-	@Override
-	public double getMotionMagicAcceleration() {
-		synchronized (SafeTalon.lock) {
-			return super.getMotionMagicAcceleration();
-		}
-	}
-
-//	@Override
-//	public double getMotionMagicActTrajVelocity() {
-//		synchronized (SafeTalon.lock) {
-//			return super.getMotionMagicActTrajVelocity();
-//		}
-//	}
-//
-//	@Override
-//	public double getMotionMagicActTrajPosition() {
-//		synchronized (SafeTalon.lock) {
-//			return super.getMotionMagicActTrajPosition();
-//		}
-//	}
-
-	@Override
-	public void setCurrentLimit(int amps) {
-		synchronized (SafeTalon.lock) {
-			super.setCurrentLimit(amps);
-		}
-	}
-
-	@Override
-	public void EnableCurrentLimit(boolean enable) {
-		synchronized (SafeTalon.lock) {
-			super.EnableCurrentLimit(enable);
-		}
-	}
-
-	@Override
-	public int GetGadgeteerStatus(GadgeteerUartStatus status) {
-		synchronized (SafeTalon.lock) {
-			return super.GetGadgeteerStatus(status);
-		}
-	}
-
-	@Override
-	public String getLastError() {
-		synchronized (SafeTalon.lock) {
-			return super.getLastError();
-		}
-	}
-
-	@Override
-	public void setExpiration(double timeout) {
-		synchronized (SafeTalon.lock) {
-			super.setExpiration(timeout);
-		}
-	}
-
-	@Override
-	public double getExpiration() {
-		synchronized (SafeTalon.lock) {
-			return super.getExpiration();
-		}
-	}
-
-	@Override
-	public boolean isAlive() {
-		synchronized (SafeTalon.lock) {
-			return super.isAlive();
-		}
-	}
-
-	@Override
-	public boolean isSafetyEnabled() {
-		synchronized (SafeTalon.lock) {
-			return super.isSafetyEnabled();
-		}
-	}
-
-	@Override
-	public void setSafetyEnabled(boolean enabled) {
-		synchronized (SafeTalon.lock) {
-			super.setSafetyEnabled(enabled);
-		}
-	}
-
-	@Override
-	public String getDescription() {
-		synchronized (SafeTalon.lock) {
-			return super.getDescription();
-		}
-	}
-
-	@Override
-	public void initTable(ITable subtable) {
-		synchronized (SafeTalon.lock) {
-			super.initTable(subtable);
-		}
-	}
-
-	@Override
-	public void updateTable() {
-		synchronized (SafeTalon.lock) {
-			super.updateTable();
-		}
-	}
-
-	@Override
-	public ITable getTable() {
-		synchronized (SafeTalon.lock) {
-			return super.getTable();
-		}
-	}
-
-	@Override
-	public void startLiveWindowMode() {
-		synchronized (SafeTalon.lock) {
-			super.startLiveWindowMode();
-		}
-	}
-
-	@Override
-	public void stopLiveWindowMode() {
-		synchronized (SafeTalon.lock) {
-			super.stopLiveWindowMode();
-		}
-	}
+    public synchronized void setPIDSourceType(PIDSourceType pidSource) 
+    { super.setPIDSourceType(pidSource); }
+
+    public synchronized PIDSourceType getPIDSourceType() { return super.getPIDSourceType(); }
+
+    public synchronized double pidGet() { return super.pidGet(); }
+
+    public synchronized void delete() { super.delete(); }
+
+    public synchronized void set(double outputValue) { super.set(outputValue); }
+
+    public synchronized void setInverted(boolean isInverted) { super.setInverted(isInverted); }
+
+    public synchronized boolean getInverted() { return super.getInverted(); }
+
+    public synchronized void reset() { super.reset(); }
+
+    public synchronized boolean isEnabled() { return super.isEnabled(); }
+
+    public synchronized double getError() { return super.getError(); }
+
+    public synchronized void setSetpoint(double setpoint) { super.setSetpoint(setpoint); }
+
+    public synchronized void reverseSensor(boolean flip) { super.reverseSensor(flip); }
+
+    public synchronized void reverseOutput(boolean flip) { super.reverseOutput(flip); }
+
+    public synchronized double get() { return super.get(); }
+
+    public synchronized int getEncPosition() { return super.getEncPosition(); }
+
+    public synchronized void setEncPosition(int newPosition) { super.setEncPosition(newPosition); }
+
+    public synchronized int getEncVelocity() { return super.getEncVelocity(); }
+
+    public synchronized int getPulseWidthPosition() { return super.getPulseWidthPosition(); }
+
+    public synchronized void setPulseWidthPosition(int newPosition) { super.setPulseWidthPosition(newPosition); }
+
+    public synchronized int getPulseWidthVelocity() { return super.getPulseWidthVelocity(); }
+
+    public synchronized int getPulseWidthRiseToFallUs() { return super.getPulseWidthRiseToFallUs(); }
+
+    public synchronized int getPulseWidthRiseToRiseUs() { return super.getPulseWidthRiseToRiseUs(); }
+
+    public synchronized FeedbackDeviceStatus isSensorPresent(FeedbackDevice feedbackDevice) { return super.isSensorPresent(feedbackDevice); }
+
+    public synchronized int getNumberOfQuadIdxRises() { return super.getNumberOfQuadIdxRises(); }
+
+    public synchronized int getPinStateQuadA() { return super.getPinStateQuadA(); }
+
+    public synchronized int getPinStateQuadB() { return super.getPinStateQuadB(); }
+
+    public synchronized int getPinStateQuadIdx() { return super.getPinStateQuadIdx(); }
+
+    public synchronized void setAnalogPosition(int newPosition) { super.setAnalogPosition(newPosition); }
+
+    public synchronized int getAnalogInPosition() { return super.getAnalogInPosition(); }
+
+    public synchronized int getAnalogInRaw() { return super.getAnalogInRaw(); }
+
+    public synchronized int getAnalogInVelocity() { return super.getAnalogInVelocity(); }
+
+    public synchronized int getClosedLoopError() { return super.getClosedLoopError(); }
+
+    public synchronized void setAllowableClosedLoopErr(int allowableCloseLoopError) { super.setAllowableClosedLoopErr(allowableCloseLoopError); }
+
+    public synchronized boolean isFwdLimitSwitchClosed() { return super.isFwdLimitSwitchClosed(); }
+
+    public synchronized boolean isRevLimitSwitchClosed() { return super.isRevLimitSwitchClosed(); }
+
+    public synchronized boolean isZeroSensorPosOnIndexEnabled() { return super.isZeroSensorPosOnIndexEnabled(); }
+
+    public synchronized boolean isZeroSensorPosOnRevLimitEnabled() { return super.isZeroSensorPosOnRevLimitEnabled(); }
+
+    public synchronized boolean isZeroSensorPosOnFwdLimitEnabled() { return super.isZeroSensorPosOnFwdLimitEnabled(); }
+
+    public synchronized boolean getBrakeEnableDuringNeutral() { return super.getBrakeEnableDuringNeutral(); }
+
+    public synchronized void configEncoderCodesPerRev(int codesPerRev) { super.configEncoderCodesPerRev(codesPerRev); }
+
+    public synchronized void configPotentiometerTurns(int turns) { super.configPotentiometerTurns(turns); }
+
+    public synchronized double getTemperature() { return super.getTemperature(); }
+
+    public synchronized double getOutputCurrent() { return super.getOutputCurrent(); }
+
+    public synchronized double getOutputVoltage() { return super.getOutputVoltage(); }
+
+    public synchronized double getBusVoltage() { return super.getBusVoltage(); }
+
+    public synchronized double getPosition() { return super.getPosition(); }
+
+    public synchronized void setPosition(double pos) { super.setPosition(pos); }
+
+    public synchronized double getSpeed() { return super.getSpeed(); }
+
+    public synchronized TalonControlMode getControlMode() { return super.getControlMode(); }
+
+    public synchronized void setControlMode(int mode) { super.setControlMode(mode); }
+
+    public synchronized void changeControlMode(TalonControlMode controlMode) { super.changeControlMode(controlMode); }
+
+    public synchronized void setFeedbackDevice(FeedbackDevice device) { super.setFeedbackDevice(device); }
+
+    public synchronized void setStatusFrameRateMs(StatusFrameRate stateFrame, int periodMs) { super.setStatusFrameRateMs(stateFrame, periodMs); }
+
+    public synchronized void enableControl() { super.enableControl(); }
+
+    public synchronized void enable() { super.enable(); }
+
+    public synchronized void disableControl() { super.disableControl(); }
+
+    public synchronized boolean isControlEnabled() { return super.isControlEnabled(); }
+
+    public synchronized double getP() { return super.getP(); }
+
+    public synchronized double getI() { return super.getI(); }
+
+    public synchronized double getD() { return super.getD(); }
+
+    public synchronized double getF() { return super.getF(); }
+
+    public synchronized double getIZone() { return super.getIZone(); }
+
+    public synchronized double getCloseLoopRampRate() { return super.getCloseLoopRampRate(); }
+
+    public synchronized long GetFirmwareVersion() { return super.GetFirmwareVersion(); }
+
+    public synchronized long GetIaccum() { return super.GetIaccum(); }
+
+    public synchronized void setP(double p) { super.setP(p); }
+
+    public synchronized void setI(double i) { super.setI(i); }
+
+    public synchronized void setD(double d) { super.setD(d); }
+
+    public synchronized void setF(double f) { super.setF(f); }
+
+    public synchronized void setIZone(int izone) { super.setIZone(izone); }
+
+    public synchronized void setCloseLoopRampRate(double rampRate) { super.setCloseLoopRampRate(rampRate); }
+
+    public synchronized void setVoltageRampRate(double rampRate) { super.setVoltageRampRate(rampRate); }
+
+    public synchronized void setVoltageCompensationRampRate(double rampRate) { super.setVoltageCompensationRampRate(rampRate); }
+
+    public synchronized void ClearIaccum() { super.ClearIaccum(); }
+
+    public synchronized void setPID(double p, double i, double d, double f, int izone, double closeLoopRampRate, int profile) { super.setPID(p, i, d, f, izone, closeLoopRampRate, profile); }
+
+    public synchronized void setPID(double p, double i, double d) { super.setPID(p, i, d); }
+
+    public synchronized double getSetpoint() { return super.getSetpoint(); }
+
+    public synchronized void setProfile(int profile) { super.setProfile(profile); }
+
+    @SuppressWarnings( "deprecation" )
+    public synchronized void stopMotor() { super.stopMotor(); } 
+
+    public synchronized void disable() { super.disable(); }
+
+    public synchronized int getDeviceID() { return super.getDeviceID(); }
+
+    public synchronized void clearIAccum() { super.clearIAccum(); }
+
+    public synchronized void setForwardSoftLimit(double forwardLimit) { super.setForwardSoftLimit(forwardLimit); }
+
+    public synchronized int getForwardSoftLimit() { return super.getForwardSoftLimit(); }
+
+    public synchronized void enableForwardSoftLimit(boolean enable) { super.enableForwardSoftLimit(enable); }
+
+    public synchronized boolean isForwardSoftLimitEnabled() { return super.isForwardSoftLimitEnabled(); }
+
+    public synchronized void setReverseSoftLimit(double reverseLimit) { super.setReverseSoftLimit(reverseLimit); }
+
+    public synchronized int getReverseSoftLimit() { return super.getReverseSoftLimit(); }
+
+    public synchronized void enableReverseSoftLimit(boolean enable) { super.enableReverseSoftLimit(enable); }
+
+    public synchronized boolean isReverseSoftLimitEnabled() { return super.isReverseSoftLimitEnabled(); }
+
+    public synchronized void configMaxOutputVoltage(double voltage) { super.configMaxOutputVoltage(voltage); }
+
+    public synchronized void configPeakOutputVoltage(double forwardVoltage, double reverseVoltage) { super.configPeakOutputVoltage(forwardVoltage, reverseVoltage); }
+
+    public synchronized void configNominalOutputVoltage(double forwardVoltage, double reverseVoltage) { super.configNominalOutputVoltage(forwardVoltage, reverseVoltage); }
+
+    public synchronized void clearStickyFaults() { super.clearStickyFaults(); }
+
+    public synchronized void enableLimitSwitch(boolean forward, boolean reverse) { super.enableLimitSwitch(forward, reverse); }
+
+    public synchronized void ConfigFwdLimitSwitchNormallyOpen(boolean normallyOpen) { super.ConfigFwdLimitSwitchNormallyOpen(normallyOpen); }
+
+    public synchronized void ConfigRevLimitSwitchNormallyOpen(boolean normallyOpen) { super.ConfigRevLimitSwitchNormallyOpen(normallyOpen); }
+
+    public synchronized void enableBrakeMode(boolean brake) { super.enableBrakeMode(brake); }
+
+    public synchronized int getFaultOverTemp() { return super.getFaultOverTemp(); }
+
+    public synchronized int getFaultUnderVoltage() { return super.getFaultUnderVoltage(); }
+
+    public synchronized int getFaultForLim() { return super.getFaultForLim(); }
+
+    public synchronized int getFaultRevLim() { return super.getFaultRevLim(); }
+
+    public synchronized int getFaultHardwareFailure() { return super.getFaultHardwareFailure(); }
+
+    public synchronized int getFaultForSoftLim() { return super.getFaultForSoftLim(); }
+
+    public synchronized int getFaultRevSoftLim() { return super.getFaultRevSoftLim(); }
+
+    public synchronized int getStickyFaultOverTemp() { return super.getStickyFaultOverTemp(); }
+
+    public synchronized int getStickyFaultUnderVoltage() { return super.getStickyFaultUnderVoltage(); }
+
+    public synchronized int getStickyFaultForLim() { return super.getStickyFaultForLim(); }
+
+    public synchronized int getStickyFaultRevLim() { return super.getStickyFaultRevLim(); }
+
+    public synchronized int getStickyFaultForSoftLim() { return super.getStickyFaultForSoftLim(); }
+
+    public synchronized int getStickyFaultRevSoftLim() { return super.getStickyFaultRevSoftLim(); }
+
+    public synchronized void enableZeroSensorPositionOnIndex(boolean enable, boolean risingEdge) { super.enableZeroSensorPositionOnIndex(enable, risingEdge); }
+
+    public synchronized void enableZeroSensorPositionOnForwardLimit(boolean enable) { super.enableZeroSensorPositionOnForwardLimit(enable); }
+
+    public synchronized void enableZeroSensorPositionOnReverseLimit(boolean enable) { super.enableZeroSensorPositionOnReverseLimit(enable); }
+
+    public synchronized void changeMotionControlFramePeriod(int periodMs) { super.changeMotionControlFramePeriod(periodMs); }
+
+    public synchronized void clearMotionProfileTrajectories() { super.clearMotionProfileTrajectories(); }
+
+    public synchronized int getMotionProfileTopLevelBufferCount() { return super.getMotionProfileTopLevelBufferCount(); }
+
+    public synchronized boolean pushMotionProfileTrajectory(TrajectoryPoint trajPt) { return super.pushMotionProfileTrajectory(trajPt); }
+
+    public synchronized boolean isMotionProfileTopLevelBufferFull() { return super.isMotionProfileTopLevelBufferFull(); }
+
+    public synchronized void processMotionProfileBuffer() { super.processMotionProfileBuffer(); }
+
+    public synchronized void getMotionProfileStatus(MotionProfileStatus motionProfileStatus) { super.getMotionProfileStatus(motionProfileStatus); }
+
+    public synchronized void clearMotionProfileHasUnderrun() { super.clearMotionProfileHasUnderrun(); }
+
+    public synchronized void setMotionMagicCruiseVelocity(double motMagicCruiseVeloc) { super.setMotionMagicCruiseVelocity(motMagicCruiseVeloc); }
+
+    public synchronized void setMotionMagicAcceleration(double motMagicAccel) { super.setMotionMagicAcceleration(motMagicAccel); }
+
+    public synchronized double getMotionMagicCruiseVelocity() { return super.getMotionMagicCruiseVelocity(); }
+
+    public synchronized double getMotionMagicAcceleration() { return super.getMotionMagicAcceleration(); }
+
+    public synchronized void setCurrentLimit(int amps) { super.setCurrentLimit(amps); }
+
+    public synchronized void EnableCurrentLimit(boolean enable) { super.EnableCurrentLimit(enable); }
+
+    public synchronized int GetGadgeteerStatus(GadgeteerUartClient.GadgeteerUartStatus status) { return super.GetGadgeteerStatus(status); }
+
+    public synchronized String getLastError() { return super.getLastError(); }
+
+    public synchronized void setExpiration(double timeout) { super.setExpiration(timeout); }
+
+    public synchronized double getExpiration() { return super.getExpiration(); }
+
+    public synchronized boolean isAlive() { return super.isAlive(); }
+
+    public synchronized boolean isSafetyEnabled() { return super.isSafetyEnabled(); }
+
+    public synchronized void setSafetyEnabled(boolean enabled) { super.setSafetyEnabled(enabled); }
+
+    public synchronized String getDescription() { return super.getDescription(); }
+
+    public synchronized void initTable(ITable subtable) { super.initTable(subtable); }
+
+    public synchronized void updateTable() { super.updateTable(); }
+
+    public synchronized ITable getTable() { return super.getTable(); }
+
+    public synchronized void startLiveWindowMode() { super.startLiveWindowMode(); }
+
+    public synchronized void stopLiveWindowMode() { super.stopLiveWindowMode(); }
+    
 }
