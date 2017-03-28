@@ -13,7 +13,8 @@ import java.util.List;
 public class MotionManager {
 	private List<double[][]> paths = new ArrayList<>();
 	private List<ProfileDetails> profileDetails = new ArrayList<>();
-	private boolean loading = false, interrupt = false;
+	private boolean loading = false;
+	private boolean interrupt = false;
 	private int batchSize = 256 * 4;
 	private int currIndex = 0;
 	private MotionControl control;
@@ -195,11 +196,6 @@ public class MotionManager {
 		for(int i = currIndex; i < currIndex + batchSize; i ++) {
 			if(i >= pathArray.length) break;
 		
-//			if(interrupt) {
-//				interrupt = false;
-//				return;
-//			}
-			
 			int colIndex = (int)(pathArray[i][1] * 500/Math.PI);
 			
 			for(int j = 0; j < numTalons; j ++) {
@@ -212,8 +208,6 @@ public class MotionManager {
 				else if((j == 1 || j == 3) && !direc) pt.velocity = -pt.velocity;
 				positions[j] += pt.velocity * deltaT; 
  				pt.position = positions[j];
-//				System.out.println("PT POS: " + pt.position);
-//				System.out.println("ZERO PT: " + pt.zeroPos + "\n");
  				pt.isLastPoint = false;//(done && (i + 1 == pathArray.length));  // TODO
 				control.pushMotionProfileTrajectory(j, pt);
 			}
@@ -225,25 +219,17 @@ public class MotionManager {
 	}
 	
 	public void pushLinear() {
-//		System.out.println("pushLinear started");
+		System.out.println("pushLinear started");
 		double[][] pathArray = paths.get(0);
 		TrajectoryPoint pt = new TrajectoryPoint();
 		double [] positions = new double[4];
 		boolean done = profileDetails.get(0).done;
 
-//		long starttime = System.nanoTime();
 		for(int i = currIndex; i < currIndex + batchSize; i ++) {
 			if(i >= pathArray.length) break;
 		
-//			if(interrupt) {
-//				interrupt = false;
-//				return;
-//			}
-			
 			int colIndex = (int)(((pathArray[i][1] + 2*Math.PI) % (2*Math.PI)) * 500/Math.PI);
 			
-			//System.out.println("i is " + i + ", pathArray[i][1] is " + pathArray[i][1] + ", colIndex is " + colIndex);
-
 			for(int j = 0; j < numTalons; j ++) {
 				pt.position = 0;
 				pt.timeDurMs = 10;
@@ -258,11 +244,6 @@ public class MotionManager {
 			}
 		}
 
-//		long elapsed = System.nanoTime() - starttime;
-//		System.out.println("Total time computing: " + elapsed);
-
-		//if (currIndex == 0) startProfile();
-		
 		currIndex += batchSize;
 	}
 	
@@ -276,6 +257,40 @@ public class MotionManager {
 	
 	public void shutDownProfiling() {
 		control.shutDownProfiling();
+	}
+	
+	// Intended to be called by the command thread
+	// the poll interval doesn't affect the 
+	public void waitUntilProfileFinishes(long pollMillis) {
+		boolean wait = false;
+		int count = 0;
+		
+		while(true) {
+			synchronized(this) {
+				if (loading || control.getPointsRemaining() > 0) {
+					wait = true;
+				}					
+			}
+		
+			if (wait) {
+				wait = false;  // reset
+				if ( count % 10 == 0) {
+					System.out.println("Waited " + count + " intervals");
+				}
+
+				try {
+					Thread.sleep(pollMillis);
+				} catch (InterruptedException e) {
+					System.out.println("Ignoring Interrupted exception in waitUntilProfileFinishes: " + e.getMessage());
+				}
+			} else {
+				System.out.println("Return from waitUntilProfileFinishes after waiting " + count + " interval(s)");
+				return;
+			}
+			
+			count++;
+			wait = false;
+		}
 	}
 
 	public double getRobotRPM() {
