@@ -14,6 +14,7 @@ public class MotionControl {
 	private boolean stopNotifier = false;	
 	public SafeTalon[] talons;
 	public CANTalon.MotionProfileStatus[] statuses = new CANTalon.MotionProfileStatus[4];
+	private int numPoints = 0;
 	
 	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable(), "MotionControl");
 	
@@ -30,12 +31,18 @@ public class MotionControl {
 //				if (stopNotifier) return; 
 //			}			
 
-			for (SafeTalon t : talons) {
-				t.clearMotionProfileHasUnderrun();
-				t.processMotionProfileBuffer();
-	    	}
-			
+			synchronized(this) {
+				if (numPoints > 0) {
+					for (SafeTalon t : talons) {
+						t.clearMotionProfileHasUnderrun();
+						t.processMotionProfileBuffer();
+			    	}
+	
+					numPoints--;
+				}
+			}
 		}
+
 	}
 	    
 	public MotionControl(SafeTalon[] talons) {
@@ -72,24 +79,37 @@ public class MotionControl {
 		}
 	}
 
-	public void shutDownProfiling() {
+	public synchronized void shutDownProfiling() {
+		numPoints = 0;
 		for (SafeTalon t : talons) {
 			t.clearMotionProfileTrajectories();
 			t.clearMotionProfileHasUnderrun();
 			t.changeControlMode(TalonControlMode.Speed); //may need to be vbus
-		}		
+		}	
 	}	
 	
-	public void clearMotionProfileTrajectories() {
+	public synchronized void clearMotionProfileTrajectories() {
+		numPoints = 0;
 		for (SafeTalon t : talons) {
 			t.clearMotionProfileTrajectories();
-		}		
+		}	
+	}
+	
+	public synchronized int getPointsRemaining() {
+		return numPoints;
 	}
 	
 	// wrapper functions for talon
-	public boolean pushMotionProfileTrajectory(int talonIndex, TrajectoryPoint pt) { return talons[talonIndex].pushMotionProfileTrajectory(pt); }
+	public synchronized boolean pushMotionProfileTrajectory(int talonIndex, TrajectoryPoint pt) { 
+		if (talonIndex == talons.length - 1)
+			numPoints++;
+		
+		return talons[talonIndex].pushMotionProfileTrajectory(pt); 
+	}
 	
-	public void clearMotionProfileTrajectories(int talonIndex) { talons[talonIndex].clearMotionProfileTrajectories(); }
+//	public void clearMotionProfileTrajectories(int talonIndex) { 
+//		talons[talonIndex].clearMotionProfileTrajectories(); 
+//	}
 
 	public int getEncVel(int talonIndex) { return talons[talonIndex].getEncVelocity();	}
 
