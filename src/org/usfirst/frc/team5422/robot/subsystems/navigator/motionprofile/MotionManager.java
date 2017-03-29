@@ -49,10 +49,10 @@ public class MotionManager {
 //				SmartDashboard.putNumber("Val 2: ", control.getEncVel(2));
 //				SmartDashboard.putNumber("Val 3: ", control.getEncVel(3));
 				
-//				SmartDashboard.putNumber("Pos 0: ", control.getEncPos(0));
-//				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
-//				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
-//				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
+				SmartDashboard.putNumber("Pos 0: ", control.getEncPos(0));
+				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
+				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
+				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
 				
 				for (int i = 0; i < control.talons.length; i++) {
 				//	Instrumentation.process(control.statuses[i], control.talons[i]);
@@ -178,12 +178,13 @@ public class MotionManager {
 		double robotRadius = 15.00; //TODO: make constant, in inches (14.25 x 13.25)
 		double wheelRadius = 3; //TODO: make constant, in inches
 		double maxVel = 240; //RPM
+		double ogTheta = d.theta;
 		d.theta %= (2 * Math.PI);
 		double tTheta = d.theta - Math.PI;
 		if(tTheta > 0) {d.theta = Math.PI - tTheta; d.direction = true; }
 		d.direction = false;
 		double dist = robotRadius * d.theta/(2.0 * Math.PI * wheelRadius);
-		return TrapezoidalProfile.getTrapezoidZero(dist, maxVel, d.theta, getRobotRPM());
+		return TrapezoidalProfile.getTrapezoidZero(dist, maxVel, ogTheta, getRobotRPM());
 	}
 
 	public void pushTurn() {
@@ -263,37 +264,37 @@ public class MotionManager {
 	
 	// Intended to be called by the command thread
 	// the poll interval doesn't affect the 
-	public void waitUntilProfileFinishes(long pollMillis) {
-		boolean wait = false;
-		int count = 0;
-		
-		while(true) {
-			synchronized(this) {
-				if (loading || control.getPointsRemaining() > 0) {
-					wait = true;
-				}					
-			}
-		
-			if (wait) {
-				wait = false;  // reset
-				if ( count % 10 == 0) {
-					System.out.println("Waited " + count + " intervals");
-				}
-
-				try {
-					Thread.sleep(pollMillis);
-				} catch (InterruptedException e) {
-					System.out.println("Ignoring Interrupted exception in waitUntilProfileFinishes: " + e.getMessage());
-				}
-			} else {
-				System.out.println("Return from waitUntilProfileFinishes after waiting " + count + " interval(s)");
-				return;
-			}
-			
-			count++;
-			wait = false;
-		}
-	}
+//	public void waitUntilProfileFinishes(long pollMillis) {
+//		boolean wait = false;
+//		int count = 0;
+//		
+//		while(true) {
+//			synchronized(this) {
+//				if (loading || control.getPointsRemaining() > 0) {
+//					wait = true;
+//				}					
+//			}
+//		
+//			if (wait) {
+//				wait = false;  // reset
+//				if ( count % 10 == 0) {
+//					System.out.println("Waited " + count + " intervals");
+//				}
+//
+//				try {
+//					Thread.sleep(pollMillis);
+//				} catch (InterruptedException e) {
+//					System.out.println("Ignoring Interrupted exception in waitUntilProfileFinishes: " + e.getMessage());
+//				}
+//			} else {
+//				System.out.println("Return from waitUntilProfileFinishes after waiting " + count + " interval(s)");
+//				return;
+//			}
+//			
+//			count++;
+//			wait = false;
+//		}
+//	}
 
 	public double getRobotRPM() {
 		int[] vels = getEncVels();

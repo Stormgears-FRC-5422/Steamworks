@@ -7,7 +7,9 @@ import org.usfirst.frc.team5422.robot.commands.AutonomousCommandGroup;
 import org.usfirst.frc.team5422.robot.subsystems.climber_intake.ClimberIntake;
 import org.usfirst.frc.team5422.robot.subsystems.dsio.DSIO;
 import org.usfirst.frc.team5422.robot.subsystems.gear.Manipulator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.AutoRoutes;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
@@ -66,12 +68,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
 		robotMode = RobotModes.AUTONOMOUS;
-		//initializing the Robot for motion profile mode
-		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.MOTIONPROFILE); 
-		MotionManager m = Navigator.motionManager;
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10, 70, 3 * Math.PI/2.0, 0), true, true);
-		
-		/*
+
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
@@ -97,7 +94,7 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.start();
 		} else {
 			System.out.println("AUTONOMOUS COMMAND IS NOT INITIALIZED");
-		}*/		
+		}		
 	}
 		
 	public void teleopInit() {
