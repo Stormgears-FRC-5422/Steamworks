@@ -137,7 +137,6 @@ public class PlaceGearCommand extends Command {
 				m.waitUntilProfileFinishes(100);
 				m.shutDownProfiling();
 				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
-
 				break;
 			case PLACE_GEAR_CENTER_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at center starting position");
