@@ -8,6 +8,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.utils.HardwareConstants;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
@@ -93,10 +94,11 @@ public class PlaceGearCommand extends Command {
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToPeg + " inches to left gear hook.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
 				
-				System.out.println("Entering 100ms delay");
-				Timer.delay(20);
+				System.out.println("Entering 12s delay");
+				Timer.delay(12);
 //				m.waitUntilProfileFinishes(100);
 				System.out.println("Delay done");
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);				
 				break;
 			case PLACE_GEAR_RIGHT_AIRSHIP: // TODO: Finish these - they don't look finished to me
 				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");
@@ -127,11 +129,11 @@ public class PlaceGearCommand extends Command {
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToPeg + " inches to right gear hook.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
 				
-				System.out.println("Entering 100ms delay");
-				Timer.delay(20);
+				System.out.println("Entering 12s delay");
+				Timer.delay(12);
 //				m.waitUntilProfileFinishes(100);
 				System.out.println("Delay done");
-
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 				break;
 			case PLACE_GEAR_CENTER_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at center starting position");
@@ -144,6 +146,10 @@ public class PlaceGearCommand extends Command {
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
 //				Vision vision = SensorManager.getVisionSubsystem();
 //				vision.alignToGear();
+				System.out.println("Entering 12s delay");
+				Timer.delay(12);
+				System.out.println("Delay done");
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 				break;
 			case NONE:
 				return;
