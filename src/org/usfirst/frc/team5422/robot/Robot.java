@@ -154,11 +154,11 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
+		SensorManager.startPublishingToNetwork();
+		Vision.turnOnLights();
+		
 		//initializing the Robot for joystick Velocity mode
 		Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 		
-
-		SensorManager.startPublishingToNetwork();
-		Vision.turnOnLights();		
 	}
 
 	public void disabledInit() {
