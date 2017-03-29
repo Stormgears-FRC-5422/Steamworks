@@ -13,6 +13,10 @@ public class MotionControl {
 	private boolean stopNotifier = false;	
 	public SafeTalon[] talons;
 	public CANTalon.MotionProfileStatus[] statuses = new CANTalon.MotionProfileStatus[4];
+	private int numPoints = 0;
+	private int btmBufferPoints = 0;
+	private int runCount = 0;
+	private int runReportInterval = 100;
 	
 	private RegisteredNotifier notifier = new RegisteredNotifier(new PeriodicRunnable(), "MotionControl");
 	
@@ -20,20 +24,26 @@ public class MotionControl {
 		// The purpose of this thread is just to push data into the firmware buffer
 		// other details of the control come through the motion manager thread.
 		public void run() {  		
-//			System.out.println(talon.getDeviceID() + ": In run");
-//			talon.getMotionProfileStatus(status);
-//			System.out.println(talon.getDeviceID() + ": Before - top: " + status.topBufferCnt + " , bottom: " + status.btmBufferCnt);
+			synchronized(this) { 
+				if (stopNotifier) return; 
+			}			
 
-// DARREN THINKS WE NEED THIS, but let's not add it until this are working 
-//			synchronized(this) { 
-//				if (stopNotifier) return; 
-//			}			
+			if (++runCount % runReportInterval == 0) {
+				System.out.println("In MotionControl run() with numPoints = " + numPoints + " and runCount = " + runCount);
+			}
 
-			for (SafeTalon t : talons) {
-				t.clearMotionProfileHasUnderrun();
-				t.processMotionProfileBuffer();
-	    	}
-			
+			synchronized(this) {
+//				if (numPoints > 0) {
+					for (SafeTalon t : talons) {
+						t.clearMotionProfileHasUnderrun();
+						t.processMotionProfileBuffer();
+//						t.clearMotionProfileHasUnderrun();
+			    	}
+					talons[0].getMotionProfileStatus(statuses[0]);
+					btmBufferPoints = statuses[0].btmBufferCnt;
+					numPoints = --numPoints < 0 ? 0 : numPoints;
+//				}
+			}			
 		}
 	}
 	    
@@ -72,6 +82,7 @@ public class MotionControl {
 	}
 
 	public void shutDownProfiling() {
+		numPoints = 0;
 		for (SafeTalon t : talons) {
 			t.clearMotionProfileTrajectories();
 			t.clearMotionProfileHasUnderrun();
@@ -80,16 +91,28 @@ public class MotionControl {
 	}	
 	
 	public void clearMotionProfileTrajectories() {
+		numPoints = 0;
 		for (SafeTalon t : talons) {
 			t.clearMotionProfileTrajectories();
 		}		
 	}
-	
-	// wrapper functions for talon
-	public boolean pushMotionProfileTrajectory(int talonIndex, TrajectoryPoint pt) { return talons[talonIndex].pushMotionProfileTrajectory(pt); }
-	
-	public void clearMotionProfileTrajectories(int talonIndex) { talons[talonIndex].clearMotionProfileTrajectories(); }
 
+	public synchronized int getPointsRemaining() {
+		System.out.println("numPoints : " + numPoints + " , btmBufferPoints : " + btmBufferPoints);
+		if (numPoints > 0) 
+			return numPoints;	
+		else
+			return btmBufferPoints;
+	}
+
+	// wrapper functions for talon
+	public synchronized boolean pushMotionProfileTrajectory(int talonIndex, TrajectoryPoint pt) { 
+		if (talonIndex == talons.length - 1)
+			numPoints++;
+		
+		return talons[talonIndex].pushMotionProfileTrajectory(pt); 
+	}
+	
 	public int getEncVel(int talonIndex) { return talons[talonIndex].getEncVelocity();	}
 
 	public int getEncPos(int talonIndex) {	return talons[talonIndex].getEncPosition();}

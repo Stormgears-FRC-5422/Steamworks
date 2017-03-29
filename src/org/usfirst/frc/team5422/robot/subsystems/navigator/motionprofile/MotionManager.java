@@ -92,6 +92,8 @@ public class MotionManager {
 				// Push the next section
 				if(profileDetails.get(0).turn) pushTurn();
 				else pushLinear();
+
+				System.out.println("Points remaining: " + control.getPointsRemaining());
 				
 				// If we have pushed the entire path, remove it and let the next path run on the next time through
 				// this could lead to a short cycle, but that is probably OK since we push points more quickly 
@@ -257,42 +259,43 @@ public class MotionManager {
 	}
 	
 	public void shutDownProfiling() {
+		control.stopControlThread();
 		control.shutDownProfiling();
 	}
 	
 	// Intended to be called by the command thread
 	// the poll interval doesn't affect the 
-//	public void waitUntilProfileFinishes(long pollMillis) {
-//		boolean wait = false;
-//		int count = 0;
-//		
-//		while(true) {
-//			synchronized(this) {
-//				if (loading || control.getPointsRemaining() > 0) {
-//					wait = true;
-//				}					
-//			}
-//		
-//			if (wait) {
-//				wait = false;  // reset
-//				if ( count % 10 == 0) {
-//					System.out.println("Waited " + count + " intervals");
-//				}
-//
-//				try {
-//					Thread.sleep(pollMillis);
-//				} catch (InterruptedException e) {
-//					System.out.println("Ignoring Interrupted exception in waitUntilProfileFinishes: " + e.getMessage());
-//				}
-//			} else {
-//				System.out.println("Return from waitUntilProfileFinishes after waiting " + count + " interval(s)");
-//				return;
-//			}
-//			
-//			count++;
-//			wait = false;
-//		}
-//	}
+	public void waitUntilProfileFinishes(long pollMillis) {
+		boolean wait = false;
+		int count = 0;
+		
+		while(true) {
+			synchronized(this) {
+				if (loading || control.getPointsRemaining() > 0) {
+					wait = true;
+				}					
+			}
+		
+			if (wait) {
+				wait = false;  // reset
+				if ( count % 10 == 0) {
+					System.out.println("Waited " + count + " intervals");
+				}
+
+				try {
+					Thread.sleep(pollMillis);
+				} catch (InterruptedException e) {
+					System.out.println("Ignoring Interrupted exception in waitUntilProfileFinishes: " + e.getMessage());
+				}
+			} else {
+				System.out.println("Return from waitUntilProfileFinishes after waiting " + count + " interval(s)");
+				return;
+			}
+			
+			count++;
+			wait = false;
+		}
+	}
 
 	public double getRobotRPM() {
 		int[] vels = getEncVels();
