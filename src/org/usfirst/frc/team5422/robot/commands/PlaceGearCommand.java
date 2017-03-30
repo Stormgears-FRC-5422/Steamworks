@@ -99,7 +99,6 @@ public class PlaceGearCommand extends Command {
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				m.shutDownProfiling();
 				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 				break;
 			case PLACE_GEAR_RIGHT_AIRSHIP: // TODO: Finish these - they don't look finished to me
@@ -133,7 +132,6 @@ public class PlaceGearCommand extends Command {
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				m.shutDownProfiling();
 				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 
 				break;
@@ -150,7 +148,6 @@ public class PlaceGearCommand extends Command {
 //				vision.alignToGear();
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				m.shutDownProfiling();
 				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 				break;
 			case NONE:
