@@ -291,6 +291,7 @@ public class MotionManager {
 				}
 			} else {
 				System.out.println("Return from waitUntilProfileFinishes after waiting " + count + " interval(s)");
+				shutDownProfiling();
 				return;
 			}
 			

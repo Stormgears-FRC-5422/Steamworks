@@ -3,6 +3,7 @@ package org.usfirst.frc.team5422.robot.subsystems.sensors;
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
@@ -83,8 +84,7 @@ public class Vision extends RunnableSubsystem {
 //      System.out.println("DiffAngle:" + diffAng);
       // TODO: Turn in place by -diffAng
 
-      Navigator.rotateRelative(diffAng); /**MOVING ROBOT**/
-
+      Navigator.getInstance().motionManager.pushTurn(diffAng, true, false); /**TURN*/
       SmartDashboard.putNumber("Angular Displacement to Gear Hook", diffAng * 180 / Math.PI);
       NetworkTable visionTable = NetworkTable.getTable("VisionTable");
       visionTable.putNumber("Angular Displacement", diffAng * 180 / Math.PI);
@@ -94,16 +94,23 @@ public class Vision extends RunnableSubsystem {
       distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
       distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
       double distY = (distLeft + distRight) / 2;
-       
+      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(distY/6.0/Math.PI *0.7, 70, Math.PI/2.0, 0), false, false); /**move Y**/ 
+      
+      
+      
       double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
       double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
       SmartDashboard.putNumber("Distance from Gear-X: ", distX);
       SmartDashboard.putNumber("Distance from Gear-Y: ", distY);
       visionTable.putNumber("Distance from Gear-X", distX);
       visionTable.putNumber("Distance from Gear-Y", distY);
-      Navigator.driveStraightRelativeInches(distX+9, distY*0.6);
+     
+      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(distX/6.0/Math.PI + 9, 70, 0, 0), false, true); /**move X**/
+      Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
+
+     // Navigator.driveStraightRelativeInches(distX+9, distY*0.6);
       Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
-      Navigator.driveStraightRelativeInches(0, -12);
+     // Navigator.driveStraightRelativeInches(0, -12);
 //      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(3, 300, 3*Math.PI/2, 0), true, false);
    }
    
