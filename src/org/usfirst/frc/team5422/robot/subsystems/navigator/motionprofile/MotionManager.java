@@ -181,6 +181,7 @@ public class MotionManager {
 		double wheelRadius = 3; //TODO: make constant, in inches
 		double maxVel = 240; //RPM
 		double ogTheta = d.theta;
+		ogTheta *= Math.PI/2.0/ogTheta;
 		d.theta %= (2 * Math.PI);
 		double tTheta = d.theta - Math.PI;
 		if(tTheta > 0) {d.theta = Math.PI - tTheta; d.direction = true; }
