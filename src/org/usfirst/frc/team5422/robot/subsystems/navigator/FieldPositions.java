@@ -58,10 +58,10 @@ public class FieldPositions {
 			centerIntermediate1Stop = Pose.createPoseTheta(82, 83, 3.14, 0.0f);
 			centerIntermediate2Stop = Pose.createPoseTheta(48, 214, 1.84, 0.0f);
 
-			leftIntermediate1Continue = Pose.createPoseTheta(84, 108, 1.57, 0.01f);
+			leftIntermediate1Continue = Pose.createPoseTheta(84, 96, 1.57, 0.01f);
 			leftIntermediate2Continue = Pose.createPoseTheta(48, 214, 2.08, 2.44f);
 
-			rightIntermediate1Continue = Pose.createPoseTheta(243, 108, 1.57, 0.01f);
+			rightIntermediate1Continue = Pose.createPoseTheta(243, 96, 1.57, 0.01f);
 			rightIntermediate2Continue = Pose.createPoseTheta(250, 214, 1.93, 2.44f);
 
 			centerIntermediate1Continue = Pose.createPoseTheta(82, 83, 3.14, 2.44f);

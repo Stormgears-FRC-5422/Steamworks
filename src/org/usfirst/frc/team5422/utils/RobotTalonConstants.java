@@ -18,7 +18,7 @@ public class RobotTalonConstants extends SteamworksConstants{
     public static final int CLIMBER_TALON_ID = 4;
     public static final int INTAKE_TALON_ID = 5;
     public static final int SHOOTER_TALON_ID = 6;
-    public static final int SHOOTER_RELAY_ID = 1;
+    public static final int SHOOTER_RELAY_ID = 0;
 
 	
 	//Motion Profile PID Values for Clone Robot
