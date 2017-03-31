@@ -119,7 +119,7 @@ public class PlaceGearCommand extends Command {
 				dstPosition = routeToGear.get(2);
 				//rotate towards Left Gear position
 				System.out.println("Theta = " + dstPosition.theta);
-				m.pushTurn((5*Math.PI/3.0), false, false); //OG
+				m.pushTurn((-Math.PI/3.0), false, false); //OG
 			//	m.pushTurn(0.46, false, false);
 				System.out.println("entering delay after turn");
 		//		Timer.delay(10);

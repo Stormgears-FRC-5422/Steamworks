@@ -181,12 +181,15 @@ public class MotionManager {
 		double wheelRadius = 3; //TODO: make constant, in inches
 		double maxVel = 240; //RPM
 		double ogTheta = d.theta;
-		ogTheta *= Math.PI/2.0/ogTheta;
+		
+		if(ogTheta > 0) ogTheta = Math.PI/2.0;
+		else ogTheta = 3 * Math.PI/2.0;
 		d.theta %= (2 * Math.PI);
 		double tTheta = d.theta - Math.PI;
 		if(tTheta > 0) {d.theta = Math.PI - tTheta; d.direction = true; }
 		d.direction = false;
 		double dist = robotRadius * d.theta/(2.0 * Math.PI * wheelRadius);
+		System.out.println("ogTheta: " + ogTheta);
 		return TrapezoidalProfile.getTrapezoidZero(dist, maxVel, ogTheta, getRobotRPM());
 	}
 

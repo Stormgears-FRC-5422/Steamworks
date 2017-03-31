@@ -58,10 +58,10 @@ public class FieldPositions {
 			centerIntermediate1Stop = new Pose(82, 83, 3.14, 0.0f);
 			centerIntermediate2Stop = new Pose(48, 214, 1.84, 0.0f);
 
-			leftIntermediate1Continue = new Pose(84, 108, 1.57, 0.01f);
+			leftIntermediate1Continue = new Pose(84, 96, 1.57, 0.01f);
 			leftIntermediate2Continue = new Pose(48, 214, 2.08, 2.44f);
 
-			rightIntermediate1Continue = new Pose(243, 108, 1.57, 0.01f);
+			rightIntermediate1Continue = new Pose(243, 96, 1.57, 0.01f);
 			rightIntermediate2Continue = new Pose(250, 214, 1.93, 2.44f);
 
 			centerIntermediate1Continue = new Pose(82, 83, 3.14, 2.44f);

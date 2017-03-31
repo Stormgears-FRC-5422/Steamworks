@@ -19,6 +19,7 @@ public class TrapezoidalProfile {
 //	}
 	
 	public static double [][] getTrapezoidZero(double rotations, double maxVel, double theta, double vStart) {
+		System.out.println("ROTATIONS gen0profile: " + rotations);
 		return generateZeroProfile(maxVel/60.0, maxVel/60.0, rotations,theta, vStart); //should want starting ticks as 0 here
 		
 	}
@@ -28,7 +29,7 @@ public class TrapezoidalProfile {
 		maxVel = maxVel * 8192.0;
 		distance = distance * 8192.0; 
 		
-		SmartDashboard.putNumber("Dist: ", distance);
+		SmartDashboard.putNumber("DIST: ", distance);
 		
 		double timeTotal = getTotalTimeZero(maxAccel, maxVel, distance, vStart);
 		int length =  (int)(timeTotal* 100) + 2;
