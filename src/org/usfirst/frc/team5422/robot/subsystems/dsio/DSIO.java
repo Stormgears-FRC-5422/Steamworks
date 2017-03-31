@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.dsio;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,6 +59,7 @@ public class DSIO {
 		// This is special
 		greenSwitch.whenPressed(new ShootCommand());
 
+		Robot.shooterSubsystem.setShootVelocity(55750);
 
 	}
 
@@ -77,12 +79,41 @@ public class DSIO {
 			Robot.climberIntakeSubsystem.stop();
 
 		// GREEN SWITCH
-		if (!buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID))
-			Robot.shooterSubsystem.setEnabled(false);
+		if (buttonBoard.getRawButton(ButtonIds.GREEN_SWITCH_ID)) {
+			System.out.println("GREEN SWITCH Pressed...");
+			robotShooterMode = shooterMode.AUTONOMOUS;
+			Robot.shooterSubsystem.shoot();
+		}
+		else {
+			robotShooterMode = shooterMode.MANUAL;
+		}
+
+		SmartDashboard.putBoolean("BUTTON 7:", false);
+		SmartDashboard.putBoolean("BUTTON 8:", false);
+
+		//TODO: get rid of this once testing is done
+		if (joystick.getRawButton(7)) {
+			Robot.shooterSubsystem.startImpeller();
+			SmartDashboard.putBoolean("BUTTON 7:", true);
+		} else if (joystick.getRawButton(8)) {
+			Robot.shooterSubsystem.runImpellerReversed();
+			SmartDashboard.putBoolean("BUTTON 8:", true);
+		} else {
+			Robot.shooterSubsystem.stopImpeller();
+		}
+		
+		if (buttonBoard.getRawButton(ButtonIds.BIG_BLUE_BUTTON_ID)) {
+			System.out.println("Blue button good!");
+			Robot.shooterSubsystem.runImpellerReversed();
+			Timer.delay(1);
+		//	Robot.shooterSubsystem.runImpellerReversed();
+		//	Robot.shooterSubsystem.setShootVelocity(getManualShooterVelocity());
+		//	Robot.shooterSubsystem.shoot();
+		}
 	}
 
 	public double getManualShooterVelocity() {
-		return (joystick.getZ());
+		return (joystick.getZ() + 1) * 5000 + 50000;
 	}
 
 	public double getSliderValueClimber() {
