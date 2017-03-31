@@ -23,7 +23,7 @@ public class Shooter extends Subsystem {
 		motor = new SafeTalon(talonId);
 		motor.changeControlMode(CANTalon.TalonControlMode.Speed);
 		motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-		motor.configEncoderCodesPerRev(8192);
+	//	motor.configEncoderCodesPerRev(8192);
 
 		impeller = new Relay(relayId);
 	}
@@ -53,7 +53,7 @@ public class Shooter extends Subsystem {
 	}
 
 	public void shoot() {
-		motor.set(shootVelocity * 81.92 * 0.5);
+		motor.set(-shootVelocity);
 //		Diagnostics.log("shootVelocity: " + shootVelocity);
 //		Diagnostics.log("shootVoltage: " + motor.getBusVoltage());
 	}
