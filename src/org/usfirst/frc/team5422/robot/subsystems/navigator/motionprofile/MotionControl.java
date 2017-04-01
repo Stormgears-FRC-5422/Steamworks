@@ -78,7 +78,7 @@ public class MotionControl {
 			t.set(0);
 			statuses[i++] = new CANTalon.MotionProfileStatus();
 		}
-		
+ 
 		synchronized(this) {
 			stopNotifier = false;
 			notifier.startPeriodic(notifierRate);

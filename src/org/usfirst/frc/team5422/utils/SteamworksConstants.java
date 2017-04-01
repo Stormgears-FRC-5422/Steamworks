@@ -49,6 +49,7 @@ public class SteamworksConstants
 		PLACE_GEAR_LEFT_AIRSHIP,
 		PLACE_GEAR_RIGHT_AIRSHIP,
 		PLACE_GEAR_CENTER_AIRSHIP,
+		HOPPER_AUTONOMOUS,
 		NONE;
 		
     	@Override
@@ -57,6 +58,7 @@ public class SteamworksConstants
 			case PLACE_GEAR_LEFT_AIRSHIP: return "Place gear left of airship";
 			case PLACE_GEAR_RIGHT_AIRSHIP: return "Place gear right of airship";
 			case PLACE_GEAR_CENTER_AIRSHIP: return "Place gear center airship";
+			case HOPPER_AUTONOMOUS: return "Hopper autonomous";
 			case NONE: return "None";
 			default: return "Unknown";
 			}

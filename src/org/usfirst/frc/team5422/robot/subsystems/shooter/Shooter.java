@@ -48,10 +48,18 @@ public class Shooter extends Subsystem {
 		this.shootVelocity = shootVelocity;
 	}
 
+	// Reverse is the normal direction
 	public void startImpeller()
 	{
 		System.out.println("propeller running");
 		impeller.set(Relay.Value.kReverse);
+	}
+
+	// this back off in the wrong direction
+	public void reverseImpeller()
+	{
+		System.out.println("propeller running the other direction");
+		impeller.set(Relay.Value.kForward);
 	}
 
 	public void stopImpeller()

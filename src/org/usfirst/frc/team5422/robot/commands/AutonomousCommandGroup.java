@@ -2,6 +2,7 @@ package org.usfirst.frc.team5422.robot.commands;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
@@ -14,7 +15,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  *
  */
 public class AutonomousCommandGroup extends CommandGroup {
-	public PlaceGearCommand autoPlaceGearCommand;
+	public Command autoPlaceGearCommand;
 	public RobotAutoDropOffCommand autoRobotDropOffCommand;
 	
 	private autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation;
@@ -48,7 +49,11 @@ public class AutonomousCommandGroup extends CommandGroup {
 		this.selectedAutonomousDropOffLocation = selectedAutonomousDropOffLocation;
 		
 		System.out.println("creating autonomous PlaceGearCommand ");
-		autoPlaceGearCommand = new PlaceGearCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
+		if (selectedAutonomousGearPlacementLocation != autonomousGearPlacementOptions.HOPPER_AUTONOMOUS)
+			autoPlaceGearCommand = new PlaceGearCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
+		else
+			autoPlaceGearCommand = new HopperShootCommand(this.selectedAlliance);
+
 		autoRobotDropOffCommand = new RobotAutoDropOffCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
 		
 		addSequential(autoPlaceGearCommand);

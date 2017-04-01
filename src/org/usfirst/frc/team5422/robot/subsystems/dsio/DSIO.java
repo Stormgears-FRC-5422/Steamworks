@@ -7,8 +7,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.commands.GearFlapCommand;
+import org.usfirst.frc.team5422.robot.commands.ReverseImpellerCommand;
 import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.robot.commands.TurnLightOnOffCommand;
+import org.usfirst.frc.team5422.robot.commands.VisionAlignToGearCommand;
 import org.usfirst.frc.team5422.utils.ButtonIds;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
@@ -28,7 +30,8 @@ public class DSIO {
 	public SendableChooser<autonomousGearPlacementOptions> autonomousGearPlacementOptionsChooser;
 	public SendableChooser<autonomousDropOffLocationOptions> autonomousDropOffLocationOptionsChooser;
 
-	JoystickButton bigBlue, smallBlue, greenSwitch, orangeSwitch, redSwitch, smallGreen, smallYellow, smallBlack;
+	JoystickButton bigBlue, greenSwitch, orangeSwitch, redSwitch, 
+	smallBlue, smallGreen, smallYellow, smallBlack, smallWhite, smallRed;
 
 	shooterMode robotShooterMode = shooterMode.MANUAL;
 
@@ -47,6 +50,8 @@ public class DSIO {
 		smallGreen = new JoystickButton(buttonBoard, ButtonIds.GREEN_BUTTON_ID);
 		smallYellow = new JoystickButton(buttonBoard, ButtonIds.YELLOW_BUTTON_ID);
 		smallBlack = new JoystickButton(buttonBoard, ButtonIds.BLACK_BUTTON_ID);
+		smallWhite = new JoystickButton(buttonBoard, ButtonIds.WHITE_BUTTON_ID);
+		smallRed = new JoystickButton(buttonBoard, ButtonIds.RED_BUTTON_ID);
 
 		initializeChoosers();
 
@@ -60,7 +65,10 @@ public class DSIO {
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
 		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
-
+		//smallWhite.whenPressed(new VisionAlignToGearCommand());
+		smallRed.whenPressed(new ReverseImpellerCommand(true));
+		smallRed.whenReleased(new ReverseImpellerCommand(false));
+		
 		// This is special
 		greenSwitch.whenPressed(new ShootCommand());
 		//Robot.shooterSubsystem.setShootVelocity(55750);
@@ -116,6 +124,7 @@ public class DSIO {
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Left", autonomousGearPlacementOptions.PLACE_GEAR_LEFT_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addDefault("Place Gear Center", autonomousGearPlacementOptions.PLACE_GEAR_CENTER_AIRSHIP);
 		autonomousGearPlacementOptionsChooser.addObject("Place Gear Right", autonomousGearPlacementOptions.PLACE_GEAR_RIGHT_AIRSHIP);
+		autonomousGearPlacementOptionsChooser.addObject("Hopper Autonomous", autonomousGearPlacementOptions.HOPPER_AUTONOMOUS);
 		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
 		SmartDashboard.putData("Autonomous Gear Placement Chooser", autonomousGearPlacementOptionsChooser);
 
