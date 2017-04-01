@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5422.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-//import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.shooter_thread.ShooterRunnable;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
@@ -15,32 +14,35 @@ public class ShootCommand extends Command
     Thread shooterThread;
     SteamworksConstants.shooterMode shooterMode;
 
+    public ShootCommand()
+    {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.shooterSubsystem);
+
+        shooterRunnable = new ShooterRunnable();
+    }
+    
     public ShootCommand(int shootTimeSeconds, SteamworksConstants.shooterMode shooterMode)
     {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.shooterSubsystem);
 
-        shooterRunnable = new ShooterRunnable(shootTimeSeconds);
+        shooterRunnable = new ShooterRunnable();
         this.shooterMode = shooterMode;
     }
 
     // Called just before this Command runs the first time
     protected void initialize()
     {
-        if (shooterMode == SteamworksConstants.shooterMode.MANUAL)
-            Robot.shooterSubsystem.setShootVelocity(Robot.dsio.getManualShooterVelocity());
-        else
-            ;
+        Robot.shooterSubsystem.initializeShooter();
 
-//        Diagnostics.log("shootCommand initializing...");
         shooterThread = new Thread(shooterRunnable);
         shooterThread.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute()
-    {
-        Robot.shooterSubsystem.shoot();
+    protected void execute() {
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -52,7 +54,7 @@ public class ShootCommand extends Command
     // Called once after isFinished returns true
     protected void end()
     {
-//        Diagnostics.log("It shot a ball!!");
+
     }
 
     // Called when another command which requires one or more of the same

@@ -1,35 +1,42 @@
 package org.usfirst.frc.team5422.robot.subsystems.shooter.shooter_thread;
 
-//import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
 import org.usfirst.frc.team5422.robot.Robot;
 
 /**
- * Created by michael on 1/29/17.
+ * All the stuff that needs to happen on a separate thread.
  */
 public class ShooterRunnable implements Runnable
 {
-    int shootTimeSeconds;
-
-    public ShooterRunnable(int shootTimeSeconds)
-    {
-        this.shootTimeSeconds = shootTimeSeconds;
-    }
-
     @Override
     public void run()
     {
-//        Diagnostics.log("shooterThread is started.");
+		//to start the shooter before the impeller
+    	Robot.shooterSubsystem.shoot();
+		
+	    // Wait three seconds for wheel to spin up
+	    try {
+		    Thread.sleep(750);
+	    } catch (InterruptedException e) {
+		    e.printStackTrace();
+	    }
 
-        try
-        {
-            Thread.sleep(shootTimeSeconds * 1000);
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+	    Robot.shooterSubsystem.startImpeller();
 
-        Robot.shooterSubsystem.stop();
-//        Diagnostics.log("shooterThread is stopped.");
+    	while (Robot.shooterSubsystem.isEnabled()) {
+    		Robot.shooterSubsystem.shoot();
+
+		    // Loop will run 10 times a second
+		    try {
+			    Thread.sleep(100);
+		    } catch (InterruptedException e) {
+			    e.printStackTrace();
+		    }
+
+		    SmartDashboard.putNumber("Shooter velocity: ", Robot.shooterSubsystem.motor.getEncVelocity());
+	    }
+
+	    Robot.shooterSubsystem.stop();
     }
 }
