@@ -9,6 +9,7 @@ import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.commands.GearFlapCommand;
 import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.robot.commands.TurnLightOnOffCommand;
+import org.usfirst.frc.team5422.robot.commands.VisionAlignToGearCommand;
 import org.usfirst.frc.team5422.utils.ButtonIds;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
@@ -28,7 +29,8 @@ public class DSIO {
 	public SendableChooser<autonomousGearPlacementOptions> autonomousGearPlacementOptionsChooser;
 	public SendableChooser<autonomousDropOffLocationOptions> autonomousDropOffLocationOptionsChooser;
 
-	JoystickButton bigBlue, smallBlue, greenSwitch, orangeSwitch, redSwitch, smallGreen, smallYellow, smallBlack;
+	JoystickButton bigBlue, greenSwitch, orangeSwitch, redSwitch, 
+	smallBlue, smallGreen, smallYellow, smallBlack, smallWhite, smallRed;
 
 	shooterMode robotShooterMode = shooterMode.MANUAL;
 
@@ -47,6 +49,7 @@ public class DSIO {
 		smallGreen = new JoystickButton(buttonBoard, ButtonIds.GREEN_BUTTON_ID);
 		smallYellow = new JoystickButton(buttonBoard, ButtonIds.YELLOW_BUTTON_ID);
 		smallBlack = new JoystickButton(buttonBoard, ButtonIds.BLACK_BUTTON_ID);
+		smallWhite = new JoystickButton(buttonBoard, ButtonIds.WHITE_BUTTON_ID);
 
 		initializeChoosers();
 
@@ -60,6 +63,7 @@ public class DSIO {
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
 		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
+		smallWhite.whenPressed(new VisionAlignToGearCommand());
 
 		// This is special
 		greenSwitch.whenPressed(new ShootCommand());
