@@ -7,6 +7,7 @@ import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotionControl {
 	private static final double notifierRate = 0.005;
@@ -50,6 +51,7 @@ public class MotionControl {
 	public MotionControl(SafeTalon[] talons) {
 		this.talons = talons;
 		int i = 0;
+		
 		for (SafeTalon t : talons) {
 			t.changeControlMode(TalonControlMode.MotionProfile);
 			t.clearMotionProfileTrajectories();
@@ -77,7 +79,7 @@ public class MotionControl {
 			t.set(0);
 			statuses[i++] = new CANTalon.MotionProfileStatus();
 		}
-		
+
 		synchronized(this) {
 			stopNotifier = false;
 			notifier.startPeriodic(notifierRate);
