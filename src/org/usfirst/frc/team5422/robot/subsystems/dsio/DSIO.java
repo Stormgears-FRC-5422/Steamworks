@@ -91,7 +91,7 @@ public class DSIO {
 	}
 
 	public double getManualShooterVelocity() {
-		return (joystick.getThrottle() - 1) * 5000 - 55000;
+		return (joystick.getThrottle() - 1) * 5000 - 48000;
 	}
 
 	public double getSliderValueClimber() {

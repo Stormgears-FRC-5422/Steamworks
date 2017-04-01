@@ -69,6 +69,16 @@ public class MotionControl {
 	}
 	
 	public void startControlThread() {
+		int i = 0;
+		for (SafeTalon t : talons) {
+			t.changeControlMode(TalonControlMode.MotionProfile);
+			t.clearMotionProfileTrajectories();
+			t.changeMotionControlFramePeriod(5);
+			t.setEncPosition(0);
+			t.set(0);
+			statuses[i++] = new CANTalon.MotionProfileStatus();
+		}
+		
 		synchronized(this) {
 			stopNotifier = false;
 			notifier.startPeriodic(notifierRate);
