@@ -63,7 +63,7 @@ public class DSIO {
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
 		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
-		smallWhite.whenPressed(new VisionAlignToGearCommand());
+		//smallWhite.whenPressed(new VisionAlignToGearCommand());
 
 		// This is special
 		greenSwitch.whenPressed(new ShootCommand());
