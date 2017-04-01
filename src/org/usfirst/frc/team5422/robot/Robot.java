@@ -120,6 +120,8 @@ public class Robot extends IterativeRobot {
 			autonomousCommand.cancel();
 		}
 
+		Robot.shooterSubsystem.setShootVelocity(RobotTalonConstants.SHOOT_HIGH_SPEED);
+
 		//select the autonomous command for this run
 		selectAutonomousCommand();
 
@@ -185,13 +187,12 @@ public class Robot extends IterativeRobot {
 	
 	
 	public void teleopPeriodic() {
-	//	robotMode = RobotModes.TELEOP;
-		//Navigator.getMecanumDrive().initializeDriveMode(robotMode, RobotDriveProfile.VELOCITY); 
-	//	Navigator.getInstance();
 		//Move the MecanumDrive
 		Navigator.getMecanumDrive().move();
-		dsio.checkSwitches();
 		
+		dsio.checkSwitches();
+		Robot.shooterSubsystem.setShootVelocity(dsio.getManualShooterVelocity());
+
 		SmartDashboard.putNumber("0 POS: " ,Drive.talons[0].getEncPosition());
 		SmartDashboard.putNumber("0 VEL: ", Drive.talons[0].getEncVelocity());
 		

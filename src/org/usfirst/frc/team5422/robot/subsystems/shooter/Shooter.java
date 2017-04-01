@@ -1,6 +1,6 @@
 package org.usfirst.frc.team5422.robot.subsystems.shooter;
 
-//import org.stormgears.WebDashboard.Diagnostics.Diagnostics;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
 import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
 
@@ -10,24 +10,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
 public class Shooter extends Subsystem {
-	SafeTalon motor;
-	Relay impeller;
+	public SafeTalon motor;
+	private Relay impeller;
 	private boolean enabled = false;
-
 	double shootVelocity;
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
-	public Shooter(int talonId, int relayId) {
-		SmartDashboard.putNumber("Relay ID: ", relayId);
-
-		motor = new SafeTalon(talonId);
+	public Shooter(int shooterId, int propellerId) {
+		motor = new SafeTalon(shooterId);
 		motor.changeControlMode(CANTalon.TalonControlMode.Speed);
 		motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-	//	motor.configEncoderCodesPerRev(8192);
+		motor.setP(RobotTalonConstants.SHOOTER_P);
+		motor.setI(0);
+		motor.setD(0);
+		motor.setIZone(0);
+		motor.setF(RobotTalonConstants.SHOOTER_F);
 
-		impeller = new Relay(relayId);
+		impeller = new Relay(propellerId);
 	}
 
 	public void initDefaultCommand()
@@ -43,6 +44,10 @@ public class Shooter extends Subsystem {
 		this.enabled = enabled;
 	}
 
+	public void setShootVelocity(double shootVelocity) {
+		this.shootVelocity = shootVelocity;
+	}
+
 	public void startImpeller()
 	{
 		System.out.println("propeller running");
@@ -56,12 +61,11 @@ public class Shooter extends Subsystem {
 
 	public void initializeShooter() {
 		enabled = true;
-		shoot();
+//		shoot();
 	}
 	public void shoot() {
-		motor.set(-shootVelocity);
-//		Diagnostics.log("shootVelocity: " + shootVelocity);
-//		Diagnostics.log("shootVoltage: " + motor.getBusVoltage());
+		motor.set(shootVelocity);
+//		motor.set(RobotTalonConstants.SHOOT_HIGH_SPEED);
 	}
 
 	public void stop() {

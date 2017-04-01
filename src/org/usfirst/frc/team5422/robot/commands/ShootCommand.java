@@ -21,6 +21,15 @@ public class ShootCommand extends Command
 
         shooterRunnable = new ShooterRunnable();
     }
+    
+    public ShootCommand(int shootTimeSeconds, SteamworksConstants.shooterMode shooterMode)
+    {
+        // Use requires() here to declare subsystem dependencies
+        requires(Robot.shooterSubsystem);
+
+        shooterRunnable = new ShooterRunnable();
+        this.shooterMode = shooterMode;
+    }
 
     // Called just before this Command runs the first time
     protected void initialize()
@@ -34,11 +43,11 @@ public class ShootCommand extends Command
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute()
-    {
+    protected void execute() {
 
     }
 
+    // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished()
     {
 //        Diagnostics.log("shootCommand stopped.");

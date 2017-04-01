@@ -12,9 +12,12 @@ public class ShooterRunnable implements Runnable
     @Override
     public void run()
     {
+		//to start the shooter before the impeller
+    	Robot.shooterSubsystem.shoot();
+		
 	    // Wait three seconds for wheel to spin up
 	    try {
-		    Thread.sleep(3000);
+		    Thread.sleep(750);
 	    } catch (InterruptedException e) {
 		    e.printStackTrace();
 	    }

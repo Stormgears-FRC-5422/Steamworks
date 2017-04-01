@@ -18,7 +18,7 @@ public class RobotTalonConstants extends SteamworksConstants{
     public static final int CLIMBER_TALON_ID = 4;
     public static final int INTAKE_TALON_ID = 5;
     public static final int SHOOTER_TALON_ID = 6;
-    public static final int SHOOTER_RELAY_ID = 0;
+    public static final int SHOOTER_RELAY_ID = 1;
 
 	
 	//Motion Profile PID Values for Clone Robot
@@ -62,7 +62,14 @@ public class RobotTalonConstants extends SteamworksConstants{
 	public static double REALBOT_POSITION_P = 0.64;
 	public static double REALBOT_POSITION_I = 0.001;
 	public static double REALBOT_POSITION_D = 2.56;
-	public static int REALBOT_POSITION_IZONE = 1000;	
+	public static int REALBOT_POSITION_IZONE = 1000;
+	
+	// Shooter Constants
+	public static final double SHOOTER_P = 0.01;
+	public static final double SHOOTER_F = 0.01573846154;
+	public static final double SHOOT_LOW_SPEED = -52500;
+	public static final double SHOOT_HIGH_SPEED = -53250;
+
 	
 	public enum RobotDriveProfile {
 		MOTIONPROFILE,
