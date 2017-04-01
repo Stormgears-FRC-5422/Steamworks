@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.commands.GearFlapCommand;
+import org.usfirst.frc.team5422.robot.commands.ReverseImpellerCommand;
 import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.robot.commands.TurnLightOnOffCommand;
 import org.usfirst.frc.team5422.robot.commands.VisionAlignToGearCommand;
@@ -50,6 +51,7 @@ public class DSIO {
 		smallYellow = new JoystickButton(buttonBoard, ButtonIds.YELLOW_BUTTON_ID);
 		smallBlack = new JoystickButton(buttonBoard, ButtonIds.BLACK_BUTTON_ID);
 		smallWhite = new JoystickButton(buttonBoard, ButtonIds.WHITE_BUTTON_ID);
+		smallRed = new JoystickButton(buttonBoard, ButtonIds.RED_BUTTON_ID);
 
 		initializeChoosers();
 
@@ -64,7 +66,9 @@ public class DSIO {
 		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
 		//smallWhite.whenPressed(new VisionAlignToGearCommand());
-
+		smallRed.whenPressed(new ReverseImpellerCommand(true));
+		smallRed.whenReleased(new ReverseImpellerCommand(false));
+		
 		// This is special
 		greenSwitch.whenPressed(new ShootCommand());
 		//Robot.shooterSubsystem.setShootVelocity(55750);
