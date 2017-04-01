@@ -75,7 +75,7 @@ public class PlaceGearCommand extends Command {
 				routeToGear = AutoRoutes.leftStartToGear;
 				srcPosition = routeToGear.get(0);
 				interimPosition = routeToGear.get(1);
-				distanceToIntermediatePosition = interimPosition.y - srcPosition.y;
+				distanceToIntermediatePosition = interimPosition.y - srcPosition.y - 3.0;
 				System.out.println("Distance to intermediate pos: " + distanceToIntermediatePosition);
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToIntermediatePosition + " inches to left interim position.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, false); 
@@ -101,7 +101,7 @@ public class PlaceGearCommand extends Command {
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 
 //				// Back up
 //				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
@@ -112,7 +112,7 @@ public class PlaceGearCommand extends Command {
 				routeToGear = AutoRoutes.rightStartToGear;
 				srcPosition = routeToGear.get(0);
 				interimPosition = routeToGear.get(1);
-				distanceToIntermediatePosition = interimPosition.y - srcPosition.y;
+				distanceToIntermediatePosition = interimPosition.y - srcPosition.y - 3.0;
 				System.out.println("Distance to intermediate pos: " + distanceToIntermediatePosition);
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToIntermediatePosition + " inches to right interim position.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, false); 
@@ -138,7 +138,7 @@ public class PlaceGearCommand extends Command {
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 
 //				// Back up
 //				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
