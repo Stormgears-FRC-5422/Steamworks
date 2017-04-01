@@ -164,6 +164,7 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() {
 		System.out.println("disabled init started.");
 
+		shooterSubsystem.setEnabled(false);
 		SensorManager.stopPublishingToNetwork();
 		Vision.turnOffLights();
 		
