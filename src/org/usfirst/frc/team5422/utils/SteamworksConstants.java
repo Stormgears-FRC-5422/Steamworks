@@ -48,6 +48,29 @@ public class SteamworksConstants
     	}
 	}
 
+	// Alliance options
+	public enum flapPositions{
+		NEUTRAL, RECEIVING, DISPENSE;
+    	@Override
+		public String toString() {
+			switch(this) {
+			case NEUTRAL: return "Neutral";
+			case RECEIVING: return "Receiving";
+			case DISPENSE: return "Dispense";
+			default: return "Unknown";
+			}
+    	}
+
+		public int toInt() {
+			switch(this) {
+			case NEUTRAL: return SteamworksConstants.FLAPS_NEUTRAL;
+			case RECEIVING: return SteamworksConstants.FLAPS_RECEIVING;
+			case DISPENSE: return SteamworksConstants.FLAPS_DISPENSE;
+			default: return SteamworksConstants.FLAPS_NEUTRAL;
+			}
+    	}
+	}
+
 	// Autonomous gear placement options
 	public enum autonomousGearPlacementOptions {
 		PLACE_GEAR_LEFT_AIRSHIP,

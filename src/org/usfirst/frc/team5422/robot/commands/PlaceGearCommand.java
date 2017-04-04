@@ -112,7 +112,7 @@ public class PlaceGearCommand extends Command {
 				routeToGear = AutoRoutes.rightStartToGear;
 				srcPosition = routeToGear.get(0);
 				interimPosition = routeToGear.get(1);
-				distanceToIntermediatePosition = interimPosition.y - srcPosition.y - 3.0;
+				distanceToIntermediatePosition = interimPosition.y - srcPosition.y - 10.0;
 				System.out.println("Distance to intermediate pos: " + distanceToIntermediatePosition);
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToIntermediatePosition + " inches to right interim position.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, false); 
@@ -132,6 +132,7 @@ public class PlaceGearCommand extends Command {
 				//go the next segment from interim position to the left peg
 				xseg = Math.abs(dstPosition.x - interimPosition.x);
 				yseg = Math.abs(dstPosition.y - interimPosition.y);
+				yseg -= 5.25;
 				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToPeg + " inches to right gear hook.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
@@ -139,10 +140,10 @@ public class PlaceGearCommand extends Command {
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
 				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
-
+				Timer.delay(0.3);
 //				// Back up
-//				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-//				m.waitUntilProfileFinishes(100);
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+				m.waitUntilProfileFinishes(100);
 
 				break;
 			case PLACE_GEAR_CENTER_AIRSHIP:
@@ -159,11 +160,9 @@ public class PlaceGearCommand extends Command {
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
 				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
-
-				// Back up
+				Timer.delay(2);
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
 				m.waitUntilProfileFinishes(100);
-
 				break;
 			case NONE:
 				return;
