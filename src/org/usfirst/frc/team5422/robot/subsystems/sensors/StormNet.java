@@ -6,6 +6,8 @@ import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class StormNet extends RunnableSubsystem {
 	public USSensor usSensor;
 	public IRSensor irSensor;
@@ -31,6 +33,7 @@ public class StormNet extends RunnableSubsystem {
 		usSensor.pollDistance();
 		for (int sensorNumber = 0; sensorNumber < SteamworksConstants.NUMBER_OF_STORMNET_ULTRASONIC_SENSORS; sensorNumber++) {
 			networkPublish("ULTRASONIC_" + Integer.toString(sensorNumber + 1), usSensor.getDistance(sensorNumber));
+			SmartDashboard.putNumber("ULTRASONIC_" + Integer.toString(sensorNumber + 1), usSensor.getDistance(sensorNumber));
 		}
 
 		networkPublish("Gear Ring Light", usSensor.getGearLightStatus() ? "On" : "Off");

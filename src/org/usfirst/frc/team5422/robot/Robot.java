@@ -22,6 +22,7 @@ import org.usfirst.frc.team5422.utils.RobotTalonConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.flapPositions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 
@@ -44,7 +45,8 @@ public class Robot extends IterativeRobot {
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
 	public autonomousDropOffLocationOptions autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
-
+	public flapPositions flapPositionSelected = flapPositions.NEUTRAL;
+	
 	public Command autonomousCommand = null;
 
 	public Robot() {
@@ -179,6 +181,10 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
+//	private void selectFlapPosition() {
+//		flapPositionSelected = (flapPositions) dsio.flapPositionsChooser.getSelected();
+//	}
+	
 	private void selectAutonomousDropOffLocation() {
 		autonomousDropOffLocationSelected = (autonomousDropOffLocationOptions) dsio.autonomousDropOffLocationOptionsChooser.getSelected();
 	}
@@ -191,10 +197,12 @@ public class Robot extends IterativeRobot {
 		selectAlliance();
 		selectAutonomousGearPlacement();
 		selectAutonomousDropOffLocation();
-
+//		selectFlapPosition();
+		
 		System.out.println("ALLIANCE: " + allianceSelected.toString());
 		System.out.println("GEAR PLACEMENT LOCATION: " + autonomousGearPlacementSelected.toString());
 		System.out.println("DROP OFF LOCATION: " + autonomousDropOffLocationSelected.toString());
+		System.out.println("FLAP POSITION: " + flapPositionSelected.toString());
 
 		System.out.println("creating autonomous command group");
 		autonomousCommand = new AutonomousCommandGroup(allianceSelected, autonomousGearPlacementSelected, autonomousDropOffLocationSelected);
