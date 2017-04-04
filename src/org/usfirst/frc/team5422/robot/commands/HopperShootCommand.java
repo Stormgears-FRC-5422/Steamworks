@@ -38,27 +38,27 @@ public class HopperShootCommand extends Command {
 		m = Navigator.motionManager;
 
 		// Drive 104 inches forward
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(104.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, false);
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(104.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, false);
 
 
 		// Go left or right by 43 inches
 		if (alliance == alliances.BLUE) {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(50.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, 0, 0), false, true);
 			// Don't need to wait for balls since we're not moving away from hopper
 		}
 		else {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(50.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, 0.0, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI, 0), false, true);
 			m.waitUntilProfileFinishes(100);
 
 			// Wait for balls to fall in
 			try {
-				wait(2000);
+				wait(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
 			// Go out six inches and turn slightly
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(6.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI, 0), true, false);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(6.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, 0, 0), true, false);
 			m.pushTurn(-0.1311795572, false, true);
 		}
 		m.waitUntilProfileFinishes(100);

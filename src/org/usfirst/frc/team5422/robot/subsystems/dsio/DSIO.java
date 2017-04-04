@@ -14,6 +14,7 @@ import org.usfirst.frc.team5422.robot.commands.VisionAlignToGearCommand;
 import org.usfirst.frc.team5422.utils.ButtonIds;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.flapPositions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.shooterMode;
@@ -29,6 +30,7 @@ public class DSIO {
 	public SendableChooser<alliances> allianceChooser;
 	public SendableChooser<autonomousGearPlacementOptions> autonomousGearPlacementOptionsChooser;
 	public SendableChooser<autonomousDropOffLocationOptions> autonomousDropOffLocationOptionsChooser;
+//	public SendableChooser<flapPositions> flapPositionsChooser;
 
 	JoystickButton bigBlue, greenSwitch, orangeSwitch, redSwitch, 
 	smallBlue, smallGreen, smallYellow, smallBlack, smallWhite, smallRed;
@@ -63,7 +65,10 @@ public class DSIO {
 		// Small buttons
 		smallBlue.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_RECEIVING));
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
-		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
+//		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
+		
+		//temporary fix in Hartford Competition 
+		smallWhite.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
 		//smallWhite.whenPressed(new VisionAlignToGearCommand());
 		smallRed.whenPressed(new ReverseImpellerCommand(true));
@@ -99,7 +104,7 @@ public class DSIO {
 	}
 
 	public double getManualShooterVelocity() {
-		return (joystick.getThrottle() - 1) * 5000 - 48000;
+		return (joystick.getThrottle() - 1) * 5000 - 46000;
 	}
 
 	public double getSliderValueClimber() {
@@ -132,6 +137,12 @@ public class DSIO {
 		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
 		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
 		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);
+
+//		flapPositionsChooser = new SendableChooser<flapPositions>();
+//		flapPositionsChooser.addDefault("Flap Neutral Position", flapPositions.NEUTRAL);
+//		flapPositionsChooser.addObject("Flap Receive Position", flapPositions.RECEIVING);
+//		flapPositionsChooser.addObject("Flap Dispense Position", flapPositions.DISPENSE);
+//		SmartDashboard.putData("Flap Position Chooser", flapPositionsChooser);
 
 	}
 }

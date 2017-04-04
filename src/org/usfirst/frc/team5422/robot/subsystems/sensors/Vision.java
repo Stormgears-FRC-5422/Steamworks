@@ -36,7 +36,7 @@ public class Vision extends RunnableSubsystem {
 	
 	public void getVisionCoordinatesFromNetworkTable() { 
 		double [] defaultXArray = new double[0];
-		double [] defaultYArray = new double[0];
+		double [] defaultYArray = new double[0];  
 		
 		double [] centerX = visionTable.getNumberArray(NetworkConstants.CENTER_X, defaultXArray);
 		double [] centerY = visionTable.getNumberArray(NetworkConstants.CENTER_Y, defaultYArray);		
