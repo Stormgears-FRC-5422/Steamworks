@@ -65,18 +65,16 @@ public class DSIO {
 		// Small buttons
 		smallBlue.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_RECEIVING));
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
-//		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
+
+		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		
 		//temporary fix in Hartford Competition 
-		smallWhite.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
+//		smallWhite.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
 		//smallWhite.whenPressed(new VisionAlignToGearCommand());
 		smallRed.whenPressed(new ReverseImpellerCommand(true));
 		smallRed.whenReleased(new ReverseImpellerCommand(false));
 		
-		// This is special
-		greenSwitch.whenPressed(new ShootCommand());
-
 		// This is special
 		greenSwitch.whenPressed(new ShootCommand());
 		//Robot.shooterSubsystem.setShootVelocity(55750);
