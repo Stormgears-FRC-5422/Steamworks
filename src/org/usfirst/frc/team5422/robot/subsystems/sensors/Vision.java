@@ -56,7 +56,7 @@ public class Vision extends RunnableSubsystem {
 	      else
 	         return -1;
 	}
-
+	
    private double getRectWidth(int index) {
       double [] defaultArray = new double[1];
       double [] visionArray = visionTable.getNumberArray(NetworkConstants.WIDTH, defaultArray);
@@ -74,63 +74,109 @@ public class Vision extends RunnableSubsystem {
       }
    }
 
+
    public void alignToGear() {
-	   System.out.println("Vision...align to gear...");
-      // Angular displacement
+	  System.out.println("Vision...align to gear...");
+      // Angular displacement from US Sensors
       double distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
       double distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
 
       double diffAng = Math.asin((distLeft - distRight) / SteamworksConstants.ROBOT_ULTRASONIC_SEPARATION_IN);
 
+      // Sanity checks
       if (distLeft > 120 || distRight > 120 || Math.abs(diffAng) > Math.PI / 6) {
     	  System.out.println("Bailing because turn values look wrong. distLeft : " + distLeft + " distRight : " + distRight + " diffAng :" + diffAng);
     	  return;
       }
 
-      // System.out.println("DiffAngle:" + diffAng);
-      Navigator.getInstance().motionManager.pushTurn(diffAng, true, false); /**TURN*/
-      Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
+      // TODO - DLM remove for real work
+      //diffAng = Math.PI/12.0;  // 15 degrees      
+
+      System.out.println("DiffAngle:" + diffAng + "left: " + distLeft + " right: " + distRight);
+      /* ********** TURN ********** */
+      if (diffAng != 0) {
+    	  if (Math.abs(diffAng) > Math.PI / 12.0) {
+    		  Navigator.getInstance().motionManager.pushTurn(diffAng, true, true); 
+        	  Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
+    	  }
+    	  else { // small angles - turn twice!
+    		  if (diffAng < 0) {
+        		  Navigator.getInstance().motionManager.pushTurn(Math.PI / 9.0, true, false); 
+        		  Navigator.getInstance().motionManager.pushTurn(diffAng - (Math.PI/9.0), false, true); 
+    			  
+    		  } else {
+        		  Navigator.getInstance().motionManager.pushTurn(-Math.PI / 9.0, true, false); 
+        		  Navigator.getInstance().motionManager.pushTurn(diffAng + (Math.PI/9.0), false, true); 
+    		  }
+        	  Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
+    	  }
+      }
       
       SmartDashboard.putNumber("Angular Displacement to Gear Hook", diffAng * 180 / Math.PI);
       NetworkTable visionTable = NetworkTable.getTable("VisionTable");
       visionTable.putNumber("Angular Displacement", diffAng * 180 / Math.PI);
 
-      // Distance
+      // Assume right orientation - get average distance
       distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
       distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
       double distY = (distLeft + distRight) / 2;
-
-      double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
-      double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
+      System.out.println("Vision distLeft: " + distLeft + " ,  distRight: " + distRight + ", distY: " + distY);
+      
+      //double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
+      //double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
+      double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0);
+      System.out.println("Vision CenterX0: " + getCenterX(0) + ", CenterX1: " + getCenterX(1) + ", distXPixel:" + distX);
+      
+      while (distX != 1000){
+    	  getVisionCoordinatesFromNetworkTable();
+      	  distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0);
+          System.out.println("Vision CenterX0: " + getCenterX(0) + ", CenterX1: " + getCenterX(1) + ", distXPixel:" + distX);
+      }
+          
+      distX = 	distX * (67.0/320.0); // pixels to degrees
+      System.out.println("Vision distXangle:" + distX);
+      double offset = distY * Math.tan(Math.toRadians(distX));
+      System.out.println("Vision Offset Pre Constant:" + offset);
+      offset -= 8.8125; // camera to gear
+      System.out.println("Vision Offset Post Constant:" + offset);
+      System.out.println("Vision Info: cX0: " + getCenterX(0) + " , distX: " + distX);
       SmartDashboard.putNumber("Distance from Gear-X: ", distX);
       SmartDashboard.putNumber("Distance from Gear-Y: ", distY);
       visionTable.putNumber("Distance from Gear-X", distX);
       visionTable.putNumber("Distance from Gear-Y", distY);
 
-      // Sanity Check
-      // distY < 0 if we can't see anything
-      // distY > 120 if we are more than 10 feet away
-      // distX + 9 > 30 or < -21 if we are more than 2.5 feet to the left or right
-      if ( distY < 0 || distY > 120 || (distX + 9 > 39) || (distX + 9 < -21) ) {
-    	  System.out.println("Bailing because US values look wrong. distLeft : " + distLeft + " distRight : " + distRight + " diffAng :" + diffAng);
+//      // Sanity Check
+//      // distY < 0 if we can't see anything
+//      // distY > 120 if we are more than 10 feet away
+//      // |distX - 9| > 24 we are more than 2 feet to the left or right
+      if ( distY < 0 || distY > 120 || (distX - 9 > 1) || (distX - 9 < -1) ) {
+    	  System.out.println("Bailing because US values look wrong. distX: " + distX + " distY: " + distY);
     	  return; // bail out
       }
       
+      // TODO - DLM remove for real work
+      // positive numbers mean move left 
+//      distX = 18;
+//      distY = 24;
+      
       // Strafing left or right     
-      double offset = distX + 9;
+      /* ********** Strafe ********** */
+//      double offset = distX - 8.8125;  // 8 13/16 from gear center to camera
       if (offset > 0) {
-    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero( offset/6.0/Math.PI , 70, 0, 0), true, true); /**move X**/
-          Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
+    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero( offset/6.0/Math.PI , 70, 0, 0), true, false); /**move X**/
+//          Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
       }
       else {
     	  // then go the other direction
     	  offset = -offset;
-    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero( offset/6.0/Math.PI , 70, Math.PI, 0), true, true); /**move X**/
-          Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
+    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero( offset/6.0/Math.PI , 70, Math.PI, 0), true, false); /**move X**/
+//          Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
       }
       
       // Move forward to peg      
-//      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(distY/6.0/Math.PI *0.7, 70, Math.PI/2.0, 0), false, false); /**move Y**/ 
+      /* ********** Forward ********** */
+      Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero((distY - 4.0)/6.0/Math.PI *0.7, 70, 3*Math.PI/2.0, 0), false, true); /**move Y**/ 
+      Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
 //      Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
 //      Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
             
