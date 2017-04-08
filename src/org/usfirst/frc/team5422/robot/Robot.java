@@ -130,8 +130,6 @@ public class Robot extends IterativeRobot {
 		for (RegisteredNotifier r : notifierRegistry) {
 			r.stop();
 		}	
-		
-		
 	}
 
 	public void autonomousPeriodic() {
@@ -161,7 +159,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledPeriodic() {
-
+//		SmartDashboard.putNumber("Climber Talon POS: " ,Robot.climberIntakeSubsystem.climberIntakeTalon.getEncPosition());
+//		SmartDashboard.putNumber("Climber Talon VEL: ", Robot.climberIntakeSubsystem.climberIntakeTalon.getEncVelocity());
 	}
 
 	public void robotPeriodic() {

@@ -95,18 +95,18 @@ public class PlaceGearCommand extends Command {
 				//go the next segment from interim position to the left peg
 				xseg = Math.abs(dstPosition.x - interimPosition.x);
 				yseg = Math.abs(dstPosition.y - interimPosition.y);
-				yseg -= 5.25;
+				yseg -= 4.0;
 				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToPeg + " inches to left gear hook.");
-				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero((distanceToPeg + 12.0)/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 
 //				// Back up
-//				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-//				m.waitUntilProfileFinishes(100);
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+				m.waitUntilProfileFinishes(100);
 				break;
 			case PLACE_GEAR_RIGHT_AIRSHIP:
 				System.out.println("[Autonomous Routing] Starting at right starting position, going to right gear hook.");				
@@ -135,14 +135,14 @@ public class PlaceGearCommand extends Command {
 //				//go the next segment from interim position to the left peg
 				xseg = Math.abs(dstPosition.x - interimPosition.x);
 				yseg = Math.abs(dstPosition.y - interimPosition.y);
-				yseg -= 5.25;
+				yseg -= 4.0;
 				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToPeg + " inches to right gear hook.");
-				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero((distanceToPeg+12.0)/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 				Timer.delay(0.3);
 ////				// Back up
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
