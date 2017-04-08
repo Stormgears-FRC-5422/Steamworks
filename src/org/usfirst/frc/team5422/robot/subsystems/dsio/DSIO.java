@@ -108,7 +108,7 @@ public class DSIO {
 
 	public double getSliderValueClimber() {
 
-		double climberVelocity = (-1*(joystick.getThrottle() - 1) / 2);
+		double climberVelocity = ((-1*(joystick.getThrottle() - 1) / 2) * 1.5) + 0.50;
 
 
 		return climberVelocity;
