@@ -29,6 +29,7 @@ public class HopperShootCommand extends Command {
 	@Override
 	protected void initialize() {
 		System.out.println("Shooting without a person doing anything! LeBROWN CURRY!!");
+		Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -36,34 +37,52 @@ public class HopperShootCommand extends Command {
 	protected void execute() {
 		shooterRunnable = new ShooterRunnable();
 		m = Navigator.motionManager;
+		
+		// Drive 84 (used to be 112) inches forward
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(84.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, 3*Math.PI/2, 0), true, false);
 
-		// Drive 104 inches forward
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(104.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, false);
-
-
-		// Go left or right by 43 inches
-		if (alliance == alliances.BLUE) {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, 0, 0), false, true);
-			// Don't need to wait for balls since we're not moving away from hopper
-		}
-		else {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI, 0), false, true);
+		// Go left or right by 64 inches (really just 43 but it hits the wall to align)
+		if (alliance == alliances.RED) {
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, Math.PI, 0), false, true);
 			m.waitUntilProfileFinishes(100);
-
-			// Wait for balls to fall in
+			// Don't need to wait for balls since we're not moving away from hopper
+			
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI/2, 0), false, false);
 			try {
-				wait(1000);
+				wait(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
-			// Go out six inches and turn slightly
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(6.0 / HardwareConstants.ROTATION_CALC_FACTOR, 70, 0, 0), true, false);
-			m.pushTurn(-0.1311795572, false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, 3*Math.PI/2, 0), false, false);
+			
+			//Extra strafing just in case to align with the hopper wall
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(2.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, 0, 0), false, true);
+			m.waitUntilProfileFinishes(100);
 		}
-		m.waitUntilProfileFinishes(100);
+		else {
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, 0, 0), false, false);
+			m.waitUntilProfileFinishes(100);
 
-		// t f (beginning)
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI/2, 0), false, false);
+			try {
+				wait(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI/2, 0), false, false);
+		
+			
+	//		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(13.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, 3*Math.PI/2, 0), false, true);
+	//		m.waitUntilProfileFinishes(100);
+			
+			// Go out six inches and turn slightly
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(6.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI, 0), false, true);
+			m.pushTurn(0.1295, false, true);
+			m.waitUntilProfileFinishes(100);
+		}
+		
+
+		// t f (beginning)  
 		// t f (any middle)
 		// f t (end)
 

@@ -65,10 +65,11 @@ public class DSIO {
 		// Small buttons
 		smallBlue.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_RECEIVING));
 		smallGreen.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_NEUTRAL));
-//		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
+
+		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		
 		//temporary fix in Hartford Competition 
-		smallWhite.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
+//		smallWhite.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
 		//smallWhite.whenPressed(new VisionAlignToGearCommand());
 		smallRed.whenPressed(new ReverseImpellerCommand(true));
@@ -109,7 +110,7 @@ public class DSIO {
 
 	public double getSliderValueClimber() {
 
-		double climberVelocity = (-1*(joystick.getThrottle() - 1) / 2);
+		double climberVelocity = ((-1*(joystick.getThrottle() - 1) / 2) * 1.5) + 0.50;
 
 
 		return climberVelocity;

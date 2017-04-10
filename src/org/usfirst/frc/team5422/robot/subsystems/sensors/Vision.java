@@ -56,7 +56,7 @@ public class Vision extends RunnableSubsystem {
 	      else
 	         return -1;
 	}
-
+	
    private double getRectWidth(int index) {
       double [] defaultArray = new double[1];
       double [] visionArray = visionTable.getNumberArray(NetworkConstants.WIDTH, defaultArray);
@@ -73,6 +73,7 @@ public class Vision extends RunnableSubsystem {
          return -1;
       }
    }
+
 
    public void alignToGear() {
 	  System.out.println("Vision...align to gear...");
@@ -120,14 +121,27 @@ public class Vision extends RunnableSubsystem {
       distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
       double distY = (distLeft + distRight) / 2;
 
+      System.out.println("Vision distLeft: " + distLeft + " ,  distRight: " + distRight + ", distY: " + distY);
+      
       //double pixelsPerIn = (getRectWidth(0) + getRectWidth(1)) / 4;
       //double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0) / pixelsPerIn;
       double distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0);
-      distX = distX * (67.0/320.0); // pixels to degrees
-      double offset = distY * Math.tan(Math.toRadians(distX));
-      offset -= 8.8125; // camera to gear
+      System.out.println("Vision CenterX0: " + getCenterX(0) + ", CenterX1: " + getCenterX(1) + ", distXPixel:" + distX);
       
-      System.out.println("Vision Info: cX0: " + getCenterX(0) + " ,  cX1: " + getCenterX(1) + " , distX: " + distX);
+      while (distX != 1000){
+    	  getVisionCoordinatesFromNetworkTable();
+      	  distX = (SteamworksConstants.FRAME_WIDTH / 2.0 - (getCenterX(0) + getCenterX(1)) / 2.0);
+          System.out.println("Vision CenterX0: " + getCenterX(0) + ", CenterX1: " + getCenterX(1) + ", distXPixel:" + distX);
+      }
+          
+      distX = 	distX * (67.0/320.0); // pixels to degrees
+      System.out.println("Vision distXangle:" + distX);
+      double offset = distY * Math.tan(Math.toRadians(distX));
+      System.out.println("Vision Offset Pre Constant:" + offset);
+      offset -= 8.8125; // camera to gear
+      System.out.println("Vision Offset Post Constant:" + offset);
+      System.out.println("Vision Info: cX0: " + getCenterX(0) + " , distX: " + distX);
+
       SmartDashboard.putNumber("Distance from Gear-X: ", distX);
       SmartDashboard.putNumber("Distance from Gear-Y: ", distY);
       visionTable.putNumber("Distance from Gear-X", distX);
@@ -137,7 +151,7 @@ public class Vision extends RunnableSubsystem {
 //      // distY < 0 if we can't see anything
 //      // distY > 120 if we are more than 10 feet away
 //      // |distX - 9| > 24 we are more than 2 feet to the left or right
-      if ( distY < 0 || distY > 120 || (distX - 9 > 24) || (distX - 9 < -24) ) {
+      if ( distY < 0 || distY > 120 || (distX - 9 > 1) || (distX - 9 < -1) ) {
     	  System.out.println("Bailing because US values look wrong. distX: " + distX + " distY: " + distY);
     	  return; // bail out
       }
