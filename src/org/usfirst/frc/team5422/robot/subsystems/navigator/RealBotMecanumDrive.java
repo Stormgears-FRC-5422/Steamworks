@@ -154,8 +154,9 @@ public class RealBotMecanumDrive extends Drive {
 		double[] vels = new double[talons.length];
 		Joystick joy = Robot.dsio.getJoystick();
 		
-			
-		if(Math.abs(theta - 0) <= Math.PI / 6.0 || Math.abs(theta - 2.0 * Math.PI) <= Math.PI / 12.0) {
+		// If +/- 15 degrees of a special angle, assume that angle was the intended direction
+		// TODO - constrain theta to be from -pi to pi.		
+		if(Math.abs(theta - 0) <= Math.PI / 12.0 || Math.abs(theta - 2.0 * Math.PI) <= Math.PI / 12.0) {
 			theta = 0;
 		}
 		if(Math.abs(theta - Math.PI / 2.0) <= Math.PI / 12.0) {

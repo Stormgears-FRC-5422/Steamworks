@@ -19,6 +19,9 @@ public class SensorManager {
 	private static boolean _isInitiated = false;
 	private static boolean _lightOn = false;
 
+	public static double getTheta() { 
+		return globalMapping.getTheta(); 
+	}
 	
 	public static boolean isPublishing(){
 		return _isPublishing;
@@ -32,6 +35,7 @@ public class SensorManager {
 	public static boolean isLightOn() {
 		return _lightOn;
 	}
+
 	public static void initiateSensorSystems(){
 		if (!_isInitiated) {
 			globalMapping = new GlobalMapping();
@@ -80,5 +84,9 @@ public class SensorManager {
 	
 	public static Vision getVisionSubsystem() {
 		return vision;
+	}
+	
+	public static GlobalMapping getGlobalMappingSubsystem() {
+		return globalMapping;
 	}
 }
