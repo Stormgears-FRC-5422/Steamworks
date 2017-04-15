@@ -42,9 +42,9 @@ public class GlobalMapping extends RunnableSubsystem {
 	
 	static double smoothingFactor = 0.9;
 	
-	static AHRS ahrs = new AHRS(Port.kMXP);
+	static public AHRS ahrs = new AHRS(Port.kMXP);
 	
-	public GlobalMapping(){
+	public GlobalMapping() {
 		super(NetworkConstants.GLOBAL_MAPPING);
 		
 		enc_fl = 0;
@@ -137,5 +137,9 @@ public class GlobalMapping extends RunnableSubsystem {
 	
 	static double getTheta(){//in radians
 		return ahrs.getAngle()*PI/180.0;
+	}
+
+	public PIDSource getPIDSource() {
+		return ahrs;
 	}
 }

@@ -1,16 +1,26 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Instrumentation;
 
-import org.usfirst.frc.team5422.utils.SafeTalon; 
-//import com.ctre.CANTalon;
+import org.usfirst.frc.team5422.utils.SafeTalon;
+import org.usfirst.frc.team5422.utils.SteamworksConstants;
+
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
+import com.kauailabs.navx.frc.AHRS;
 
 import org.usfirst.frc.team5422.utils.RegisteredNotifier;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import edu.wpi.first.wpilibj.PIDController;
+
+import org.usfirst.frc.team5422.robot.subsystems.sensors.GlobalMapping;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
+
 
 public class MotionManager {
 	private List<double[][]> paths = new ArrayList<double[][]>();
@@ -29,7 +39,20 @@ public class MotionManager {
 	private static final double scale = 500d/Math.PI;
 	// TODO - make 1000 and 500 not magic numbers
 	
+	// For pid-based turning
+	// TODO - get these tuned and make them constants in the appropriate file
+    PIDController turnController;
+    double rotateToAngleRate;
+    
+    static final double kP = 0.03;
+    static final double kI = 0.00;
+    static final double kD = 0.00;
+    static final double kF = 0.00;
+    
+    static final double kToleranceDegrees = 1.0f;
+    
 	private boolean isLoaded = false;
+	private SafeTalon[] talons;
 	
 	class PeriodicRunnable implements java.lang.Runnable {
 		
@@ -41,77 +64,96 @@ public class MotionManager {
 			
 			// called from synchronized methods - which effectively sync(this)
 			synchronized(this) {
-//				System.out.println("In MotionManager run. INT = " + interrupt + " loading = " + loading + " isLoaded = " + isLoaded);
-//				System.out.println("there are " + paths.size() + " paths");
-//				System.out.println("currIndex = " + currIndex);
-//				SmartDashboard.putNumber("Val 0: ", control.getEncVel(0));
-//				SmartDashboard.putNumber("Val 1: ", control.getEncVel(1));
-//				SmartDashboard.putNumber("Val 2: ", control.getEncVel(2));
-//				SmartDashboard.putNumber("Val 3: ", control.getEncVel(3));
-				
 				SmartDashboard.putNumber("Pos 0: ", control.getEncPos(0));
 				SmartDashboard.putNumber("Pos 1: ", control.getEncPos(1));
 				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
 				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
 				
-				for (int i = 0; i < control.talons.length; i++) {
-				//	Instrumentation.process(control.statuses[i], control.talons[i]);
-				}	
-
-				
-				if (isLoaded) {
+				if (profileDetails.isEmpty() || profileDetails.get(0).isPIDTurn) {
+					runMotionProfile();
+				}
+				else {
+					runRotateToAngle();
+				}
+			}
+		}
+		
+		private void runMotionProfile() {
+			if (isLoaded) {
 //					System.out.println("Ready to react to loaded buffers");
-					control.enable();
-				}
-				
-				if (loading == false) return;
+				control.enable();
+			}
+			
+			if (loading == false) return;
 
-				// Are we done?
-				if(paths.isEmpty()) {  // TODO: need a more elegant stop condition??
-//					System.out.println("Stop pushing points because paths are loaded. loading is " + loading);
-//					for(int i = 0; i < controls.length; i ++) {
-//						controls[i].stopControlThread();
-//					}
-//					notifier.stop();
-					loading = false;
-					isLoaded = true;
-					// anything else? disable talons?
-					return;
-				}
+			// Are we done?
+			if(paths.isEmpty()) {  // TODO: need a more elegant stop condition??
+				loading = false;
+				isLoaded = true;
+				// anything else? disable talons?
+				return;
+			}
 
-				// If the last profile was marked "immediate" we need to abandon the current path and clean up
-				if(interrupt) {
-					currIndex = 0;
-					control.clearMotionProfileTrajectories();
-					//remove all other profiles from the list except the most recent one
-					while(paths.size() > 1) {
-						paths.remove(0);
-						profileDetails.remove(0);
-					}
-					interrupt = false;
-				}
-				
-				// Push the next section
-				if(profileDetails.get(0).turn == true) pushTurn();
-				else pushLinear();
-
-				System.out.println("Points remaining: " + control.getPointsRemaining());
-				
-				// If we have pushed the entire path, remove it and let the next path run on the next time through
-				// this could lead to a short cycle, but that is probably OK since we push points more quickly 
-				// than they can run anyway.
-				if(currIndex >= paths.get(0).length) {
-					currIndex = 0;
+			// If the last profile was marked "immediate" we need to abandon the current path and clean up
+			if(interrupt) {
+				currIndex = 0;
+				control.clearMotionProfileTrajectories();
+				//remove all other profiles from the list except the most recent one
+				while(paths.size() > 1) {
 					paths.remove(0);
 					profileDetails.remove(0);
 				}
+				interrupt = false;
 			}
-		}	
+			
+			// Push the next section
+			if(profileDetails.get(0).turn == true) pushTurn();
+			else pushLinear();
 
+			System.out.println("Points remaining: " + control.getPointsRemaining());
+			
+			// If we have pushed the entire path, remove it and let the next path run on the next time through
+			// this could lead to a short cycle, but that is probably OK since we push points more quickly 
+			// than they can run anyway.
+			if(currIndex >= paths.get(0).length) {
+				currIndex = 0;
+				paths.remove(0);
+				profileDetails.remove(0);
+			}
+		}
+
+		private void runRotateToAngle() {
+			if (loading == false) return;
+
+			// are we there yet?
+			if (turnController.onTarget()) {
+				loading = false;
+				paths.remove(0);
+				profileDetails.remove(0);
+				turnController.disable();
+			}
+			else {
+				adjustPIDTurnRate();
+			}
+		}
 	}
+	
+	class PIDOutput implements edu.wpi.first.wpilibj.PIDOutput {
+	    @Override
+	    /* This function is invoked periodically by the PID Controller, */
+	    /* based upon navX MXP yaw angle input and PID Coefficients.    */
+	    public void pidWrite(double output) {
+	        synchronized(MotionManager.this) {
+	        	rotateToAngleRate = output;
+	        }
+	    }
+	    
+	}
+
 	
 	// information that needs to be stored per profile path
 	class ProfileDetails {
+		boolean isPIDTurn;
 		boolean turn;
 		double theta;
 		boolean direction;
@@ -120,10 +162,53 @@ public class MotionManager {
 	
 	public MotionManager(SafeTalon [] talons) {
 		control = new MotionControl(talons);
+		this.talons = talons;
 		numTalons = talons.length;
+
+		// pidControl turning is independent of motion profiling. This just sets things up. Actual work happens elsewhere
+		turnController = new PIDController(kP, kI, kD, kF, SensorManager.getGlobalMappingSubsystem().getPIDSource(), new PIDOutput());
+        turnController.setInputRange(-180.0f,  180.0f);
+        turnController.setOutputRange(-1.0, 1.0);
+        turnController.setAbsoluteTolerance(kToleranceDegrees);
+        turnController.setContinuous(true);
 	}	
 	
-	/*
+	// Theta is a heading change. 0 is straight ahead, +pi/2 is 90 degrees to the right, -pi/2 is 90 degrees to the left
+	public synchronized void rotateAngle(double theta) {
+		double turnAngle = theta * 180.0 / Math.PI;
+		double [][] dummyPathArray = new double[0][0];
+		AHRS ahrs = GlobalMapping.ahrs;
+		ProfileDetails d = new ProfileDetails();
+
+		// other details ignored if isPIDTurn = true;
+		d.isPIDTurn = true;
+		profileDetails.add(d);
+		paths.add(dummyPathArray);
+
+		talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].changeControlMode(TalonControlMode.Speed);
+		talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].changeControlMode(TalonControlMode.Speed);
+		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].changeControlMode(TalonControlMode.Speed);
+		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].changeControlMode(TalonControlMode.Speed);
+
+        turnController.setSetpoint(ahrs.getAngle() + turnAngle);
+        turnController.enable();  //Go!
+
+        loading = true; // hijack this handy variable to indicate that there is work to do
+		notifier.startPeriodic(0.05);  // how often do we adjust to new set rate
+		control.startControlThread();
+	}
+	
+    // using rotateToAngleRate set above
+    protected void adjustPIDTurnRate() {
+    	double vel = (8192.0 / 600.0) * rotateToAngleRate;
+    	
+    	talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].set(vel);
+		talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].set(vel);
+		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].set(-vel);
+		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].set(-vel);	    	
+    }
+
+    /*
 	 * Preconditions: All talons must be set to the following
 	 * 
 	 * reverseOutput(true)
@@ -152,7 +237,7 @@ public class MotionManager {
 		notifier.startPeriodic(0.05);  // pushing batchsize points at a time
 		control.startControlThread();
 	}
-	
+		
 	public synchronized void pushTurn(double theta, boolean immediate, boolean done) {
 		ProfileDetails d = new ProfileDetails();
 		d.done = done;
