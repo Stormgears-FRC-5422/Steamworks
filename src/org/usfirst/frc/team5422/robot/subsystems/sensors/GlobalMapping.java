@@ -56,18 +56,26 @@ public class GlobalMapping extends RunnableSubsystem {
 		prev_enc_fr = 0;
 		prev_enc_bl = 0;
 		prev_enc_br = 0;
-		
+		  
 		prevTimeStamp = Timer.getFPGATimestamp();
 		
 		resetPose(0, 0, Math.PI/2);
 		
-		
+		AHRS.BoardYawAxis yawAxis = ahrs.getBoardYawAxis();
+		yawAxis.up = false;
+		ahrs.zeroYaw();
+		SmartDashboard.putString("YawAxisDirection", yawAxis.up ? "Up" : "Down");
+		SmartDashboard.putNumber("YawAxis", yawAxis.board_axis.getValue());
+		SmartDashboard.putNumber("NavX Angle", ahrs.getAngle());
+		SmartDashboard.putNumber("NavX Yaw", ahrs.getYaw());
 	}
 	
 	@Override
 	public void run(){		
 		updatePose();
 		
+		SmartDashboard.putNumber("NavX Angle", ahrs.getAngle());
+		SmartDashboard.putNumber("NavX Yaw", ahrs.getYaw());
 		networkPublish(NetworkConstants.GP_THETA, getTheta());
 		networkPublish(NetworkConstants.GP_X, x);
 		networkPublish(NetworkConstants.GP_Y, y);

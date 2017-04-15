@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Steamworks.iml" filepath="$PROJECT_DIR$/.idea/Steamworks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Steamworks.iml" filepath="$PROJECT_DIR$/Steamworks.iml" />
     </modules>
   </component>
 </project>
