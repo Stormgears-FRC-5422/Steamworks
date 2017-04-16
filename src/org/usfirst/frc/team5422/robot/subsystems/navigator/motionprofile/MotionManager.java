@@ -27,6 +27,7 @@ public class MotionManager {
 	private List<ProfileDetails> profileDetails = new ArrayList<ProfileDetails>();
 	private boolean loading = false;
 	private boolean interrupt = false;
+	private boolean rotateToAngle = false;
 	private int batchSize = 256 * 4;
 	private int currIndex = 0;
 	private MotionControl control;
@@ -69,7 +70,7 @@ public class MotionManager {
 				SmartDashboard.putNumber("Pos 2: ", control.getEncPos(2));
 				SmartDashboard.putNumber("Pos 3: ", control.getEncPos(3));
 				
-				if (profileDetails.isEmpty() || profileDetails.get(0).isPIDTurn) {
+				if (!rotateToAngle) {
 					runMotionProfile();
 				}
 				else {
@@ -164,13 +165,6 @@ public class MotionManager {
 		control = new MotionControl(talons);
 		this.talons = talons;
 		numTalons = talons.length;
-
-		// pidControl turning is independent of motion profiling. This just sets things up. Actual work happens elsewhere
-		turnController = new PIDController(kP, kI, kD, kF, SensorManager.getGlobalMappingSubsystem().getPIDSource(), new PIDOutput());
-        turnController.setInputRange(-180.0f,  180.0f);
-        turnController.setOutputRange(-1.0, 1.0);
-        turnController.setAbsoluteTolerance(kToleranceDegrees);
-        turnController.setContinuous(true);
 	}	
 	
 	// Theta is a heading change. 0 is straight ahead, +pi/2 is 90 degrees to the right, -pi/2 is 90 degrees to the left
@@ -180,12 +174,20 @@ public class MotionManager {
 		AHRS ahrs = GlobalMapping.ahrs;
 		ProfileDetails d = new ProfileDetails();
 
+		rotateToAngle = true;
 		// other details ignored if isPIDTurn = true;
 		d.isPIDTurn = true;
 		profileDetails.add(d);
 		paths.add(dummyPathArray);
 
-		talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].changeControlMode(TalonControlMode.Speed);
+		// pidControl turning is independent of motion profiling. This just sets things up. Actual work happens elsewhere
+		turnController = new PIDController(kP, kI, kD, kF, SensorManager.getGlobalMappingSubsystem().getPIDSource(), new PIDOutput());
+        turnController.setInputRange(-180.0f,  180.0f);
+        turnController.setOutputRange(-1.0, 1.0);
+        turnController.setAbsoluteTolerance(kToleranceDegrees);
+        turnController.setContinuous(true);
+
+        talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].changeControlMode(TalonControlMode.Speed);
@@ -195,7 +197,6 @@ public class MotionManager {
 
         loading = true; // hijack this handy variable to indicate that there is work to do
 		notifier.startPeriodic(0.05);  // how often do we adjust to new set rate
-		control.startControlThread();
 	}
 	
     // using rotateToAngleRate set above
@@ -228,6 +229,7 @@ public class MotionManager {
 		d.turn = false;
 		// other details ignored if turn is false
 		profileDetails.add(d);
+		rotateToAngle = false;
 
 		interrupt = immediate;
 		paths.add(pathArray);
@@ -244,6 +246,8 @@ public class MotionManager {
 		d.theta = theta;
 		d.turn = true;
 		profileDetails.add(d);
+
+		rotateToAngle = false;
 
 		interrupt = immediate;
 		paths.add(getTurnProfile(d));

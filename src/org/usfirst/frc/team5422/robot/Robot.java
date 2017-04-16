@@ -60,7 +60,8 @@ public class Robot extends IterativeRobot {
 		climberIntakeSubsystem = new ClimberIntake(RobotTalonConstants.CLIMBER_TALON_ID);
  		gearManipulatorSubsystem = new Manipulator(SteamworksConstants.LEFT_FLAP_CHANNEL, SteamworksConstants.RIGHT_FLAP_CHANNEL);
 		SensorManager.initiateSensorSystems();
-		SensorManager.startPublishingToNetwork();			
+		SensorManager.startPublishingToNetwork();	
+				
 	}
 
 	public void robotInit() {

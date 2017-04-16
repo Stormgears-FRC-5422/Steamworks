@@ -81,7 +81,7 @@ public class RealBotMecanumDrive extends Drive {
 
 		if(Math.abs(joy.getX()) > 0.1 || Math.abs(joy.getY()) > 0.1 || Math.abs(joy.getZ()) > 0.2)
 			mecMove(6300 * Math.sqrt(joy.getX() * joy.getX() + joy.getY() * 
-					joy.getY() + joy.getZ() * joy.getZ()), theta, joy.getZ());
+					joy.getY()), theta, joy.getZ());
 		else {
 			setDriveTalonsZeroVelocity();
 		}

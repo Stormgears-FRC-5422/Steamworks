@@ -1,16 +1,16 @@
 package org.usfirst.frc.team5422.robot.subsystems.sensors;
 
-import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Drive;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.RobotTalonConstants;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SPI.Port;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class GlobalMapping extends RunnableSubsystem {
 
