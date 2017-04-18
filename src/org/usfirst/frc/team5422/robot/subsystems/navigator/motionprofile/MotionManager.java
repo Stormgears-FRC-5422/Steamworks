@@ -169,7 +169,9 @@ public class MotionManager {
 		numTalons = talons.length;
 	}	
 	
-	// Theta is a heading change. 0 is straight ahead, +pi/2 is 90 degrees to the right, -pi/2 is 90 degrees to the left
+	// Theta is a heading change. 0 is straight ahead, 
+	// +pi/2 is 90 degrees to the right (clockwise), 
+	// -pi/2 is 90 degrees to the left (counterclockwise)
 	public synchronized void rotateAngle(double theta) {
 		double turnAngle = theta * 180.0 / Math.PI;
 		System.out.println("Started rotateAngle with angle = " + turnAngle);
@@ -198,7 +200,7 @@ public class MotionManager {
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].changeControlMode(TalonControlMode.Speed);
 
-        turnController.setSetpoint(ahrs.getAngle() + turnAngle - 90.0);
+        turnController.setSetpoint(ahrs.getAngle() - ahrs.getAngleAdjustment() + turnAngle);
         turnController.enable();  //Go!
 
         loading = true; // hijack this handy variable to indicate that there is work to do
@@ -207,9 +209,13 @@ public class MotionManager {
 	
     // using rotateToAngleRate set above
     protected void adjustPIDTurnRate(double angleRate) {
-    	double vel = 60.0 * angleRate;
+    	// negative velocity translates to clockwise rotation - this is positive for NavX and
+    	// for our reference rotation direction
+    	double vel = -60.0 * angleRate;
     	
 		System.out.println("Adjust PIDTurnRate with angleRate = " + angleRate);
+		// Note that the left and right wheels turning the same direction at the same speed causes
+		// a rotation since the wheels face opposite directions.
     	talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].set(vel);
 		talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].set(vel);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].set(vel);
