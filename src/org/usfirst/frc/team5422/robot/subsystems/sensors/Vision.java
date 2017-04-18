@@ -134,12 +134,10 @@ public class Vision extends RunnableSubsystem {
           System.out.println("Vision CenterX0: " + getCenterX(0) + ", CenterX1: " + getCenterX(1) + ", distXPixel:" + distX);
      // }
           
-      distX = 	distX * (67.0/320.0); // pixels to degrees
+      distX = 	distX * (64.2/320.0); // pixels to degrees
       System.out.println("Vision distXangle:" + distX);
       double offset = distY * Math.tan(Math.toRadians(distX));
-      
-      if(offset < 0) offset += 2.5;
-      else offset -= 2.5;
+     
       
       System.out.println("Vision Offset Pre Constant:" + offset);
       offset -= 8.8125; // camera to gear
@@ -170,13 +168,13 @@ public class Vision extends RunnableSubsystem {
       /* ********** Strafe ********** */
 //      double offset = distX - 8.8125;  // 8 13/16 from gear center to camera
       if (offset > 0) {
-    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero( offset/6.0/Math.PI , 70, 0, 0), true, false); /**move X**/
+    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(offset/6.0/Math.PI , 70, -0.2, 0), true, false); /**move X**/
 //          Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
       }
       else {
     	  // then go the other direction
     	  offset = -offset;
-    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero( offset/6.0/Math.PI , 70, Math.PI, 0), true, false); /**move X**/
+    	  Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero( offset/6.0/Math.PI , 70, Math.PI+0.2, 0), true, false); /**move X**/
 //          Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
       }
       

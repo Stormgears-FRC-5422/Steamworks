@@ -1,25 +1,23 @@
 package org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile;
-import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Instrumentation;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
+import org.usfirst.frc.team5422.robot.subsystems.navigator.RealBotMecanumDrive;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.GlobalMapping;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
+import org.usfirst.frc.team5422.utils.RegisteredNotifier;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants;
+import org.usfirst.frc.team5422.utils.RobotTalonConstants.RobotDriveProfile;
 import org.usfirst.frc.team5422.utils.SafeTalon;
-import org.usfirst.frc.team5422.utils.SteamworksConstants;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.RobotModes;
 
 import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.CANTalon.TrajectoryPoint;
 import com.kauailabs.navx.frc.AHRS;
 
-import org.usfirst.frc.team5422.utils.RegisteredNotifier;
-import org.usfirst.frc.team5422.utils.RobotTalonConstants;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import edu.wpi.first.wpilibj.PIDController;
-
-import org.usfirst.frc.team5422.robot.subsystems.sensors.GlobalMapping;
-import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class MotionManager {
@@ -42,10 +40,10 @@ public class MotionManager {
 	
 	// For pid-based turning
 	// TODO - get these tuned and make them constants in the appropriate file
-    PIDController turnController;
+    public PIDController turnController;
     double rotateToAngleRate;
     
-    static final double kP = 0.03;
+    static final double kP = 1.0;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 0.00;
@@ -128,13 +126,15 @@ public class MotionManager {
 
 			// are we there yet?
 			if (turnController.onTarget()) {
+				System.out.println("On Target");
 				loading = false;
+				adjustPIDTurnRate(0);  // stop!
+				turnController.disable();
 				paths.remove(0);
 				profileDetails.remove(0);
-				turnController.disable();
 			}
-			else {
-				adjustPIDTurnRate();
+			else {				
+				adjustPIDTurnRate(rotateToAngleRate);
 			}
 		}
 	}
@@ -145,7 +145,9 @@ public class MotionManager {
 	    /* based upon navX MXP yaw angle input and PID Coefficients.    */
 	    public void pidWrite(double output) {
 	        synchronized(MotionManager.this) {
-	        	rotateToAngleRate = output;
+				System.out.println("in PIDWrite - rotateToAngleRate = " + output);
+				System.out.println("Error: " + MotionManager.this.turnController.getAvgError());
+				rotateToAngleRate = output;
 	        }
 	    }
 	    
@@ -170,6 +172,8 @@ public class MotionManager {
 	// Theta is a heading change. 0 is straight ahead, +pi/2 is 90 degrees to the right, -pi/2 is 90 degrees to the left
 	public synchronized void rotateAngle(double theta) {
 		double turnAngle = theta * 180.0 / Math.PI;
+		System.out.println("Started rotateAngle with angle = " + turnAngle);
+
 		double [][] dummyPathArray = new double[0][0];
 		AHRS ahrs = GlobalMapping.ahrs;
 		ProfileDetails d = new ProfileDetails();
@@ -182,17 +186,19 @@ public class MotionManager {
 
 		// pidControl turning is independent of motion profiling. This just sets things up. Actual work happens elsewhere
 		turnController = new PIDController(kP, kI, kD, kF, SensorManager.getGlobalMappingSubsystem().getPIDSource(), new PIDOutput());
-        turnController.setInputRange(-180.0f,  180.0f);
+		turnController.setInputRange(-180.0f,  180.0f);
         turnController.setOutputRange(-1.0, 1.0);
         turnController.setAbsoluteTolerance(kToleranceDegrees);
         turnController.setContinuous(true);
 
+        Navigator.getMecanumDrive().initializeDriveMode(RobotModes.TELEOP, RobotDriveProfile.VELOCITY);
+        
         talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].changeControlMode(TalonControlMode.Speed);
 
-        turnController.setSetpoint(ahrs.getAngle() + turnAngle);
+        turnController.setSetpoint(ahrs.getAngle() + turnAngle - 90.0);
         turnController.enable();  //Go!
 
         loading = true; // hijack this handy variable to indicate that there is work to do
@@ -200,13 +206,14 @@ public class MotionManager {
 	}
 	
     // using rotateToAngleRate set above
-    protected void adjustPIDTurnRate() {
-    	double vel = (8192.0 / 600.0) * rotateToAngleRate;
+    protected void adjustPIDTurnRate(double angleRate) {
+    	double vel = 60.0 * angleRate;
     	
+		System.out.println("Adjust PIDTurnRate with angleRate = " + angleRate);
     	talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].set(vel);
 		talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].set(vel);
-		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].set(-vel);
-		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].set(-vel);	    	
+		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].set(vel);
+		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].set(vel);	    	
     }
 
     /*

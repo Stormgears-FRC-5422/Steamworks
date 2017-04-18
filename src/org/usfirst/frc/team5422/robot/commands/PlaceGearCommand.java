@@ -149,6 +149,10 @@ public class PlaceGearCommand extends Command {
 				m.waitUntilProfileFinishes(100);
 				break;
 			case PLACE_GEAR_CENTER_AIRSHIP:
+// DLM added this to test rotation
+			//	m.rotateAngle(Math.PI/6.0);
+				//m.waitUntilProfileFinishes(100);
+ //DLM commented this out to test rotation
 				System.out.println("[Autonomous Routing] Starting at center starting position");
 				routeToGear = AutoRoutes.centerStartToGear;
 				srcPosition = routeToGear.get(0);
