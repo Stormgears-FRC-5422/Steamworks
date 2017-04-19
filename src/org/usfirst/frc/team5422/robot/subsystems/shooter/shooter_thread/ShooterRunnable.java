@@ -17,7 +17,7 @@ public class ShooterRunnable implements Runnable
 		
 	    // Wait three seconds for wheel to spin up
 	    try {
-		    Thread.sleep(750);
+		    Thread.sleep(250);
 	    } catch (InterruptedException e) {
 		    e.printStackTrace();
 	    }

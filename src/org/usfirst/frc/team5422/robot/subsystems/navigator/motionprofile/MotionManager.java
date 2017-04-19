@@ -43,7 +43,7 @@ public class MotionManager {
     public PIDController turnController;
     double rotateToAngleRate;
     
-    static final double kP = 1.0;
+    static final double kP = 0.05;
     static final double kI = 0.00;
     static final double kD = 0.00;
     static final double kF = 0.00;
@@ -146,7 +146,9 @@ public class MotionManager {
 	    public void pidWrite(double output) {
 	        synchronized(MotionManager.this) {
 				System.out.println("in PIDWrite - rotateToAngleRate = " + output);
-				System.out.println("Error: " + MotionManager.this.turnController.getAvgError());
+				System.out.println("Error: " + MotionManager.this.turnController.getAvgError() +
+								   " Output: " + MotionManager.this.turnController.get() + 
+								   " Set: " + MotionManager.this.turnController.getSetpoint());
 				rotateToAngleRate = output;
 	        }
 	    }
@@ -187,20 +189,20 @@ public class MotionManager {
 		paths.add(dummyPathArray);
 
 		// pidControl turning is independent of motion profiling. This just sets things up. Actual work happens elsewhere
+		ahrs.reset();
 		turnController = new PIDController(kP, kI, kD, kF, SensorManager.getGlobalMappingSubsystem().getPIDSource(), new PIDOutput());
 		turnController.setInputRange(-180.0f,  180.0f);
-        turnController.setOutputRange(-1.0, 1.0);
+        turnController.setOutputRange(-2.5, 2.5);
         turnController.setAbsoluteTolerance(kToleranceDegrees);
         turnController.setContinuous(true);
 
         Navigator.getMecanumDrive().initializeDriveMode(RobotModes.TELEOP, RobotDriveProfile.VELOCITY);
-        
         talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_LEFT_REAR].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].changeControlMode(TalonControlMode.Speed);
 
-        turnController.setSetpoint(ahrs.getAngle() - ahrs.getAngleAdjustment() + turnAngle);
+        turnController.setSetpoint(ahrs.getYaw() + turnAngle);
         turnController.enable();  //Go!
 
         loading = true; // hijack this handy variable to indicate that there is work to do
@@ -213,7 +215,7 @@ public class MotionManager {
     	// for our reference rotation direction
     	double vel = -60.0 * angleRate;
     	
-		System.out.println("Adjust PIDTurnRate with angleRate = " + angleRate);
+//		System.out.println("Adjust PIDTurnRate with angleRate = " + angleRate);
 		// Note that the left and right wheels turning the same direction at the same speed causes
 		// a rotation since the wheels face opposite directions.
     	talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].set(vel);

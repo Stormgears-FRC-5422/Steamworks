@@ -150,25 +150,26 @@ public class PlaceGearCommand extends Command {
 				break;
 			case PLACE_GEAR_CENTER_AIRSHIP:
 // DLM added this to test rotation
-			//	m.rotateAngle(Math.PI/6.0);
-				//m.waitUntilProfileFinishes(100);
- //DLM commented this out to test rotation
-				System.out.println("[Autonomous Routing] Starting at center starting position");
-				routeToGear = AutoRoutes.centerStartToGear;
-				srcPosition = routeToGear.get(0);
-				dstPosition = routeToGear.get(1);
-				distanceToPeg = dstPosition.y - srcPosition.y + 3.0; 				
-				System.out.println("[Autonomous Routing] Starting at center and going " + distanceToPeg + " inches to center gear hook.");
-		//		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-				Timer.delay(1.0);
-				Vision vision = SensorManager.getVisionSubsystem();
-				vision.alignToGear();
-//				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(36.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI, 0), true, true); //GEAR CENTER AUTO
+				m.rotateAngle(Math.PI/2.0);
 				m.waitUntilProfileFinishes(100);
-				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
-				Timer.delay(1.0);
-		//		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-		//		m.waitUntilProfileFinishes(100);
+				//m.waitUntilProfileFinishes(100);
+// //DLM commented this out to test rotation
+//				System.out.println("[Autonomous Routing] Starting at center starting position");
+//				routeToGear = AutoRoutes.centerStartToGear;
+//				srcPosition = routeToGear.get(0);
+//				dstPosition = routeToGear.get(1);
+//				distanceToPeg = dstPosition.y - srcPosition.y + 3.0; 				
+//				System.out.println("[Autonomous Routing] Starting at center and going " + distanceToPeg + " inches to center gear hook.");
+//		//		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+//				Timer.delay(1.0);
+//				Vision vision = SensorManager.getVisionSubsystem();
+//				vision.alignToGear();
+////				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(36.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI, 0), true, true); //GEAR CENTER AUTO
+//				m.waitUntilProfileFinishes(100);
+//				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
+//				Timer.delay(1.0);
+//		//		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+//		//		m.waitUntilProfileFinishes(100);
 				break;
 			case NONE:
 				return;

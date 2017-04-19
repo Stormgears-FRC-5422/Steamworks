@@ -66,7 +66,7 @@ public class RobotTalonConstants extends SteamworksConstants{
 	
 	// Shooter Constants
 	public static final double SHOOTER_P = 0.01;
-	public static final double SHOOTER_F = 0.01573846154;
+	public static final double SHOOTER_F = 0.015753846154;
 	public static final double SHOOT_LOW_SPEED = -52500;
 	public static final double SHOOT_HIGH_SPEED = -49700;
 
