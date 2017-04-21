@@ -59,10 +59,10 @@ public class GlobalMapping extends RunnableSubsystem {
 		  
 		prevTimeStamp = Timer.getFPGATimestamp();
 		
-		resetPose(0, 0, Math.PI/2);
+//		resetPose(0, 0, Math.PI/2);
 		
 		AHRS.BoardYawAxis yawAxis = ahrs.getBoardYawAxis();
-		yawAxis.up = false;
+//		yawAxis.up = false;
 		ahrs.zeroYaw();
 		SmartDashboard.putString("YawAxisDirection", yawAxis.up ? "Up" : "Down");
 		SmartDashboard.putNumber("YawAxis", yawAxis.board_axis.getValue());

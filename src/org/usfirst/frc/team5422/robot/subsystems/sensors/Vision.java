@@ -7,12 +7,13 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.Trapezo
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision extends RunnableSubsystem {
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
-	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
+	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_SHOOTER_COUNTOURS_REPORT);
 	
 	public Vision() {
 		super(NetworkConstants.VISION);
@@ -57,6 +58,58 @@ public class Vision extends RunnableSubsystem {
 	         return -1;
 	}
 	
+	
+	private double getShooterCenterX(int index) {
+	      double [] defaultArray = new double[0];
+	      double [] visionArrayX = shooterTable.getNumberArray(NetworkConstants.CENTER_X, defaultArray);
+	      double [] visionArrayY = shooterTable.getNumberArray(NetworkConstants.CENTER_Y, defaultArray);
+	      
+	      SmartDashboard.putNumber("VisionArrayX len", visionArrayX.length);
+	      
+	      if(visionArrayX.length >=2) {
+	    	  int minIndex = 0;
+	    	  //find max y-val, return corresponding x
+	    	  for(int i = 1; i < visionArrayY.length; i ++) if(visionArrayY[i] < visionArrayY[minIndex]) minIndex = i;
+	    	  return visionArrayX[minIndex];
+	      }
+	      else if(visionArrayX.length > 0) {
+	        try {
+	        	return visionArrayX[index];
+	        }
+	        catch(Exception e) {
+	        	return -1;
+	        }
+	      }
+	      else
+	         return -1;
+	}
+	
+	
+	
+   private double getShooterCenterY(int index) {
+	    double [] defaultArray = {0};  
+	   	double [] visionArrayY = shooterTable.getNumberArray(NetworkConstants.CENTER_Y, defaultArray);
+	      
+	      if(visionArrayY.length >=2) {
+	    	  int maxIndex = 0;
+	    	  //find max y-val, return corresponding x
+	    	  for(int i = 1; i < visionArrayY.length; i ++) if(visionArrayY[i] > visionArrayY[maxIndex]) maxIndex = i;
+	    	  return visionArrayY[maxIndex];
+	      }
+	      
+	      else if(visionArrayY.length > 0) {
+	        try {
+	        	return visionArrayY[index];
+	        }
+	        catch(Exception e) {
+	        	return -1;
+	        }
+	      }
+	      else
+	         return -1;
+	   
+   }
+	
    private double getRectWidth(int index) {
       double [] defaultArray = new double[1];
       double [] visionArray = visionTable.getNumberArray(NetworkConstants.WIDTH, defaultArray);
@@ -75,6 +128,61 @@ public class Vision extends RunnableSubsystem {
    }
 
 
+   public void alignToBoiler() {
+	   /*
+        * 
+        * Pseudocode:
+        * 
+        * xVal = camera X val(from Network Tables, in pixels)
+        * xOffset = xVal - 160
+        * xOffset = xOffset * (64.2/320.0); // pixels to degrees
+        * 
+        * turnRelative(xOffset)
+        */
+       Timer.delay(0.75); 
+       double xVal = getShooterCenterX(0); //actually get from network tables
+       SmartDashboard.putNumber("xVal:", xVal);
+       double xOffset = xVal - 153;
+       SmartDashboard.putNumber("xOffset boiler: ", xOffset);
+       xOffset = xOffset * (67/320.0);
+       SmartDashboard.putNumber("theta offset boiler: ",xOffset);
+       xOffset = Math.toRadians(xOffset);
+       SmartDashboard.putNumber("theta offset boiler radians", xOffset);
+       Navigator.getInstance().motionManager.rotateToAngle(xOffset*1.2); /**move X**/
+       
+       double camHeight = 23.75;
+       double centerY = getShooterCenterY(0);
+       SmartDashboard.putNumber("CenterY", centerY);
+       double thetaCurrent = 45.5 - 51.0/240.0 * centerY;
+       double distanceOffset = (86-camHeight) / Math.tan(thetaCurrent) - 153;
+       SmartDashboard.putNumber("Distance offset", distanceOffset);
+       
+       /*
+        * 
+        * Pseudocode:
+        * 
+        * Assumptions:
+        * 
+        * Camera mounted at 20 degree angle
+        * Field of view = 51 degree
+        * Field of view from -5.5 to 45.5 degrees
+        * Center of top strip at 7 ft 2 inch(86 in)
+        * Our ideal shoot position is at 84 inch away from boiler
+        * 
+        * 
+        * 
+        * theta_current = 70.5 - 51.0/240.0 * centerY
+        * distance_offset = (86-camHeight)*cot(theta_current) - 84
+        * 
+        * if(distance_offset < 0) go away from boiler
+        * else go towards boiler
+        * 
+        * 
+        * 
+        */
+       
+   }
+   
    public void alignToGear() {
 	  System.out.println("Vision...align to gear...");
       // Angular displacement from US Sensors

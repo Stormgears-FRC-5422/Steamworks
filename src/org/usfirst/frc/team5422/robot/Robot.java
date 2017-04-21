@@ -13,6 +13,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.FieldPositions;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.GlobalMapping;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
 import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.Shooter;
@@ -71,6 +72,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("autonomous init started.");
 		robotMode = RobotModes.AUTONOMOUS;
+		GlobalMapping.ahrs.zeroYaw();
 
 		//if any residual commands exist, cancel them
 		if (autonomousCommand != null) {
@@ -162,6 +164,9 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 //		SmartDashboard.putNumber("Climber Talon POS: " ,Robot.climberIntakeSubsystem.climberIntakeTalon.getEncPosition());
 //		SmartDashboard.putNumber("Climber Talon VEL: ", Robot.climberIntakeSubsystem.climberIntakeTalon.getEncVelocity());
+		SmartDashboard.putNumber("NavX Angle", GlobalMapping.ahrs.getAngle());
+		SmartDashboard.putNumber("NavX Yaw", GlobalMapping.ahrs.getYaw());
+		SmartDashboard.putString("NavX isCalibrating", GlobalMapping.ahrs.isCalibrating() ? "True" : "False");
 	}
 
 	public void robotPeriodic() {

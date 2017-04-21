@@ -13,7 +13,7 @@ public class Shooter extends Subsystem {
 	public SafeTalon motor;
 	private Relay impeller;
 	private boolean enabled = false;
-	double shootVelocity = -54500;
+	double shootVelocity = -49600; //correct value is 48588
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
@@ -45,25 +45,22 @@ public class Shooter extends Subsystem {
 	}
 
 	public void setShootVelocity(double shootVelocity) {
-		this.shootVelocity = -54500;
+		this.shootVelocity = -49600;
 	}
 
 	// Reverse is the normal direction
-	public void startImpeller()
-	{
+	public void startImpeller() {
 		System.out.println("propeller running");
 		impeller.set(Relay.Value.kReverse);
 	}
 
 	// this back off in the wrong direction
-	public void reverseImpeller()
-	{
+	public void reverseImpeller() {
 		System.out.println("propeller running the other direction");
 		impeller.set(Relay.Value.kForward);
 	}
 
-	public void stopImpeller()
-	{
+	public void stopImpeller() {
 		impeller.set(Relay.Value.kOff);
 	}
 

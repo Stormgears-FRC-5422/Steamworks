@@ -174,7 +174,7 @@ public class MotionManager {
 	// Theta is a heading change. 0 is straight ahead, 
 	// +pi/2 is 90 degrees to the right (clockwise), 
 	// -pi/2 is 90 degrees to the left (counterclockwise)
-	public synchronized void rotateAngle(double theta) {
+	public synchronized void rotateToAngle(double theta) {
 		double turnAngle = theta * 180.0 / Math.PI;
 		System.out.println("Started rotateAngle with angle = " + turnAngle);
 
@@ -189,7 +189,7 @@ public class MotionManager {
 		paths.add(dummyPathArray);
 
 		// pidControl turning is independent of motion profiling. This just sets things up. Actual work happens elsewhere
-		ahrs.reset();
+		//ahrs.reset();  // Use original startup orientation as 0 degrees
 		turnController = new PIDController(kP, kI, kD, kF, SensorManager.getGlobalMappingSubsystem().getPIDSource(), new PIDOutput());
 		turnController.setInputRange(-180.0f,  180.0f);
         turnController.setOutputRange(-2.5, 2.5);
@@ -202,7 +202,7 @@ public class MotionManager {
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_FRONT].changeControlMode(TalonControlMode.Speed);
 		talons[RobotTalonConstants.DRIVE_TALON_RIGHT_REAR].changeControlMode(TalonControlMode.Speed);
 
-        turnController.setSetpoint(ahrs.getYaw() + turnAngle);
+        turnController.setSetpoint(turnAngle);
         turnController.enable();  //Go!
 
         loading = true; // hijack this handy variable to indicate that there is work to do
