@@ -43,10 +43,11 @@ public class MotionManager {
     public PIDController turnController;
     double rotateToAngleRate;
     
-    static final double kP = 0.05;
+    static final double kP = 0.40;
     static final double kI = 0.00;
-    static final double kD = 0.00;
+    static final double kD = 0.20;
     static final double kF = 0.00;
+    double recentError = 0.0;
     
     static final double kToleranceDegrees = 1.0f;
     
@@ -125,7 +126,7 @@ public class MotionManager {
 			if (loading == false) return;
 
 			// are we there yet?
-			if (turnController.onTarget()) {
+			if (Math.abs(turnController.getAvgError()) < kToleranceDegrees) {
 				System.out.println("On Target");
 				loading = false;
 				adjustPIDTurnRate(0);  // stop!
@@ -195,6 +196,7 @@ public class MotionManager {
         turnController.setOutputRange(-2.5, 2.5);
         turnController.setAbsoluteTolerance(kToleranceDegrees);
         turnController.setContinuous(true);
+        turnController.setToleranceBuffer(6);
 
         Navigator.getMecanumDrive().initializeDriveMode(RobotModes.TELEOP, RobotDriveProfile.VELOCITY);
         talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].changeControlMode(TalonControlMode.Speed);
