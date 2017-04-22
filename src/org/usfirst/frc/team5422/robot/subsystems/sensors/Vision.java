@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision extends RunnableSubsystem {
+//	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
+
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
 	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_SHOOTER_COUNTOURS_REPORT);
 	
@@ -47,13 +49,15 @@ public class Vision extends RunnableSubsystem {
 	      double [] defaultArray = new double[0];
 	      double [] visionArray = visionTable.getNumberArray(NetworkConstants.CENTER_X, defaultArray);
 
-	      if(visionArray.length > 0)
+	      System.out.println("ARRAY LEN: " + visionArray.length);
+	      if(visionArray.length > 0) {
 	        try {
 	        	return visionArray[index];
 	        }
 	        catch(Exception e) {
 	        	return -1;
 	        }
+	      }
 	      else
 	         return -1;
 	}
@@ -139,7 +143,7 @@ public class Vision extends RunnableSubsystem {
         * 
         * turnRelative(xOffset)
         */
-       Timer.delay(0.75); 
+       Timer.delay(0.25); 
        double xVal = getShooterCenterX(0); //actually get from network table
 	   SmartDashboard.putNumber("xVal:", xVal);
 	   if(xVal < 0) return;
@@ -149,13 +153,15 @@ public class Vision extends RunnableSubsystem {
        SmartDashboard.putNumber("theta offset boiler: ",xOffset);
        xOffset = Math.toRadians(xOffset);
        SmartDashboard.putNumber("theta offset boiler radians", xOffset);
-       Navigator.getInstance().motionManager.rotateToAngle(xOffset*1.2); /**move X**/
        
+       GlobalMapping.ahrs.zeroYaw(); //reset gyro before turning
+       Navigator.getInstance().motionManager.rotateToAngle(xOffset*1.2); /**move X**/
+       Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
        double camHeight = 23.75;
        double centerY = getShooterCenterY(0);
        SmartDashboard.putNumber("CenterY", centerY);
-       double thetaCurrent = 45.5 - 51.0/240.0 * centerY;
-       double distanceOffset = (86-camHeight) / Math.tan(thetaCurrent) - 153;
+       double thetaCurrent = 45.5 - 50.0/240.0 * centerY;
+       double distanceOffset = (86-camHeight) / Math.tan(Math.toRadians(thetaCurrent));
        SmartDashboard.putNumber("Distance offset", distanceOffset);
        
        /*
@@ -222,9 +228,10 @@ public class Vision extends RunnableSubsystem {
       }
       
       SmartDashboard.putNumber("Angular Displacement to Gear Hook", diffAng * 180 / Math.PI);
-      NetworkTable visionTable = NetworkTable.getTable("VisionTable");
-      visionTable.putNumber("Angular Displacement", diffAng * 180 / Math.PI);
+//      NetworkTable visionTable = NetworkTable.getTable("VisionTable");
+//      visionTable.putNumber("Angular Displacement", diffAng * 180 / Math.PI);
 
+ //     Navigator.getInstance().motionManager.rotateToAngle(diffAng);
       // Assume right orientation - get average distance
       distLeft = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_1_KEY, 6.0);
       distRight = NetworkTable.getTable(NetworkConstants.STORM_NET).getNumber(NetworkConstants.US_2_KEY, 6.0);
