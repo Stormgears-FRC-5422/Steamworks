@@ -16,6 +16,7 @@ import org.usfirst.frc.team5422.utils.SteamworksConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.flapPositions;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -23,7 +24,8 @@ import edu.wpi.first.wpilibj.command.Command;
 public class PlaceGearCommand extends Command {
 	private ArrayList<Pose> routeToGear;
 	private autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation;
-	private autonomousDropOffLocationOptions selectedAutonomousDropOffLocation;
+	private flapPositions selectedAutoStartFlapPosition;
+	private flapPositions selectedAutoEndFlapPosition;
 	private alliances selectedAlliance;
 	private MotionManager m;		
 	
@@ -32,17 +34,21 @@ public class PlaceGearCommand extends Command {
     	requires(Robot.gearManipulatorSubsystem);    	
 	}
 	
-	public PlaceGearCommand(alliances selectedAlliance, autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation, autonomousDropOffLocationOptions selectedAutonomousDropOffLocation) {
+	public PlaceGearCommand(alliances selectedAlliance, 
+							autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation, 
+							flapPositions autoStartFlapPosition,
+							flapPositions autoEndFlapPosition) {
 		requires(Robot.navigatorSubsystem);
     	requires(Robot.gearManipulatorSubsystem);    	
 
     	this.selectedAlliance = selectedAlliance;
 		this.selectedAutonomousGearPlacementLocation = selectedAutonomousGearPlacementLocation;
-		this.selectedAutonomousDropOffLocation = selectedAutonomousDropOffLocation;
+		this.selectedAutoStartFlapPosition = autoStartFlapPosition;
+		this.selectedAutoEndFlapPosition = autoEndFlapPosition;
+
 		System.out.println("In PlaceGearCommand Constructor..." + 
 				" Alliance: " + this.selectedAlliance.toString() + 
-				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
-				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
+				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString());
 	}
 	
 	// Called just before this Command runs the first time
@@ -59,8 +65,7 @@ public class PlaceGearCommand extends Command {
 		
 		System.out.println("In Execute() of PlaceGearCommand Constructor..." + 
 				" Alliance: " + this.selectedAlliance.toString() + 
-				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString() +
-				" Robot DropOff Location: " + this.selectedAutonomousDropOffLocation.toString());
+				" GearPlacement Location: " + this.selectedAutonomousGearPlacementLocation.toString());
 		Pose srcPosition;
 		Pose interimPosition;
 		Pose dstPosition;
@@ -106,7 +111,8 @@ public class PlaceGearCommand extends Command {
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
+//				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);				
+				Robot.gearManipulatorSubsystem.setFlaps(selectedAutoEndFlapPosition.toInt());
 
 //				// Back up
 				//m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
@@ -149,7 +155,8 @@ public class PlaceGearCommand extends Command {
 				
 //				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
-				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
+//				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
+				Robot.gearManipulatorSubsystem.setFlaps(selectedAutoEndFlapPosition.toInt());
 				Timer.delay(0.3);
 ////				// Back up
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO

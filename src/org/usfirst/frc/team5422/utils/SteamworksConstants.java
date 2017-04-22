@@ -46,7 +46,17 @@ public class SteamworksConstants
 
 	// Alliance options
 	public enum flapPositions{
-		NEUTRAL, RECEIVING, DISPENSE;
+		NEUTRAL(0), RECEIVING(1), DISPENSE(2);
+		
+		private int pos;
+		flapPositions(int positions) {
+			pos = positions;
+		}
+		
+		public int getPosition() {
+			return pos;
+		}
+		
     	@Override
 		public String toString() {
 			switch(this) {

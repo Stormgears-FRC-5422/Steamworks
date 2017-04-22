@@ -8,6 +8,7 @@ import org.usfirst.frc.team5422.robot.subsystems.navigator.Pose;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.alliances;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousDropOffLocationOptions;
 import org.usfirst.frc.team5422.utils.SteamworksConstants.autonomousGearPlacementOptions;
+import org.usfirst.frc.team5422.utils.SteamworksConstants.flapPositions;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -16,12 +17,15 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class AutonomousCommandGroup extends CommandGroup {
 	public Command autoPlaceGearCommand;
-	public RobotAutoDropOffCommand autoRobotDropOffCommand;
+//	public RobotAutoDropOffCommand autoRobotDropOffCommand;
 	
 	private autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation;
-	private autonomousDropOffLocationOptions selectedAutonomousDropOffLocation;
+//	private autonomousDropOffLocationOptions selectedAutonomousDropOffLocation;
 	private alliances selectedAlliance;
-    public AutonomousCommandGroup() {
+	private flapPositions selectedAutoEndFlapPosition;
+	private flapPositions selectedAutoStartFlapPosition;	
+
+	public AutonomousCommandGroup() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -42,26 +46,37 @@ public class AutonomousCommandGroup extends CommandGroup {
 		//addSequential(autonomousCommand);
 	}
 
-	public AutonomousCommandGroup(alliances selectedAlliance, autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation, autonomousDropOffLocationOptions selectedAutonomousDropOffLocation) {
+	public AutonomousCommandGroup(alliances selectedAlliance, 
+			  autonomousGearPlacementOptions selectedAutonomousGearPlacementLocation,
+			  flapPositions selectedAutoStartFlapPosition,
+			  flapPositions selectedAutoEndFlapPosition) {
 		requires(Robot.navigatorSubsystem);
+		requires(Robot.gearManipulatorSubsystem);
+		
 		this.selectedAlliance = selectedAlliance;
 		this.selectedAutonomousGearPlacementLocation = selectedAutonomousGearPlacementLocation;
-		this.selectedAutonomousDropOffLocation = selectedAutonomousDropOffLocation;
+		this.selectedAutoStartFlapPosition = selectedAutoStartFlapPosition;
+		this.selectedAutoEndFlapPosition = selectedAutoEndFlapPosition;
 		
 		System.out.println("creating autonomous PlaceGearCommand ");
-		if (selectedAutonomousGearPlacementLocation != autonomousGearPlacementOptions.HOPPER_AUTONOMOUS)
-			autoPlaceGearCommand = new PlaceGearCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
-		else
-			autoPlaceGearCommand = new HopperShootCommand(this.selectedAlliance);
+		
+		if (selectedAutonomousGearPlacementLocation == autonomousGearPlacementOptions.HOPPER_AUTONOMOUS) {
+		autoPlaceGearCommand = new HopperShootCommand(this.selectedAlliance);			
+		} else if (selectedAutonomousGearPlacementLocation == autonomousGearPlacementOptions.NONE) {
+		//do nothing
+		} else {
+		autoPlaceGearCommand = new PlaceGearCommand(this.selectedAlliance, 
+											this.selectedAutonomousGearPlacementLocation,
+											this.selectedAutoStartFlapPosition,
+											this.selectedAutoEndFlapPosition);
+		}
 
-		autoRobotDropOffCommand = new RobotAutoDropOffCommand(this.selectedAlliance, this.selectedAutonomousGearPlacementLocation, this.selectedAutonomousDropOffLocation);
-		
 		addSequential(autoPlaceGearCommand);
-//		addSequential(autoRobotDropOffCommand);
-		
+
 	}
 
 	protected void initialize() {
 		System.out.println("Initializing Steamworks autonomous command group.");
-    }
+		Robot.gearManipulatorSubsystem.setFlaps(selectedAutoStartFlapPosition.toInt());
+   }
 }

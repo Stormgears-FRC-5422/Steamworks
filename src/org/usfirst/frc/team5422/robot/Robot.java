@@ -45,8 +45,9 @@ public class Robot extends IterativeRobot {
 
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
-	public autonomousDropOffLocationOptions autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
-	public flapPositions flapPositionSelected = flapPositions.NEUTRAL;
+//	public autonomousDropOffLocationOptions autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
+	public flapPositions autoStartFlapPositionSelected = flapPositions.NEUTRAL;
+	public flapPositions autoEndFlapPositionSelected = flapPositions.DISPENSE;
 	
 	public Command autonomousCommand = null;
 
@@ -186,13 +187,17 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
-//	private void selectFlapPosition() {
-//		flapPositionSelected = (flapPositions) dsio.flapPositionsChooser.getSelected();
-//	}
-	
-	private void selectAutonomousDropOffLocation() {
-		autonomousDropOffLocationSelected = (autonomousDropOffLocationOptions) dsio.autonomousDropOffLocationOptionsChooser.getSelected();
+	private void selectStartFlapPosition() {
+		this.autoStartFlapPositionSelected = (flapPositions) dsio.autoStartFlapPositionsChooser.getSelected();
 	}
+
+	private void selectEndFlapPosition() {
+		this.autoEndFlapPositionSelected = (flapPositions) dsio.autoEndFlapPositionsChooser.getSelected(); 
+	}
+	
+//	private void selectAutonomousDropOffLocation() {
+//		autonomousDropOffLocationSelected = (autonomousDropOffLocationOptions) dsio.autonomousDropOffLocationOptionsChooser.getSelected();
+//	}
 
 	private void selectAutonomousGearPlacement() {
 		autonomousGearPlacementSelected = (autonomousGearPlacementOptions) dsio.autonomousGearPlacementOptionsChooser.getSelected();
@@ -201,16 +206,21 @@ public class Robot extends IterativeRobot {
 	private void selectAutonomousCommand() {
 		selectAlliance();
 		selectAutonomousGearPlacement();
-		selectAutonomousDropOffLocation();
-//		selectFlapPosition();
+//		selectAutonomousDropOffLocation();
+		selectStartFlapPosition();
+		selectEndFlapPosition();
 		
 		System.out.println("ALLIANCE: " + allianceSelected.toString());
 		System.out.println("GEAR PLACEMENT LOCATION: " + autonomousGearPlacementSelected.toString());
-		System.out.println("DROP OFF LOCATION: " + autonomousDropOffLocationSelected.toString());
-		System.out.println("FLAP POSITION: " + flapPositionSelected.toString());
+//		System.out.println("DROP OFF LOCATION: " + autonomousDropOffLocationSelected.toString());
+		System.out.println("FLAP START POSITION: " + autoStartFlapPositionSelected.toString());
+		System.out.println("FLAP END POSITION: " + autoEndFlapPositionSelected.toString());
 
 		System.out.println("creating autonomous command group");
-		autonomousCommand = new AutonomousCommandGroup(allianceSelected, autonomousGearPlacementSelected, autonomousDropOffLocationSelected);
+		autonomousCommand = new AutonomousCommandGroup(allianceSelected, 
+														autonomousGearPlacementSelected, 
+														autoStartFlapPositionSelected, 
+														autoEndFlapPositionSelected);
 	}
 	
 	public static Shooter getShooterSubsystem() {

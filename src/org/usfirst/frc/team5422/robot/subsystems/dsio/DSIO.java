@@ -30,7 +30,8 @@ public class DSIO {
 	public SendableChooser<alliances> allianceChooser;
 	public SendableChooser<autonomousGearPlacementOptions> autonomousGearPlacementOptionsChooser;
 	public SendableChooser<autonomousDropOffLocationOptions> autonomousDropOffLocationOptionsChooser;
-//	public SendableChooser<flapPositions> flapPositionsChooser;
+	public SendableChooser<flapPositions> autoStartFlapPositionsChooser;
+	public SendableChooser<flapPositions> autoEndFlapPositionsChooser;
 
 	JoystickButton bigBlue, greenSwitch, orangeSwitch, redSwitch, 
 	smallBlue, smallGreen, smallYellow, smallBlack, smallWhite, smallRed;
@@ -134,16 +135,21 @@ public class DSIO {
 		autonomousGearPlacementOptionsChooser.addObject("Not Moving in Autonomous", autonomousGearPlacementOptions.NONE);
 		SmartDashboard.putData("Autonomous Gear Placement Chooser", autonomousGearPlacementOptionsChooser);
 
-		autonomousDropOffLocationOptionsChooser = new SendableChooser<autonomousDropOffLocationOptions>();
-		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
-		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
-		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);
+//		autonomousDropOffLocationOptionsChooser = new SendableChooser<autonomousDropOffLocationOptions>();
+//		autonomousDropOffLocationOptionsChooser.addDefault("Drop Off at Gear Pickup", autonomousDropOffLocationOptions.GEAR_PICKUP);
+//		autonomousDropOffLocationOptionsChooser.addObject("Drop Off at Baseline", autonomousDropOffLocationOptions.BASELINE);
+//		SmartDashboard.putData("Drop off location Chooser", autonomousDropOffLocationOptionsChooser);
 
-//		flapPositionsChooser = new SendableChooser<flapPositions>();
-//		flapPositionsChooser.addDefault("Flap Neutral Position", flapPositions.NEUTRAL);
-//		flapPositionsChooser.addObject("Flap Receive Position", flapPositions.RECEIVING);
-//		flapPositionsChooser.addObject("Flap Dispense Position", flapPositions.DISPENSE);
-//		SmartDashboard.putData("Flap Position Chooser", flapPositionsChooser);
+		autoStartFlapPositionsChooser = new SendableChooser<flapPositions>();
+		autoStartFlapPositionsChooser.addDefault("Flap Neutral - Start Position", flapPositions.NEUTRAL);
+		autoStartFlapPositionsChooser.addObject("Flap Receive - Start Position", flapPositions.RECEIVING);
+		autoStartFlapPositionsChooser.addObject("Flap Dispense - Start Position", flapPositions.DISPENSE);
+		SmartDashboard.putData("Autonomous Start Position Chooser for Flaps", autoStartFlapPositionsChooser);
 
+		autoEndFlapPositionsChooser = new SendableChooser<flapPositions>();
+		autoEndFlapPositionsChooser.addObject("Flap Neutral - End Position", flapPositions.NEUTRAL);
+		autoEndFlapPositionsChooser.addObject("Flap Receive - End Position", flapPositions.RECEIVING);
+		autoEndFlapPositionsChooser.addDefault("Flap Dispense - End Position", flapPositions.DISPENSE);
+		SmartDashboard.putData("Autonomous End Position Chooser for Flaps", autoEndFlapPositionsChooser);
 	}
 }
