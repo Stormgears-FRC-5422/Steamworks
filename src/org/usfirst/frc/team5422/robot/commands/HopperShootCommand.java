@@ -5,6 +5,9 @@ import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.MotionManager;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.StormgearsI2CSensor;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.robot.subsystems.shooter.shooter_thread.ShooterRunnable;
 import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
@@ -39,52 +42,50 @@ public class HopperShootCommand extends Command {
 		m = Navigator.motionManager;
 		
 		// Drive 84 (used to be 112) inches forward
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(84.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, 3*Math.PI/2, 0), true, false);
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(96.0 / HardwareConstants.ROTATION_CALC_FACTOR, 280, 3*Math.PI/2, 0), true, false);
 
 		// Go left or right by 64 inches (really just 43 but it hits the wall to align)
 		if (alliance == alliances.RED) {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, Math.PI, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 280, Math.PI+0.2, 0), false, true);
 			m.waitUntilProfileFinishes(100);
 			// Don't need to wait for balls since we're not moving away from hopper
 			
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI/2, 0), false, false);
-			try {
-				wait(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, 3*Math.PI/2, 0), false, false);
-			
-			//Extra strafing just in case to align with the hopper wall
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(2.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, 0, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), false, false);
+
+//			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, 3*Math.PI/2, 0), false, false);
+
+			// Back away from hopper wall 6 inches
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10.0 / HardwareConstants.ROTATION_CALC_FACTOR, 45, -0.2, 0), false, true);
 			m.waitUntilProfileFinishes(100);
 		}
 		else {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 140, 0, 0), false, false);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 280, -0.2, 0), false, false);
 			m.waitUntilProfileFinishes(100);
 
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI/2, 0), false, false);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), false, false);
 			try {
 				wait(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI/2, 0), false, false);
+//			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), false, false);
 		
 			
 	//		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(13.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, 3*Math.PI/2, 0), false, true);
 	//		m.waitUntilProfileFinishes(100);
 			
 			// Go out six inches and turn slightly
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(6.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI, 0), false, true);
-			m.pushTurn(0.1295, false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10.0 / HardwareConstants.ROTATION_CALC_FACTOR, 45, Math.PI+0.2, 0), false, true);
+			m.rotateToAngle(0.1295);
 			m.waitUntilProfileFinishes(100);
 		}
-		
 
 		// t f (beginning)  
 		// t f (any middle)
 		// f t (end)
+
+		// Align with vision!!
+		SensorManager.getVisionSubsystem().alignToBoiler();
 
 		// SHOOT!!
 		Robot.shooterSubsystem.initializeShooter();

@@ -140,8 +140,9 @@ public class Vision extends RunnableSubsystem {
         * turnRelative(xOffset)
         */
        Timer.delay(0.75); 
-       double xVal = getShooterCenterX(0); //actually get from network tables
-       SmartDashboard.putNumber("xVal:", xVal);
+       double xVal = getShooterCenterX(0); //actually get from network table
+	   SmartDashboard.putNumber("xVal:", xVal);
+	   if(xVal < 0) return;
        double xOffset = xVal - 153;
        SmartDashboard.putNumber("xOffset boiler: ", xOffset);
        xOffset = xOffset * (67/320.0);
