@@ -46,7 +46,7 @@ public class HopperShootCommand extends Command {
 
 		// Go left or right by 64 inches (really just 43 but it hits the wall to align)
 		if (alliance == alliances.RED) {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 280, Math.PI+0.2, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 90, Math.PI+0.2, 0), false, true);
 			m.waitUntilProfileFinishes(100);
 			// Don't need to wait for balls since we're not moving away from hopper
 			
@@ -55,11 +55,11 @@ public class HopperShootCommand extends Command {
 //			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, 3*Math.PI/2, 0), false, false);
 
 			// Back away from hopper wall 6 inches
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10.0 / HardwareConstants.ROTATION_CALC_FACTOR, 45, -0.2, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10.0 / HardwareConstants.ROTATION_CALC_FACTOR, 45, 0.2, 0), false, true);
 			m.waitUntilProfileFinishes(100);
 		}
 		else {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 280, -0.2, 0), false, false);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 45, -0.2, 0), false, false);
 			m.waitUntilProfileFinishes(100);
 
 			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(12.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), false, false);
@@ -85,7 +85,8 @@ public class HopperShootCommand extends Command {
 		// f t (end)
 
 		// Align with vision!!
-		SensorManager.getVisionSubsystem().alignToBoiler();
+		Vision vision = SensorManager.getVisionSubsystem();
+		vision.alignToBoiler();
 
 		// SHOOT!!
 		Robot.shooterSubsystem.initializeShooter();
