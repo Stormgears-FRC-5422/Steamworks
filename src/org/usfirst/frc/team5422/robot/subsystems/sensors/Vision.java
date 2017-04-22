@@ -4,6 +4,7 @@ import org.usfirst.frc.team5422.robot.Robot;
 import org.usfirst.frc.team5422.robot.subsystems.RunnableSubsystem;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.Navigator;
 import org.usfirst.frc.team5422.robot.subsystems.navigator.motionprofile.TrapezoidalProfile;
+import org.usfirst.frc.team5422.utils.HardwareConstants;
 import org.usfirst.frc.team5422.utils.NetworkConstants;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
 
@@ -159,10 +160,22 @@ public class Vision extends RunnableSubsystem {
        Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
        double camHeight = 23.75;
        double centerY = getShooterCenterY(0);
+       if(centerY < 0) return;
        SmartDashboard.putNumber("CenterY", centerY);
-       double thetaCurrent = 45.5 - 50.0/240.0 * centerY;
+       double thetaCurrent = 45.5 - 51.0/240.0 * centerY;
        double distanceOffset = (86-camHeight) / Math.tan(Math.toRadians(thetaCurrent));
        SmartDashboard.putNumber("Distance offset", distanceOffset);
+       distanceOffset -= 135;
+       
+       if(Math.abs(distanceOffset) > 60) return;
+       //if offset > 0 pi/2
+       //else 3 pi/2
+       
+       
+       if(distanceOffset > 0) Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceOffset / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), true, false);
+       else Navigator.getInstance().motionManager.pushProfile(TrapezoidalProfile.getTrapezoidZero(-distanceOffset / HardwareConstants.ROTATION_CALC_FACTOR, 180, 3*Math.PI/2, 0), true, false);
+       Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
+       
        
        /*
         * 

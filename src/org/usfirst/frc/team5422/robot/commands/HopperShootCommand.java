@@ -46,7 +46,7 @@ public class HopperShootCommand extends Command {
 
 		// Go left or right by 64 inches (really just 43 but it hits the wall to align)
 		if (alliance == alliances.RED) {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 135, Math.PI+0.5, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(75.0 / HardwareConstants.ROTATION_CALC_FACTOR, 135, Math.PI+0.5, 0), false, true);
 			m.waitUntilProfileFinishes(100);
 			// Don't need to wait for balls since we're not moving away from hopper
 			
@@ -61,7 +61,7 @@ public class HopperShootCommand extends Command {
 		//	m.waitUntilProfileFinishes(100);
 		}
 		else {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(64.0 / HardwareConstants.ROTATION_CALC_FACTOR, 135, -0.5, 0), false, false);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(75.0 / HardwareConstants.ROTATION_CALC_FACTOR, 135, -0.5, 0), false, false);
 			m.waitUntilProfileFinishes(100);
 
 			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), false, true);

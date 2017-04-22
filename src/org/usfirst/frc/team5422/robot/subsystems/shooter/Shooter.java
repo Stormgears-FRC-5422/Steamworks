@@ -1,5 +1,7 @@
 package org.usfirst.frc.team5422.robot.subsystems.shooter;
 
+import org.usfirst.frc.team5422.robot.subsystems.sensors.SensorManager;
+import org.usfirst.frc.team5422.robot.subsystems.sensors.Vision;
 import org.usfirst.frc.team5422.utils.RobotTalonConstants;
 import org.usfirst.frc.team5422.utils.SafeTalon;
 import com.ctre.CANTalon;
@@ -13,7 +15,7 @@ public class Shooter extends Subsystem {
 	public SafeTalon motor;
 	private Relay impeller;
 	private boolean enabled = false;
-	double shootVelocity = -51700; //correct value is 48588
+	double shootVelocity = -50350; //correct value is 48588
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
@@ -45,7 +47,7 @@ public class Shooter extends Subsystem {
 	}
 
 	public void setShootVelocity(double shootVelocity) {
-		this.shootVelocity = -51700;
+		this.shootVelocity = -50350;
 	}
 
 	// Reverse is the normal direction
@@ -66,6 +68,8 @@ public class Shooter extends Subsystem {
 
 	public void initializeShooter() {
 		enabled = true;
+		Vision vision = SensorManager.getVisionSubsystem();
+		vision.alignToBoiler();
 //		shoot();
 	}
 	public void shoot() {
