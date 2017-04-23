@@ -17,6 +17,7 @@ import com.ctre.CANTalon.TrajectoryPoint;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -45,7 +46,7 @@ public class MotionManager {
     
     static final double kP = 0.40;
     static final double kI = 0.00;
-    static final double kD = 0.20;
+    static final double kD = 0.18;	
     static final double kF = 0.00;
     double recentError = 0.0;
     
@@ -125,8 +126,14 @@ public class MotionManager {
 		private void runRotateToAngle() {
 			if (loading == false) return;
 
+			SmartDashboard.putNumber("Rotate to angle rate", rotateToAngleRate);
+			
 			// are we there yet?
-			if (Math.abs(turnController.getAvgError()) < kToleranceDegrees) {
+			// exponential averaging of recent error values
+			recentError = Math.abs(0.25 * recentError) + Math.abs(0.75 * turnController.getError()); 
+			SmartDashboard.putNumber("Average error", recentError);  // not really average error
+			if ( recentError < kToleranceDegrees) {
+				SmartDashboard.putString("OnTarget", "True");
 				System.out.println("On Target");
 				loading = false;
 				adjustPIDTurnRate(0);  // stop!
@@ -135,6 +142,7 @@ public class MotionManager {
 				profileDetails.remove(0);
 			}
 			else {				
+				SmartDashboard.putString("OnTarget", "False");
 				adjustPIDTurnRate(rotateToAngleRate);
 			}
 		}
@@ -190,13 +198,12 @@ public class MotionManager {
 		paths.add(dummyPathArray);
 
 		// pidControl turning is independent of motion profiling. This just sets things up. Actual work happens elsewhere
-		//ahrs.reset();  // Use original startup orientation as 0 degrees
 		turnController = new PIDController(kP, kI, kD, kF, SensorManager.getGlobalMappingSubsystem().getPIDSource(), new PIDOutput());
 		turnController.setInputRange(-180.0f,  180.0f);
         turnController.setOutputRange(-2.5, 2.5);
         turnController.setAbsoluteTolerance(kToleranceDegrees);
         turnController.setContinuous(true);
-        turnController.setToleranceBuffer(6);
+//        turnController.setToleranceBuffer(10);
 
         Navigator.getMecanumDrive().initializeDriveMode(RobotModes.TELEOP, RobotDriveProfile.VELOCITY);
         talons[RobotTalonConstants.DRIVE_TALON_LEFT_FRONT].changeControlMode(TalonControlMode.Speed);
@@ -401,7 +408,9 @@ public class MotionManager {
 				}
 			} else {
 				System.out.println("Return from waitUntilProfileFinishes after waiting " + count + " interval(s)");
-				shutDownProfiling();
+				if (!rotateToAngle) {
+					shutDownProfiling();
+				}
 				return;
 			}
 			
