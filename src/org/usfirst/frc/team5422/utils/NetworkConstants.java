@@ -9,7 +9,7 @@ public class NetworkConstants {
 	public static final String VISION = "Vision";
 	
 	public static final String GRIP_MY_CONTOURS_REPORT = "GRIP/gearContoursReport";
-	public static final String GRIP_SHOOTER_COUNTOURS_REPORT = "GRIP/shooterContoursReport";//"GRIP/myContoursReport";
+	public static final String GRIP_SHOOTER_CONTOURS_REPORT = "GRIP/shooterContoursReport";//"GRIP/myContoursReport";
 	public static final String CENTER_Y = "centerY";
 	public static final String CENTER_X = "centerX";
 	public static final String WIDTH = "width";

@@ -16,7 +16,7 @@ public class Vision extends RunnableSubsystem {
 //	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
 
 	public static NetworkTable visionTable = NetworkTable.getTable(NetworkConstants.GRIP_MY_CONTOURS_REPORT);
-	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_SHOOTER_COUNTOURS_REPORT);
+	public static NetworkTable shooterTable = NetworkTable.getTable(NetworkConstants.GRIP_SHOOTER_CONTOURS_REPORT);
 	
 	public Vision() {
 		super(NetworkConstants.VISION);
