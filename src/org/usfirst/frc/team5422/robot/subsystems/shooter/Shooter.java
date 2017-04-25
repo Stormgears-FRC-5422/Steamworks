@@ -15,7 +15,7 @@ public class Shooter extends Subsystem {
 	public SafeTalon motor;
 	private Relay impeller;
 	private boolean enabled = false;
-	double shootVelocity = -50350; //correct value is 48588
+	double shootVelocity = 49588;//-50350; //correct value is 48588
 
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.

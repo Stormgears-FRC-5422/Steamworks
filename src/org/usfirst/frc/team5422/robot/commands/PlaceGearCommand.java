@@ -85,22 +85,15 @@ public class PlaceGearCommand extends Command {
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToIntermediatePosition + " inches to left interim position.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true);
 				m.waitUntilProfileFinishes(100);
-			//	m.pushProfile(TrapezoidalProfile.getTrapezoidZero(76.0/6.0/Math.PI, 70, 3*Math.PI/2, 0), true, true); 
+
 				m.rotateToAngle(Math.PI/3.0);
 				m.waitUntilProfileFinishes(100);
-				
-				System.out.println("entering delay after forward");
-				System.out.println("Exiting delay after forward");
-				//Timer.delay(10);
-				dstPosition = routeToGear.get(2);
 				//rotate towards Left Gear position
-				System.out.println("Theta = " + dstPosition.theta);
-			//	m.pushTurn((Math.PI/3.0), false, false); //OG
-			//	m.pushTurn(0.46, false, false);
-//				System.out.println("entering delay after turn");
-		//		Timer.delay(10);
-//				System.out.println("Exiting delay after turn");
 				//Navigator.rotateAbsolute(dstPosition.theta);
+//				System.out.println("Theta = " + dstPosition.theta);
+//				m.pushTurn((Math.PI/3.0), false, false); //OG
+				
+				dstPosition = routeToGear.get(2);
 				//go the next segment from interim position to the left peg
 				xseg = Math.abs(dstPosition.x - interimPosition.x);
 				yseg = Math.abs(dstPosition.y - interimPosition.y);
@@ -108,14 +101,13 @@ public class PlaceGearCommand extends Command {
 				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
 				System.out.println("[Autonomous Routing] Starting at left and going " + distanceToPeg + " inches to left gear hook.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero((distanceToPeg + 12.0)/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
-				
-//				Timer.delay(12);
 				m.waitUntilProfileFinishes(100);
+
 //				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);				
 				Robot.gearManipulatorSubsystem.setFlaps(selectedAutoEndFlapPosition.toInt());
 
 //				// Back up
-				//m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
 				m.waitUntilProfileFinishes(100);
 				break;
 			case PLACE_GEAR_RIGHT_AIRSHIP:
@@ -128,37 +120,27 @@ public class PlaceGearCommand extends Command {
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToIntermediatePosition + " inches to right interim position.");
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToIntermediatePosition/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); 
 				m.waitUntilProfileFinishes(100);
-				//	m.pushProfile(TrapezoidalProfile.getTrapezoidZero(76.0/6.0/Math.PI, 70, 3*Math.PI/2, 0), true, true); 
-//				System.out.println("entering delay after forward");
-//				System.out.println("Exiting delay after forward");
-				//Timer.delay(10);
+
 				dstPosition = routeToGear.get(2);
 				//rotate towards Left Gear position
-				System.out.println("Theta = " + dstPosition.theta);
-				//m.pushTurn((-Math.PI/3.0), false, true); //OG
-				
+//				System.out.println("Theta = " + dstPosition.theta);
+//				m.pushTurn((-Math.PI/3.0), false, true); //OG
 				m.rotateToAngle(-Math.PI/3.0);
 				m.waitUntilProfileFinishes(100);
 				
-//				//	m.pushTurn(0.46, false, false);
-//				System.out.println("entering delay after turn");
-//		//		Timer.delay(10);
-//				System.out.println("Exiting delay after turn");
-//				//Navigator.rotateAbsolute(dstPosition.theta);
 //				//go the next segment from interim position to the left peg
 				xseg = Math.abs(dstPosition.x - interimPosition.x);
 				yseg = Math.abs(dstPosition.y - interimPosition.y);
 				yseg -= 4.0;
 				distanceToPeg = Math.sqrt(xseg*xseg + yseg*yseg);
 				System.out.println("[Autonomous Routing] Starting at right and going " + distanceToPeg + " inches to right gear hook.");
-				m.pushProfile(TrapezoidalProfile.getTrapezoidZero((distanceToPeg+12.0)/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 
-				
-//				Timer.delay(12);
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero((distanceToPeg+12.0)/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), false, true); 				
 				m.waitUntilProfileFinishes(100);
+
 //				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_NEUTRAL);
 				Robot.gearManipulatorSubsystem.setFlaps(selectedAutoEndFlapPosition.toInt());
 				Timer.delay(0.3);
-////				// Back up
+//				// Back up
 				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
 				m.waitUntilProfileFinishes(100);
 				break;
@@ -168,22 +150,25 @@ public class PlaceGearCommand extends Command {
 		//		m.waitUntilProfileFinishes(100);
 				//m.waitUntilProfileFinishes(100);
 // //DLM commented this out to test rotation
-//				System.out.println("[Autonomous Routing] Starting at center starting position");
+				System.out.println("[Autonomous Routing] Starting at center starting position");
 				routeToGear = AutoRoutes.centerStartToGear;
 				srcPosition = routeToGear.get(0);
 				dstPosition = routeToGear.get(1);
 				distanceToPeg = dstPosition.y - srcPosition.y + 3.0; 				
 				System.out.println("[Autonomous Routing] Starting at center and going " + distanceToPeg + " inches to center gear hook.");
-			//	m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-//				Timer.delay(1.0);
-				Vision vision = SensorManager.getVisionSubsystem();
-				vision.alignToBoiler();
-////				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(36.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI, 0), true, true); //GEAR CENTER AUTO
-//				m.waitUntilProfileFinishes(100);
-//				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
-//				Timer.delay(1.0);
-		//		m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
-		//		m.waitUntilProfileFinishes(100);
+
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(distanceToPeg/HardwareConstants.ROTATION_CALC_FACTOR, 70, 3*Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+				m.waitUntilProfileFinishes(100);
+
+//				Vision vision = SensorManager.getVisionSubsystem();
+//				vision.alignToBoiler();
+
+				Robot.gearManipulatorSubsystem.setFlaps(SteamworksConstants.FLAPS_DISPENSE);
+				Timer.delay(0.5);
+
+//				//Backup
+				m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0/HardwareConstants.ROTATION_CALC_FACTOR, 70, Math.PI/2, 0), true, true); //GEAR CENTER AUTO
+				m.waitUntilProfileFinishes(100);
 				break;
 			case NONE:
 				return;
@@ -191,14 +176,6 @@ public class PlaceGearCommand extends Command {
 				routeToGear = new ArrayList<>();
 				break;
 		}
-
-//		Vision vision = SensorManager.getVisionSubsystem();
-//		vision.alignToGear();
-
-//		for (int i = 0; i < routeToGear.size(); i++) {
-//			System.out.println("X: " + routeToGear.get(i).x + " Y: " + routeToGear.get(i).y);
-//		}
-
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

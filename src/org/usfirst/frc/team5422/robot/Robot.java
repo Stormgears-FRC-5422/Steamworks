@@ -46,8 +46,8 @@ public class Robot extends IterativeRobot {
 	public alliances allianceSelected = alliances.RED;
 	public autonomousGearPlacementOptions autonomousGearPlacementSelected = autonomousGearPlacementOptions.NONE;
 //	public autonomousDropOffLocationOptions autonomousDropOffLocationSelected = autonomousDropOffLocationOptions.BASELINE;
-	public flapPositions autoStartFlapPositionSelected = flapPositions.NEUTRAL;
-	public flapPositions autoEndFlapPositionSelected = flapPositions.DISPENSE;
+	public static flapPositions autoStartFlapPositionSelected = flapPositions.NEUTRAL;
+	public static flapPositions autoEndFlapPositionSelected = flapPositions.DISPENSE;
 	
 	public Command autonomousCommand = null;
 

@@ -18,6 +18,13 @@ public class SteamworksConstants
 	public static int ROBOT_ULTRASONIC_SEPARATION_IN = 24;
 	public static int FRAME_WIDTH = 320;//in pixels
 	public static int FRAME_HEIGHT = 240;//in pixels
+	
+	//Field Measurements
+	//distance/length in inches
+	public static double FIRST_HOPPER_START_DISTANCE = 78.5;
+	public static double HOPPER_BALL_DISPOSAL_BAR = 30.0;
+	public static double HOPPER_LENGTH = 26.5;
+	public static double SECOND_HOPPER_START_DISTANCE = 135.0;
 
 	// Gear Manipulator Constants
 	public static final int FLAPS_NEUTRAL = 0;

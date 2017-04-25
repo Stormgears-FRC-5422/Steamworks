@@ -4,6 +4,10 @@ public class HardwareConstants {
 	/*
 	 * this is for physical distances of the robot
 	 */
+//  includes length of bumper
+	public static final double ROBOT_BODY_LENGTH_GEARINTAKE_SIDE = 35.0;//28.5 + 3.25 + 3.25;
+	public static final double ROBOT_BODY_LENGTH_SHOOTER_SIDE = 32.5;//26.0 + 3.25 + 3.25
+//	public static final double BUMPER_WIDTH = 3.25;
 	
 	public static final int ENCODER_RESOLUTION = 2048;//?????
 	public static final double PI = Math.PI;
