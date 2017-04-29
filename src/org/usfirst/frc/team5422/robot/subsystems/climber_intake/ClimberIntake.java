@@ -36,7 +36,7 @@ public class ClimberIntake extends Subsystem {
 
 		climberIntakeTalon.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 		climberIntakeTalon.set(5000);
-		secondaryIntakeTalon.set(5000);
+		secondaryIntakeTalon.set(-5000);
 
 	}
 	

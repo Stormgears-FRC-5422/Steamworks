@@ -10,6 +10,7 @@ import org.usfirst.frc.team5422.robot.commands.GearFlapCommand;
 import org.usfirst.frc.team5422.robot.commands.ReverseImpellerCommand;
 import org.usfirst.frc.team5422.robot.commands.ShootCommand;
 import org.usfirst.frc.team5422.robot.commands.TurnLightOnOffCommand;
+import org.usfirst.frc.team5422.robot.commands.VisionAlignToBoilerCommand;
 import org.usfirst.frc.team5422.robot.commands.VisionAlignToGearCommand;
 import org.usfirst.frc.team5422.utils.ButtonIds;
 import org.usfirst.frc.team5422.utils.SteamworksConstants;
@@ -60,8 +61,6 @@ public class DSIO {
 
 		// Assign commands to pushable buttons
 
-		// Big Blue Button
-//		bigBlue.whenPressed(new ShootCommand(3, robotShooterMode));
 
 		// Small buttons
 		smallBlue.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_RECEIVING));
@@ -69,16 +68,20 @@ public class DSIO {
 
 		smallYellow.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		
-		//temporary fix in Hartford Competition 
-//		smallWhite.whenPressed(new GearFlapCommand(SteamworksConstants.FLAPS_DISPENSE));
 		smallBlack.whenPressed(new TurnLightOnOffCommand());
 		//smallWhite.whenPressed(new VisionAlignToGearCommand());
 		smallRed.whenPressed(new ReverseImpellerCommand(true));
 		smallRed.whenReleased(new ReverseImpellerCommand(false));
 		
-		// This is special
+		// Big Blue Button is held pressed to align Vision to Boiler
+		bigBlue.whenPressed(new VisionAlignToBoilerCommand());
+
+		// When the green button is ON the shooter shoots
 		greenSwitch.whenPressed(new ShootCommand());
 		//Robot.shooterSubsystem.setShootVelocity(55750);
+
+		//align to gear 
+		smallWhite.whenPressed(new VisionAlignToGearCommand());
 
 	}
 

@@ -44,9 +44,9 @@ public class MotionManager {
     public PIDController turnController;
     double rotateToAngleRate;
     
-    static final double kP = 0.40;
-    static final double kI = 0.00;
-    static final double kD = 0.18;	
+    static final double kP = 0.30;
+    static final double kI = 0.03;
+    static final double kD = 0.40;	
     static final double kF = 0.00;
     double recentError = 0.0;
     

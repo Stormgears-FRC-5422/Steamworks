@@ -24,8 +24,10 @@ public class ReverseImpellerCommand extends Command
     {
     	if (doReverse) 
     		Robot.shooterSubsystem.reverseImpeller();
-    	else
-    		Robot.shooterSubsystem.startImpeller();    		
+    	else {
+    		Robot.shooterSubsystem.stopImpeller();    		
+//    		Robot.shooterSubsystem.startImpeller();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

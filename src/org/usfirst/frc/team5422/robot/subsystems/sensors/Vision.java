@@ -148,7 +148,7 @@ public class Vision extends RunnableSubsystem {
        double xVal = getShooterCenterX(0); //actually get from network table
 	   SmartDashboard.putNumber("xVal:", xVal);
 	   if(xVal < 0) return;
-       double xOffset = xVal - 153;
+       double xOffset = xVal - 165;
        SmartDashboard.putNumber("xOffset boiler: ", xOffset);
        xOffset = xOffset * (67/320.0);
        SmartDashboard.putNumber("theta offset boiler: ",xOffset);
@@ -156,9 +156,9 @@ public class Vision extends RunnableSubsystem {
        SmartDashboard.putNumber("theta offset boiler radians", xOffset);
        
        GlobalMapping.ahrs.zeroYaw(); //reset gyro before turning
-       Navigator.getInstance().motionManager.rotateToAngle(xOffset*1.2); /**move X**/
+       Navigator.getInstance().motionManager.rotateToAngle(xOffset*1.0); /**move X**/
        Navigator.getInstance().motionManager.waitUntilProfileFinishes(100);
-       double camHeight = 23.75;
+       double camHeight = 21.50;
        double centerY = getShooterCenterY(0);
        if(centerY < 0) return;
        SmartDashboard.putNumber("CenterY", centerY);

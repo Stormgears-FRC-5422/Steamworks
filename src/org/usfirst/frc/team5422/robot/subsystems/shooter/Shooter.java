@@ -27,6 +27,7 @@ public class Shooter extends Subsystem {
 		motor.setP(RobotTalonConstants.SHOOTER_P);
 		motor.setI(0);
 		motor.setD(0);
+		
 		motor.setIZone(0);
 		motor.setF(RobotTalonConstants.SHOOTER_F);
 
@@ -68,9 +69,9 @@ public class Shooter extends Subsystem {
 
 	public void initializeShooter() {
 		enabled = true;
-		Vision vision = SensorManager.getVisionSubsystem();
-		vision.alignToBoiler();
-//		shoot();
+//		Vision vision = SensorManager.getVisionSubsystem();
+//		vision.alignToBoiler();
+		shoot();
 	}
 	public void shoot() {
 		motor.set(shootVelocity);

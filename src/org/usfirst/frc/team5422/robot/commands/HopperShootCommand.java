@@ -43,20 +43,20 @@ public class HopperShootCommand extends Command {
 		m = Navigator.motionManager;
 		
 		// Drive 84 (used to be 112) inches forward
-		m.pushProfile(TrapezoidalProfile.getTrapezoidZero((SteamworksConstants.FIRST_HOPPER_START_DISTANCE + 6.5)/HardwareConstants.ROTATION_CALC_FACTOR, 
+		m.pushProfile(TrapezoidalProfile.getTrapezoidZero((SteamworksConstants.FIRST_HOPPER_START_DISTANCE + 7.0)/HardwareConstants.ROTATION_CALC_FACTOR, 
 														   580, 3*Math.PI/2, 0), true, false);
 
 		// Go left or right by 64 inches (really just 43 but it hits the wall to align)
 		if (alliance == alliances.RED) {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(75.0/HardwareConstants.ROTATION_CALC_FACTOR, 
-															  135, Math.PI+0.5, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(106.0/HardwareConstants.ROTATION_CALC_FACTOR, 
+															  135, Math.PI, 0), false, true);
 			m.waitUntilProfileFinishes(100);
 			// Don't need to wait for balls since we're not moving away from hopper
 			
 //			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(10.0 / HardwareConstants.ROTATION_CALC_FACTOR, 
 //																45, 0.2, 0), false, true);
 		//	m.waitUntilProfileFinishes(100);
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0 / HardwareConstants.ROTATION_CALC_FACTOR, 
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(5.0 / HardwareConstants.ROTATION_CALC_FACTOR, 
 															  180, Math.PI/2, 0), false, true);
 			m.waitUntilProfileFinishes(100);	
 			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(6.0 / HardwareConstants.ROTATION_CALC_FACTOR, 
@@ -68,10 +68,10 @@ public class HopperShootCommand extends Command {
 		//	m.waitUntilProfileFinishes(100);
 		}
 		else {
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(75.0 / HardwareConstants.ROTATION_CALC_FACTOR, 135, -0.5, 0), false, false);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(106.0 / HardwareConstants.ROTATION_CALC_FACTOR, 135, -0.5, 0), false, false);
 			m.waitUntilProfileFinishes(100);
 
-			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(24.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), false, true);
+			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(5.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI/2, 0), false, true);
 			m.waitUntilProfileFinishes(100);	
 			m.pushProfile(TrapezoidalProfile.getTrapezoidZero(6.0 / HardwareConstants.ROTATION_CALC_FACTOR, 180, Math.PI+0.2, 0), false, false);
 			m.waitUntilProfileFinishes(100);
